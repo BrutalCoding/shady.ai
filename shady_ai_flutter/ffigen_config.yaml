@@ -1,0 +1,9 @@
+name: OnnxRuntime
+
+description: Bindings to `onnxruntime_c_api.h`
+output: 'lib/generated_bindings.dart'
+headers:
+  entry-points:
+    - '/Users/brutalcoding/Development/Repos/onnxruntime/**' # Run cmake . in the rust folder of onnxruntime to generate the header files
+preamble: |
+  // ignore_for_file: deprecated_member_use
