@@ -1,6 +1,6 @@
 # Shady.ai
 
-![Dad The Benchmark](./shady_ai_flutter/macos/Runner/Assets.xcassets/AppIcon.appiconset/icon_512x512@2x.png =300x)
+![Dad The Benchmark](https://github.com/BrutalCoding/shady.ai/blob/main/shady_ai_flutter/macos/Runner/Assets.xcassets/AppIcon.appiconset/icon_512x512@2x.png?raw=true =300x)
 
 My take to get privacy friendly, offline AI models accessible to as many people as possible. The cutting edge offline AI models such as [Segment Anything](https://ai.facebook.com/research/publications/segment-anything/), [LLaMA](https://github.com/facebookresearch/llama) and [Whisper](https://github.com/openai/whisper) have been optimised by many other developers in various forms and sizes. The small to medium sizes are the ones I'm interested in.
 
@@ -20,7 +20,7 @@ If I could get him in touch with these AI models, It's a win for everyone. Bare 
 
 That's him 👇
 
-![Dad The Benchmark](./shady_ai_flutter/assets/dad_the_benchmark.png =200x)
+![Dad The Benchmark](https://github.com/BrutalCoding/shady.ai/blob/main/shady_ai_flutter/assets/dad_the_benchmark.png?raw=true =200x)
 
 ## Goal
 
@@ -90,4 +90,4 @@ Feel free to open an issue or a pull request. I'm open to any suggestions.
 
 ### Mac
 
-![Screenshot 1](./shady_ai_flutter/assets/mac_screenshot_1.png =400x)
+![Screenshot 1](https://raw.githubusercontent.com/BrutalCoding/shady.ai/main/shady_ai_flutter/assets/mac_screenshot_1.png =400x)
