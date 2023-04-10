@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:serverpod_flutter/serverpod_flutter.dart';
 import 'package:shady_ai_client/shady_ai_client.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 // Sets up a singleton client object that can be used to talk to the server from
 // anywhere in our app. The client is generated from your server code.
@@ -21,11 +22,15 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Serverpod Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+      title: 'ShadyAI',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData.light(
+        useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Serverpod Example'),
+      darkTheme: ThemeData.dark(
+        useMaterial3: true,
+      ),
+      home: const MyHomePage(title: 'ShadyAI'),
     );
   }
 }
@@ -40,97 +45,90 @@ class MyHomePage extends StatefulWidget {
 }
 
 class MyHomePageState extends State<MyHomePage> {
-  // These fields hold the last result or error message that we've received from
-  // the server or null if no result exists yet.
-  String? _resultMessage;
-  String? _errorMessage;
-
-  final _textEditingController = TextEditingController();
-
-  // Calls the `hello` method of the `example` endpoint. Will set either the
-  // `_resultMessage` or `_errorMessage` field, depending on if the call
-  // is successful.
-  void _callHello() async {
-    try {
-      final result = await client.example.hello(_textEditingController.text);
-      setState(() {
-        _resultMessage = result;
-      });
-    } catch (e) {
-      setState(() {
-        _errorMessage = '$e';
-      });
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
+        actions: [
+          IconButton(
+              icon: const Icon(Icons.info_outline),
+              onPressed: () {
+                // Display a dialog with information about the app.
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      title: const Text('About ShadyAI'),
+                      content: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: const [
+                            Text(
+                              'ShadyAI is a project by BrutalCoding.'
+                              "A collection of cutting edge AI tech that run locally on your device. "
+                              "It's a work in progress, so don't expect too much yet.",
+                            ),
+                          ]),
+                    );
+                  },
+                );
+              }),
+        ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(bottom: 16.0),
-              child: TextField(
-                controller: _textEditingController,
-                decoration: const InputDecoration(
-                  hintText: 'Enter your name',
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(32.0),
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Image.asset(
+                  'assets/dad_the_benchmark.png',
+                  width: 200,
                 ),
-              ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    'Coming Soon',
+                    style: Theme.of(context).textTheme.displayLarge,
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                ConstrainedBox(
+                  constraints: const BoxConstraints(
+                    maxWidth: 500,
+                  ),
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          "Sorry, there is nothing to see yet. Watch my progress on GitHub.",
+                          style: Theme.of(context).textTheme.bodyLarge,
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () async {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text("Sending you to GitHub..."),
+                      ),
+                    );
+                    await launchUrl(
+                      Uri.parse('https://github.com/BrutalCoding/shady.ai'),
+                    );
+                  },
+                  child: const Text('Visit ShadyAI on GitHub 🚀'),
+                ),
+              ],
             ),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 16.0),
-              child: ElevatedButton(
-                onPressed: _callHello,
-                child: const Text('Send to Server'),
-              ),
-            ),
-            _ResultDisplay(
-              resultMessage: _resultMessage,
-              errorMessage: _errorMessage,
-            ),
-          ],
+          ),
         ),
-      ),
-    );
-  }
-}
-
-// _ResultDisplays shows the result of the call. Either the returned result from
-// the `example.hello` endpoint method or an error message.
-class _ResultDisplay extends StatelessWidget {
-  final String? resultMessage;
-  final String? errorMessage;
-
-  const _ResultDisplay({
-    this.resultMessage,
-    this.errorMessage,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    String text;
-    Color backgroundColor;
-    if (errorMessage != null) {
-      backgroundColor = Colors.red[300]!;
-      text = errorMessage!;
-    } else if (resultMessage != null) {
-      backgroundColor = Colors.green[300]!;
-      text = resultMessage!;
-    } else {
-      backgroundColor = Colors.grey[300]!;
-      text = 'No server response yet.';
-    }
-
-    return Container(
-      height: 50,
-      color: backgroundColor,
-      child: Center(
-        child: Text(text),
       ),
     );
   }
