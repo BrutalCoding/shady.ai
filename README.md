@@ -1,6 +1,10 @@
-# Shady.ai
+<div align="center">
+<picture>
+<img alt="The Benchmark" src="https://user-images.githubusercontent.com/5500332/230834497-1a044b2f-2200-44a8-b6f2-33f587bad218.png" height=300>
+</picture>
+</div>
 
-![Dad The Benchmark](https://github.com/BrutalCoding/shady.ai/blob/main/shady_ai_flutter/macos/Runner/Assets.xcassets/AppIcon.appiconset/icon_512x512@2x.png?raw=true =300x)
+<h1 align="center">ShadyAI</h1>
 
 My take to get privacy friendly, offline AI models accessible to as many people as possible. The cutting edge offline AI models such as [Segment Anything](https://ai.facebook.com/research/publications/segment-anything/), [LLaMA](https://github.com/facebookresearch/llama) and [Whisper](https://github.com/openai/whisper) have been optimised by many other developers in various forms and sizes. The small to medium sizes are the ones I'm interested in.
 
@@ -16,11 +20,15 @@ My dad, the retired butcher.
 
 Stats: mid-70s. Great memory. Always forgets my date of birth, yet somehow remembers details about his customers from 30 years ago. Has a great sense of humour.
 
-If I could get him in touch with these AI models, It's a win for everyone. Bare in mind, there's 13.000 KM between us, so I can't just ask him to try it out.
+If I could get him in touch with these AI models, It's a win for everyone. Bare in mind, there's 13.000 KM between us, which sets the bar high for easy of use.
 
 That's him 👇
 
-![Dad The Benchmark](https://github.com/BrutalCoding/shady.ai/blob/main/shady_ai_flutter/assets/dad_the_benchmark.png?raw=true =200x)
+<div align="left">
+<picture>
+<img alt="Shady's Daddy" src="https://user-images.githubusercontent.com/5500332/230836945-0540146a-b341-4874-9f31-58e687d29053.png" height=350>
+</picture>
+</div>
 
 ## Goal
 
@@ -86,8 +94,8 @@ See the [LICENSE](LICENSE) file.
 
 Feel free to open an issue or a pull request. I'm open to any suggestions.
 
-## Preview
+## Screenshots
 
-### Mac
+### MacOS
 
-![Screenshot 1](https://raw.githubusercontent.com/BrutalCoding/shady.ai/main/shady_ai_flutter/assets/mac_screenshot_1.png =400x)
+![macos_screenshot](https://user-images.githubusercontent.com/5500332/230838110-f462d8b6-bc02-46fc-b300-86ca75bbbec4.png)
