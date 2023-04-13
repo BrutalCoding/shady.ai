@@ -1,0 +1,14 @@
+macos_instance:
+  image: ghcr.io/cirruslabs/macos-ventura-xcode:14.3
+
+container:
+  image: cirrusci/flutter:latest
+
+task:
+  pub_cache:
+    folder: ~/.pub-cache
+  test_script: cd shady_ai_flutter && flutter analyze && flutter test
+  always:
+    report_artifacts:
+      path: report.json
+      format: flutter
