@@ -5,32 +5,15 @@ container:
     image: cirrusci/flutter:latest
 
 # ==== All tasks for shady_ai_flutter ====
-# 1. Flutter test
-flutter_test_task:
-  folder: shady_ai_flutter
-  task_script:
+shady_ai_flutter_task:
+  env:
+    CIRRUS_WORKING_DIR: "shady_ai_flutter/"
+  pub_cache:
+    folder: $HOME/.pub-cache
+  script:
+    - cd $CIRRUS_WORKING_DIR
     - flutter test
-
-# 2. Flutter analyze
-flutter_analyze_task:
-  folder: shady_ai_flutter
-  task_script:
     - flutter analyze
-
-# 3. Flutter check unused files
-flutter_check_unused_files_task:
-  folder: shady_ai_flutter
-  task_script:
     - flutter pub run dart_code_metrics:metrics check-unused-files lib --exclude="{/**.g.dart,/**.freezed.dart}"
-
-# 4. Flutter check unused code
-flutter_check_unused_code_task:
-  folder: shady_ai_flutter
-  task_script:
     - flutter pub run dart_code_metrics:metrics check-unused-code lib --exclude="{/**.g.dart,/**.freezed.dart}"
-
-# 5. Dart format
-dart_format_task:
-  folder: shady_ai_flutter
-  task_script:
     - dart format lib test --set-exit-if-changed
