@@ -1,10 +1,17 @@
 <div align="center">
 <picture>
-<img alt="The Benchmark" src="https://user-images.githubusercontent.com/5500332/230834497-1a044b2f-2200-44a8-b6f2-33f587bad218.png" height=300>
+<img alt="The Benchmark" src="https://user-images.githubusercontent.com/5500332/230834497-1a044b2f-2200-44a8-b6f2-33f587bad218.png" height=300/>
 </picture>
+
+| Branch | Build Status |
+| :---         |     :---:      |
+| Main   | [![Main Build Status](https://api.cirrus-ci.com/github/BrutalCoding/shady.ai.svg?branch=main)](https://cirrus-ci.com/github/BrutalCoding/shady.ai/main)     | git status    |
+
+<h1>ShadyAI</>
+
 </div>
 
-<h1 align="center">ShadyAI</h1>
+
 
 My take to get privacy friendly, offline AI models accessible to as many people as possible. The cutting edge offline AI models such as [Segment Anything](https://ai.facebook.com/research/publications/segment-anything/), [LLaMA](https://github.com/facebookresearch/llama) and [Whisper](https://github.com/openai/whisper) have been optimised by many other developers in various forms and sizes. The small to medium sizes are the ones I'm interested in.
 
