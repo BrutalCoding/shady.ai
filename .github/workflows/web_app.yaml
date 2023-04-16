@@ -38,6 +38,7 @@ jobs:
         with:
           channel: 'stable'
       - run: |
+          cd shady_ai_flutter
           flutter pub get
           flutter test
           flutter build web --web-renderer canvaskit --release
@@ -45,7 +46,7 @@ jobs:
         uses: actions/upload-pages-artifact@v1
         with:
           # Upload entire repository
-          path: 'build/web/'
+          path: 'shady_ai_flutter/build/web/'
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v2
