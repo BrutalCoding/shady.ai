@@ -1,23 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:serverpod_flutter/serverpod_flutter.dart';
-import 'package:shady_ai_client/shady_ai_client.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-// Sets up a singleton client object that can be used to talk to the server from
-// anywhere in our app. The client is generated from your server code.
-// The client is set up to connect to a Serverpod running on a local server on
-// the default port. You will need to modify this to connect to staging or
-// production servers.
-var client = Client('http://localhost:8080/')
-  ..connectivityMonitor = FlutterConnectivityMonitor();
-
 void main() {
-  // final onnyxSessiojn = bindings.
-  runApp(const MyApp());
+  runApp(const Main());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+class Main extends StatelessWidget {
+  const Main({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -47,32 +36,36 @@ class MyHomePage extends StatefulWidget {
 class MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
         actions: [
           IconButton(
-              icon: const Icon(Icons.info_outline),
-              onPressed: () {
-                // Display a dialog with information about the app.
-                showDialog(
-                  context: context,
-                  builder: (context) {
-                    return AlertDialog(
-                      title: const Text('About ShadyAI'),
-                      content: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: const [
-                            Text(
-                              'ShadyAI is a project by BrutalCoding.'
-                              "A collection of cutting edge AI tech that run locally on your device. "
-                              "It's a work in progress, so don't expect too much yet.",
-                            ),
-                          ]),
-                    );
-                  },
-                );
-              }),
+            icon: const Icon(Icons.info_outline),
+            onPressed: () {
+              // Display a dialog with information about the app.
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    title: const Text('About ShadyAI'),
+                    content: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: const [
+                        Text(
+                          'ShadyAI is a project by BrutalCoding.'
+                          "A collection of cutting edge AI tech that run locally on your device. "
+                          "It's a work in progress, so don't expect too much yet.",
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              );
+            },
+          ),
         ],
       ),
       body: SafeArea(
@@ -91,7 +84,7 @@ class MyHomePageState extends State<MyHomePage> {
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
                     'Coming Soon',
-                    style: Theme.of(context).textTheme.displayLarge,
+                    style: textTheme.displayLarge,
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -105,7 +98,7 @@ class MyHomePageState extends State<MyHomePage> {
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
                           "Sorry, there is nothing to see yet. Watch my progress on GitHub.",
-                          style: Theme.of(context).textTheme.bodyLarge,
+                          style: textTheme.bodyLarge,
                           textAlign: TextAlign.center,
                         ),
                       ),
@@ -113,13 +106,22 @@ class MyHomePageState extends State<MyHomePage> {
                   ),
                 ),
                 ElevatedButton(
-                  onPressed: () async {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text("Sending you to GitHub..."),
+                  onPressed: () {
+                    ScaffoldMessenger.of(context).showMaterialBanner(
+                      MaterialBanner(
+                        content: const Text('Bringing you to ShadyAI...'),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              ScaffoldMessenger.of(context)
+                                  .hideCurrentMaterialBanner();
+                            },
+                            child: const Text('Dismiss'),
+                          ),
+                        ],
                       ),
                     );
-                    await launchUrl(
+                    launchUrl(
                       Uri.parse('https://github.com/BrutalCoding/shady.ai'),
                     );
                   },

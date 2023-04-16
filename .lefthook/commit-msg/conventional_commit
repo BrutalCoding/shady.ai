@@ -1,0 +1,56 @@
+#!/bin/bash
+
+echo "===================================="
+echo "Checking branch name..."
+echo "===================================="
+BRANCH_PATTERN="^(feat|fix)/"
+BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD)
+if ! [[ "$BRANCH_NAME" =~ $BRANCH_PATTERN ]]; then
+  # Branch name is not valid
+  echo "Error: Bad branch name \"$BRANCH_NAME\""
+  echo "Reason: Your branch name does not comply with this pattern: $BRANCH_PATTERN"
+  echo "Todo: Rename your branch to comply with the pattern."
+  echo 'Here are some examples:'
+  echo '- "feat/forgot-password"'
+  echo '- "fix/chat-bot-not-responding"'
+  echo "===================================="
+  echo "❌ Branch name is invalid..."
+  echo "===================================="
+  exit 1
+else
+  echo "===================================="
+  echo "✅ Branch name is valid!"
+  echo "===================================="
+fi
+
+echo "===================================="
+echo "Checking commit message..."
+echo "===================================="
+YOUR_COMMIT_MESSAGE=$(HEAD -n1 "$1")
+CONVENTIONAL_COMMIT_PATTERN="^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test)(\(.+\))?!?: .+"
+if ! [[ "$YOUR_COMMIT_MESSAGE" =~ $CONVENTIONAL_COMMIT_PATTERN ]]; then
+  # Commit message is not valid
+  echo "Error: Commit message is not allowed."
+  echo "Reason: Your commit message does not comply with this pattern: $CONVENTIONAL_COMMIT_PATTERN"
+  echo "Todo: Rewrite your commit message to comply with the pattern."
+  echo 'Here are some examples:'
+  echo '- "feat: Add user onboarding tutorial"'
+  echo '- "fix: Fix chat message overflow"'
+  echo '- "chore: Upgrade dependencies"'
+  echo '- "refactor: Refactor chat message component"'
+  echo '- "docs: Update README"'
+  echo '- "test: Add unit tests for chat message component"'
+  echo '- "ci: Add CI/CD pipeline"'
+  echo '- "build: Add build script"'
+  echo '- "style: Enforce code style with custom_lint"'
+  echo '- "perf: Improve performance of chat message component"'
+  echo '- "revert: Revert "feat: Add user onboarding tutorial""'
+  echo "===================================="
+  echo "❌ Commit message is invalid..."
+  echo "===================================="
+  exit 1
+else
+  echo "===================================="
+  echo "✅ Commit message is valid!"
+  echo "===================================="
+fi
