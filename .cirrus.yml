@@ -17,7 +17,6 @@ frontend_task:
     dart format -o none --set-exit-if-changed .
   analyze_with_dart_code_metrics_script: |
     cd $WORKING_DIR
-    [[ $WORKING_DIR == *shady_ai_server* ]] && exit0
     flutter pub run dart_code_metrics:metrics check-unused-files lib test --exclude="{/**.g.dart,/**.freezed.dart}"
     flutter pub run dart_code_metrics:metrics check-unused-code lib test --exclude="{/**.g.dart,/**.freezed.dart}"
 
@@ -31,20 +30,28 @@ backend_task:
       WORKING_DIR: $CIRRUS_WORKING_DIR/shady_ai_server
 
   # Scripts to run
-  analyze_with_flutter_script: |
-    cd $WORKING_DIR
-    flutter analyze
-    flutter test
-  analyze_with_dart_script: |
-    cd $WORKING_DIR
-    [[ $WORKING_DIR == *shady_ai_flutter* ]] && exit 0
-    dart analyze
-    dart test
   format_with_dart_script: |
     cd $WORKING_DIR
-    dart format -o none --set-exit-if-changed .
-  analyze_with_dart_code_metrics_script: |
+    dart format --output=none --set-exit-if-changed .
+
+  analyze_with_dart_script: |
     cd $WORKING_DIR
-    [[ $WORKING_DIR == *shady_ai_server* ]] && exit0
-    flutter pub run dart_code_metrics:metrics check-unused-files lib test --exclude="{/**.g.dart,/**.freezed.dart}"
-    flutter pub run dart_code_metrics:metrics check-unused-code lib test --exclude="{/**.g.dart,/**.freezed.dart}"
+    dart pub get
+    dart analyze --fatal-infos lib test
+
+  test_coverage_with_dart_script: |
+    cd $WORKING_DIR
+    dart pub global activate coverage
+    dart pub global run coverage:collect_coverage --port=8111 --out=coverage/coverage.json --wait-paused --resume-isolates &
+    dart --disable-service-auth-codes --enable-vm-service=8111 --pause-isolates-on-exit test/main_test.dart
+    dart pub global run coverage:format_coverage --lcov --in=coverage/coverage.json --out=coverage/lcov.info --report-on=test
+    genhtml -o ./coverage ./coverage/lcov.info --branch-coverage
+
+  always:
+    json_coverage_artifacts:
+      path: $WORKING_DIR/coverage/coverage.json
+      format: flutter
+    html_coverage_artifacts:
+      path: $WORKING_DIR/coverage/index.html
+
+
