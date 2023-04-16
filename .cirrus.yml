@@ -60,6 +60,8 @@ backend_task:
   # Upload artifacts from Cirrus CI build folder ($CIRRUS_WORKING_DIR)
   always:
     coverage_artifacts:
-      path: "coverage/*"
+      path: "coverage/**/*"
       type: "text/html"
+    dart_test_report_artifacts:
+      path: "coverage/dart_test_report.json"
       format: flutter
