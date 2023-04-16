@@ -1,14 +1,67 @@
-macos_instance:
-  image: ghcr.io/cirruslabs/macos-ventura-xcode:14.3
+frontend_task:
+  # MacOS is used as our main CI environment for Flutter
+  macos_instance:
+    image: ghcr.io/cirruslabs/macos-ventura-xcode:latest
+  container:
+    image: cirrusci/flutter:latest
 
-container:
-  image: cirrusci/flutter:latest
+  # Environment variables
+  env:
+    WORKING_DIR: $CIRRUS_WORKING_DIR/shady_ai_flutter
 
-task:
-  pub_cache:
-    folder: ~/.pub-cache
-  test_script: cd shady_ai_flutter && flutter analyze && flutter test
+  # Scripts to run
+  analyze_with_flutter_script: |
+    cd $WORKING_DIR
+    flutter analyze
+    flutter test
+  analyze_with_dart_code_metrics_script: |
+    cd $WORKING_DIR
+    flutter pub run dart_code_metrics:metrics check-unused-files lib test --exclude="{/**.g.dart,/**.freezed.dart}"
+    flutter pub run dart_code_metrics:metrics check-unused-code lib test --exclude="{/**.g.dart,/**.freezed.dart}"
+  format_with_dart_script: |
+    cd $WORKING_DIR
+    dart format -o none --set-exit-if-changed .
+
+backend_task:
+  # MacOS is used as our main CI environment for Flutter
+  macos_instance:
+    image: ghcr.io/cirruslabs/macos-ventura-xcode:latest
+  container:
+    image: cirrusci/flutter:latest
+
+  # Environment variables
+  env:
+    WORKING_DIR: $CIRRUS_WORKING_DIR/shady_ai_server
+
+  # Scripts to run
+  format_with_dart_script: |
+    cd $WORKING_DIR
+    dart format --output=none --set-exit-if-changed .
+
+  analyze_with_dart_script: |
+    cd $WORKING_DIR
+    dart pub get
+    dart analyze --fatal-infos lib test
+
+  test_coverage_with_dart_script: |
+    cd $WORKING_DIR
+    dart pub global activate coverage
+    dart pub global run coverage:collect_coverage --port=8111 --out=coverage/coverage.json --wait-paused --resume-isolates &
+    dart --disable-service-auth-codes --enable-vm-service=8111 --pause-isolates-on-exit test/main_test.dart
+    dart pub global run coverage:format_coverage --lcov --in=coverage/coverage.json --out=coverage/lcov.info --report-on=test
+    genhtml -o ./coverage ./coverage/lcov.info --branch-coverage
+    dart test --file-reporter=json:coverage/dart_test_report.json
+
+  # Copy artifacts to the Cirrus CI build folder ($CIRRUS_WORKING_DIR)
+  # Because Cirrus CI doesn't support artifacts from other folders
+  copy_artifacts_script: |
+    cp -r $WORKING_DIR/coverage $CIRRUS_WORKING_DIR
+
+  # Upload artifacts from Cirrus CI build folder ($CIRRUS_WORKING_DIR)
   always:
-    report_artifacts:
-      path: report.json
+    coverage_artifacts:
+      path: "coverage/**/*"
+      type: "text/html"
+    dart_test_report_artifacts:
+      path: "coverage/dart_test_report.json"
       format: flutter
