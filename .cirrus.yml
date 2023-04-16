@@ -1,14 +1,34 @@
+# MacOS is used as our main CI environment for Flutter
 macos_instance:
-  image: ghcr.io/cirruslabs/macos-ventura-xcode:14.3
-
+    image: ghcr.io/cirruslabs/macos-ventura-xcode:14.3
 container:
-  image: cirrusci/flutter:latest
+    image: cirrusci/flutter:latest
 
-task:
-  pub_cache:
-    folder: ~/.pub-cache
-  test_script: cd shady_ai_flutter && flutter analyze && flutter test
-  always:
-    report_artifacts:
-      path: report.json
-      format: flutter
+# The working directory for all tasks
+folder: shady_ai_flutter
+
+# ==== All tasks are defined here below ====
+# 1. Flutter test
+flutter_test_task:
+  task_script:
+    - flutter test
+
+# 2. Flutter analyze
+flutter_analyze_task:
+  task_script:
+    - flutter analyze
+
+# 3. Flutter check unused files
+flutter_check_unused_files_task:
+  task_script:
+    - flutter pub run dart_code_metrics:metrics check-unused-files lib --exclude="{/**.g.dart,/**.freezed.dart}"
+
+# 4. Flutter check unused code
+flutter_check_unused_code_task:
+  task_script:
+    - flutter pub run dart_code_metrics:metrics check-unused-code lib --exclude="{/**.g.dart,/**.freezed.dart}"
+
+# 5. Dart format
+dart_format_task:
+  task_script:
+    - dart format lib test --set-exit-if-changed
