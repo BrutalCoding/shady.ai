@@ -13,11 +13,11 @@ var client = Client('http://localhost:8080/')
 
 void main() {
   // final onnyxSessiojn = bindings.
-  runApp(const MyApp());
+  runApp(const Main());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+class Main extends StatelessWidget {
+  const Main({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
