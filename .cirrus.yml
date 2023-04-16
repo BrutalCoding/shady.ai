@@ -1,11 +1,11 @@
 frontend_task:
   # MacOS is used as our main CI environment for Flutter
   macos_instance:
-      image: ghcr.io/cirruslabs/macos-ventura-xcode:latest
+    image: ghcr.io/cirruslabs/macos-ventura-xcode:latest
   container:
-      image: cirrusci/flutter:latest
+    image: cirrusci/flutter:latest
   env:
-      WORKING_DIR: $CIRRUS_WORKING_DIR/shady_ai_flutter
+    WORKING_DIR: $CIRRUS_WORKING_DIR/shady_ai_flutter
 
   # Scripts to run
   analyze_with_flutter_script: |
@@ -23,11 +23,11 @@ frontend_task:
 backend_task:
   # MacOS is used as our main CI environment for Flutter
   macos_instance:
-      image: ghcr.io/cirruslabs/macos-ventura-xcode:latest
+    image: ghcr.io/cirruslabs/macos-ventura-xcode:latest
   container:
-      image: cirrusci/flutter:latest
+    image: cirrusci/flutter:latest
   env:
-      WORKING_DIR: $CIRRUS_WORKING_DIR/shady_ai_server
+    WORKING_DIR: $CIRRUS_WORKING_DIR/shady_ai_server
 
   # Scripts to run
   format_with_dart_script: |
@@ -46,12 +46,18 @@ backend_task:
     dart --disable-service-auth-codes --enable-vm-service=8111 --pause-isolates-on-exit test/main_test.dart
     dart pub global run coverage:format_coverage --lcov --in=coverage/coverage.json --out=coverage/lcov.info --report-on=test
     genhtml -o ./coverage ./coverage/lcov.info --branch-coverage
+    dart test --file-reporter=json:coverage/dart_test_report.json
+
+  copy_artifacts_script: |
+    # Copy artifacts to the Cirrus CI build folder
+    cp -r $WORKING_DIR/coverage $CIRRUS_WORKING_DIR
 
   always:
-    json_coverage_artifacts:
-      path: $WORKING_DIR/coverage/coverage.json
+    coverage_artifacts:
+      path: "coverage/**/*"
+      type: "text/html"
+    report_artifacts:
+      path: "coverage/dart_test_report.json"
       format: flutter
-    html_coverage_artifacts:
-      path: $WORKING_DIR/coverage/index.html
 
 
