@@ -1,19 +1,50 @@
-# MacOS is used as our main CI environment for Flutter
-macos_instance:
-    image: ghcr.io/cirruslabs/macos-ventura-xcode:14.3
-container:
-    image: cirrusci/flutter:latest
-
-# ==== All tasks for shady_ai_flutter ====
-shady_ai_flutter_task:
+frontend_task:
+  # MacOS is used as our main CI environment for Flutter
+  macos_instance:
+      image: ghcr.io/cirruslabs/macos-ventura-xcode:latest
+  container:
+      image: cirrusci/flutter:latest
   env:
-    CIRRUS_WORKING_DIR: "shady_ai_flutter/"
-  pub_cache:
-    folder: $HOME/.pub-cache
-  script:
-    - cd $CIRRUS_WORKING_DIR
-    - flutter test
-    - flutter analyze
-    - flutter pub run dart_code_metrics:metrics check-unused-files lib --exclude="{/**.g.dart,/**.freezed.dart}"
-    - flutter pub run dart_code_metrics:metrics check-unused-code lib --exclude="{/**.g.dart,/**.freezed.dart}"
-    - dart format lib test --set-exit-if-changed
+      WORKING_DIR: $CIRRUS_WORKING_DIR/shady_ai_flutter
+
+  # Scripts to run
+  analyze_with_flutter_script: |
+    cd $WORKING_DIR
+    flutter analyze
+    flutter test
+  format_with_dart_script: |
+    cd $WORKING_DIR
+    dart format -o none --set-exit-if-changed .
+  analyze_with_dart_code_metrics_script: |
+    cd $WORKING_DIR
+    [[ $WORKING_DIR == *shady_ai_server* ]] && exit0
+    flutter pub run dart_code_metrics:metrics check-unused-files lib test --exclude="{/**.g.dart,/**.freezed.dart}"
+    flutter pub run dart_code_metrics:metrics check-unused-code lib test --exclude="{/**.g.dart,/**.freezed.dart}"
+
+backend_task:
+  # MacOS is used as our main CI environment for Flutter
+  macos_instance:
+      image: ghcr.io/cirruslabs/macos-ventura-xcode:latest
+  container:
+      image: cirrusci/flutter:latest
+  env:
+      WORKING_DIR: $CIRRUS_WORKING_DIR/shady_ai_server
+
+  # Scripts to run
+  analyze_with_flutter_script: |
+    cd $WORKING_DIR
+    flutter analyze
+    flutter test
+  analyze_with_dart_script: |
+    cd $WORKING_DIR
+    [[ $WORKING_DIR == *shady_ai_flutter* ]] && exit 0
+    dart analyze
+    dart test
+  format_with_dart_script: |
+    cd $WORKING_DIR
+    dart format -o none --set-exit-if-changed .
+  analyze_with_dart_code_metrics_script: |
+    cd $WORKING_DIR
+    [[ $WORKING_DIR == *shady_ai_server* ]] && exit0
+    flutter pub run dart_code_metrics:metrics check-unused-files lib test --exclude="{/**.g.dart,/**.freezed.dart}"
+    flutter pub run dart_code_metrics:metrics check-unused-code lib test --exclude="{/**.g.dart,/**.freezed.dart}"
