@@ -47,13 +47,20 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-# Launcher icons generator
+# Launcher icons generator plugin
+#
+# To generate icons, enter this in the terminal:
+# > flutter pub run flutter_launcher_icons:main'
 flutter_icons:
   android: "launcher_icon"
   ios: true
   image_path: "assets/dad_the_benchmark_icon.png"
   min_sdk_android: 21 # android min sdk min:16, default 21
   macos:
+    generate: true
+  web:
+    generate: true
+  windows:
     generate: true
 
 # For information on the generic Dart part of this file, see the
