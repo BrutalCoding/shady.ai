@@ -1,39 +1,43 @@
-# shady.ai
-
 <div align="center">
-<image alt="Main logo" height=512 src="https://user-images.githubusercontent.com/5500332/230834497-1a044b2f-2200-44a8-b6f2-33f587bad218.png"/>
+  <image alt="Main logo" height=384 src="https://user-images.githubusercontent.com/5500332/230834497-1a044b2f-2200-44a8-b6f2-33f587bad218.png"/>
+  <h1>ShadyAI</h1>
 
-| Branch | Build Status |
-| :---         |     :---:      |
-| Main   | [![Main Build Status](https://api.cirrus-ci.com/github/BrutalCoding/shady.ai.svg?branch=main)](https://cirrus-ci.com/github/BrutalCoding/shady.ai/main)     | git status    |
-
-<h1>ShadyAI</>
-
+  <sub>My take to get privacy friendly, offline AI models accessible to as many people as possible. The cutting edge offline AI models such as [Segment Anything](https://ai.facebook.com/research/publications/segment-anything/), [LLaMA](https://github.com/facebookresearch/llama) and [Whisper](https://github.com/openai/whisper) have been optimised by many other developers in various forms and sizes. The small to medium sizes are the ones I'm interested in.</sub>
 </div>
-
-
-
-My take to get privacy friendly, offline AI models accessible to as many people as possible. The cutting edge offline AI models such as [Segment Anything](https://ai.facebook.com/research/publications/segment-anything/), [LLaMA](https://github.com/facebookresearch/llama) and [Whisper](https://github.com/openai/whisper) have been optimised by many other developers in various forms and sizes. The small to medium sizes are the ones I'm interested in.
 
 ## Getting Started
 
-This project has just started, so there is not much to see yet. Please check back later.
-
 Unlike the majority of the frontends for the AI models, this project aims to be easier than even those with 1-click installers to launch a web app.
+
+### Website
+
+Visit [shady.ai](https://shady.ai) (experimental!). This web-app gets freshly build and deployed every night at 00:00 UTC, as seen on the [deployments page](https://github.com/BrutalCoding/shady.ai/deployments?environment=github-pages#activity-log).
+
+### Other platforms
+
+No builds are available yet.
+
+### DIY 
+#### You've got the source code, here's how you can build it yourself:
+
+1. Install Flutter and make sure you can run their example app (counter app). 
+2. Install FVM (Flutter Version Manager) and make sure you can run it (e.g. `fvm --version` outputs 2.4.1 at the time of this writing).
+3. Open your terminal, navigate to the root of this project (e.g. `cd ~/my-favorite-projects/shady.ai`)
+4. Navigate to the frontend: `cd shady_ai_flutter`
+5. Install the same Flutter version: `fvm install`
+4. Finally, run the app with: `flutter run` (if multiple platforms are detected, e.g. MacOS and your phone, you'll be prompted to pick 1 device)
 
 ## Benchmark
 
-My dad, the retired butcher.
+My dad, the retired butcher in his mid-70's, is going to be the benchmark.
+
+If dad the retired butcher can install ShadyAI and interact with AI, it's a pass. Otherwise there's room for improvements to be made.
 
 Stats: mid-70s. Great memory. Always forgets my date of birth, yet somehow remembers details about his customers from 30 years ago. Has a great sense of humour.
 
-If I could get him in touch with these AI models, It's a win for everyone. Bare in mind, there's 13.000 KM between us, which sets the bar high for easy of use.
-
 That's him 👇
 
-<div align="left">
-<img alt="Shady's Daddy" src="https://user-images.githubusercontent.com/5500332/230836945-0540146a-b341-4874-9f31-58e687d29053.png" height=350>
-</div>
+<img alt="Shady's Daddy" src="https://user-images.githubusercontent.com/5500332/230836945-0540146a-b341-4874-9f31-58e687d29053.png" height=256>
 
 ## Goal
 
