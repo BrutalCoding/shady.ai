@@ -1,7 +1,7 @@
+# shady.ai
+
 <div align="center">
-<picture>
-<img alt="The Benchmark" src="https://user-images.githubusercontent.com/5500332/230834497-1a044b2f-2200-44a8-b6f2-33f587bad218.png" height=300/>
-</picture>
+<image alt="Main logo" height=512 src="https://user-images.githubusercontent.com/5500332/230834497-1a044b2f-2200-44a8-b6f2-33f587bad218.png"/>
 
 | Branch | Build Status |
 | :---         |     :---:      |
@@ -32,9 +32,7 @@ If I could get him in touch with these AI models, It's a win for everyone. Bare 
 That's him 👇
 
 <div align="left">
-<picture>
 <img alt="Shady's Daddy" src="https://user-images.githubusercontent.com/5500332/230836945-0540146a-b341-4874-9f31-58e687d29053.png" height=350>
-</picture>
 </div>
 
 ## Goal
