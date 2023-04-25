@@ -52,7 +52,7 @@ _Planned release dates are estimates and subject to change._
 
 April 2023 - No Talk, Just Code
 
-- [ ]  Mac app powered by [rwkv.cpp](https://github.com/saharNooby/rwkv.cpp)
+- [x] Mac app powered by [rwkv.cpp](https://github.com/saharNooby/rwkv.cpp)
 - [ ] iOS app powered by [rwkv.cpp](https://github.com/saharNooby/rwkv.cpp)
 - [ ] Android app powered by [rwkv.cpp](https://github.com/saharNooby/rwkv.cpp)
 - [ ] Windows app powered by [rwkv.cpp](https://github.com/saharNooby/rwkv.cpp)
