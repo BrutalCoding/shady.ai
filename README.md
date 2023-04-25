@@ -1,5 +1,5 @@
 <div align="center">
-  <image alt="Main logo" height=384 src="https://user-images.githubusercontent.com/5500332/230834497-1a044b2f-2200-44a8-b6f2-33f587bad218.png"/>
+  <image alt="Main logo" height=256 src="assets/shady_app_icon.png"/>
   <h1>ShadyAI</h1>
 
   <sub>My take to get privacy friendly, offline AI models accessible to as many people as possible. The cutting edge offline AI models such as [Segment Anything](https://ai.facebook.com/research/publications/segment-anything/), [LLaMA](https://github.com/facebookresearch/llama) and [Whisper](https://github.com/openai/whisper) have been optimised by many other developers in various forms and sizes. The small to medium sizes are the ones I'm interested in.</sub>
@@ -17,10 +17,11 @@ Visit [shady.ai](https://shady.ai) (experimental!). This web-app gets freshly bu
 
 No builds are available yet.
 
-### DIY 
-#### You've got the source code, here's how you can build it yourself:
+### DIY
 
-1. Install Flutter and make sure you can run their example app (counter app). 
+#### You've got the source code, here's how you can build it yourself
+
+1. Install Flutter and make sure you can run their example app (counter app).
 2. Install FVM (Flutter Version Manager) and make sure you can run it (e.g. `fvm --version` outputs 2.4.1 at the time of this writing).
 3. Open your terminal, navigate to the root of this project (e.g. `cd ~/my-favorite-projects/shady.ai`)
 4. Navigate to the frontend: `cd shady_ai_flutter`
@@ -37,13 +38,13 @@ Stats: mid-70s. Great memory. Always forgets my date of birth, yet somehow remem
 
 That's him 👇
 
-<img alt="Shady's Daddy" src="https://user-images.githubusercontent.com/5500332/230836945-0540146a-b341-4874-9f31-58e687d29053.png" height=256>
+<img alt="Shady's Daddy" src="shady_ai_flutter/assets/dad_the_benchmark.png" height=256>
 
 ## Goal
 
 The goal is to have a "normal" app for all platforms, including Windows, Mac, Linux, iOS, Android and web. Should be as simple as downloading the app and running it. No need to install Python, download models, install dependencies, etc.
 
-The web version will be powered by [Serverpod](https://github.com/serverpod/serverpod) and eventually be hosted on [shady.ai](https://shady.ai) (not yet available). No guarantees on the ease of use, but I'll try my best. It's going to be a bumpier ride than the other frontends, but I'm up for the challenge.
+The web version will be powered by [Serverpod](https://github.com/serverpod/serverpod) as the backend. A experimental web version is available on [shady.ai](https://shady.ai). No guarantees on the ease of use, but I'll try my best. It's going to be a bumpier ride than the other frontends, but I'm up for the challenge.
 
 ## Roadmap
 
@@ -51,12 +52,12 @@ _Planned release dates are estimates and subject to change._
 
 April 2023 - No Talk, Just Code
 
-- [ ] Mac app powered by [rwkv.cpp](https://github.com/saharNooby/rwkv.cpp) | 14B | 7B
-- [ ] iOS app powered by [rwkv.cpp](https://github.com/saharNooby/rwkv.cpp) | 3B
-- [ ] Android app powered by [rwkv.cpp](https://github.com/saharNooby/rwkv.cpp) | 3B | 7B*
-- [ ] Windows app powered by [rwkv.cpp](https://github.com/saharNooby/rwkv.cpp) | 14B | 7B
-- [ ] Setup CI/CD with Fastlane (Google's open source tool) to create consistent GitHub releases for all platforms.
-- [ ] Update documentation to include instructions on how to build the apps from source or download the prebuilt apps from GitHub releases.
+- [ ]  Mac app powered by [rwkv.cpp](https://github.com/saharNooby/rwkv.cpp)
+- [ ] iOS app powered by [rwkv.cpp](https://github.com/saharNooby/rwkv.cpp)
+- [ ] Android app powered by [rwkv.cpp](https://github.com/saharNooby/rwkv.cpp)
+- [ ] Windows app powered by [rwkv.cpp](https://github.com/saharNooby/rwkv.cpp)
+- [x] Setup various CI/CD pipelines
+- [x] Update documentation to include instructions on how to build the apps from source or download the prebuilt apps from GitHub releases.
 
 May 2023 - Whisper Quiet
 
@@ -89,7 +90,7 @@ July 2023 - Real Shady
 
 Q: Why the name Shady.ai?
 
-A: Because it's shady. It's shady because it's not using the internet. Wait, I'll get back to you on that one later.
+A: Because it's shady. It's shady because it's not using the internet. Wait, that doesn't make any sense. I'll think of something better.
 
 ## Disclaimer
 
@@ -103,8 +104,6 @@ See the [LICENSE](LICENSE) file.
 
 Feel free to open an issue or a pull request. I'm open to any suggestions.
 
-## Screenshots
-
-### MacOS
+## App Preview
 
 ![macos_screenshot](https://user-images.githubusercontent.com/5500332/230838110-f462d8b6-bc02-46fc-b300-86ca75bbbec4.png)

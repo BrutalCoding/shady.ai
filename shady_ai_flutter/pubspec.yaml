@@ -27,10 +27,6 @@ dependencies:
   serverpod_flutter: ^1.0.1
   shady_ai_client:
     path: ../shady_ai_client
-
-
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   ffi: ^2.0.1
   hooks_riverpod: ^2.3.4
@@ -38,6 +34,17 @@ dependencies:
   riverpod_lint: ^1.2.0
   go_router: ^6.5.5
   url_launcher: ^6.1.10
+  #
+  # Experimental. I was able to compile "flutter build web --wasm" but only without serverpod_flutter.
+  # serverpod_flutter relies on a connectivity package, which uses dart:html.
+  # dart:html is causing troubles together with the --wasm flag.
+  # If you want to try it out, make sure you're on the latest flutter master channel.
+  # For more info, visit: https://github.com/dart-lang/wasm/tree/main/flutter_wasm
+  #
+  # flutter_wasm:
+  #   git:
+  #     url: https://github.com/dart-lang/wasm.git
+  #     path: flutter_wasm
 
 dev_dependencies:
   dart_code_metrics: ^5.7.2
