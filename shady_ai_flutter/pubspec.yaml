@@ -54,6 +54,17 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
+ffigen:
+  name: RWKV
+  description: Bindings to rwkv.cpp
+  output: 'lib/rwkv_bindings.dart'
+  headers:
+    entry-points:
+      - 'headers/rwkv.h'
+  preamble: |
+    // ignore_for_file: deprecated_member_use
+
+
 # Launcher icons generator plugin
 #
 # To generate icons, enter this in the terminal:
@@ -82,3 +93,4 @@ flutter:
   uses-material-design: true
   assets:
     - assets/dad_the_benchmark.png
+    - assets/rwkv/
