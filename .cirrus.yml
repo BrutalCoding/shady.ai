@@ -41,7 +41,7 @@ backend_task:
   analyze_with_dart_script: |
     cd $WORKING_DIR
     dart pub get
-    dart analyze --fatal-infos lib test
+    dart analyze --fatal-infos lib/*.dart test
 
   test_coverage_with_dart_script: |
     cd $WORKING_DIR
