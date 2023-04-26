@@ -106,4 +106,4 @@ Feel free to open an issue or a pull request. I'm open to any suggestions.
 
 ## App Preview
 
-![macos_screenshot](https://user-images.githubusercontent.com/5500332/230838110-f462d8b6-bc02-46fc-b300-86ca75bbbec4.png)
+![shadyai_eval_ok](https://user-images.githubusercontent.com/5500332/234497371-eeb5be33-f884-4a90-b977-0d5f162641da.gif)
