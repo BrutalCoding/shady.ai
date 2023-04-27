@@ -7,11 +7,11 @@
 
 ## Getting Started
 
-Unlike the majority of the frontends for the AI models, this project aims to be easier than even those with 1-click installers to launch a web app.
+Unlike the majority of frontends for AI models, this project aims to be easier than even those with 1-click installers to launch a web app.
 
 ### Website
 
-Visit [shady.ai](https://shady.ai) (experimental!). This web-app gets freshly build and deployed every night at 00:00 UTC, as seen on the [deployments page](https://github.com/BrutalCoding/shady.ai/deployments?environment=github-pages#activity-log).
+Visit [shady.ai](https://shady.ai) (experimental!). This web-app gets freshly built and deployed every night at 00:00 UTC, as seen on the [deployments page](https://github.com/BrutalCoding/shady.ai/deployments?environment=github-pages#activity-log).
 
 ### Other platforms
 
@@ -30,7 +30,7 @@ No builds are available yet.
 
 ## Benchmark
 
-My dad, the retired butcher in his mid-70's, is going to be the benchmark.
+My dad, the retired butcher in his mid-70s, is going to be the benchmark.
 
 If dad the retired butcher can install ShadyAI and interact with AI, it's a pass. Otherwise there's room for improvements to be made.
 
@@ -42,7 +42,7 @@ That's him 👇
 
 ## Goal
 
-The goal is to have a "normal" app for all platforms, including Windows, Mac, Linux, iOS, Android and web. Should be as simple as downloading the app and running it. No need to install Python, download models, install dependencies, etc.
+The goal is to have a "normal" app for all platforms, including Windows, Mac, Linux, iOS, Android and Web. Should be as simple as downloading the app and running it. No need to install Python, download models, install dependencies, etc.
 
 The web version will be powered by [Serverpod](https://github.com/serverpod/serverpod) as the backend. A experimental web version is available on [shady.ai](https://shady.ai). No guarantees on the ease of use, but I'll try my best. It's going to be a bumpier ride than the other frontends, but I'm up for the challenge.
 
@@ -76,13 +76,13 @@ July 2023 - Real Shady
 - [ ] Prototyping with voice synthesis and music generation.
 - [ ] Trying out WASM for Flutter web (experimental)
 
-*Stretch goal. 7B is the size of the model, which might be too big for Android for a good user experience. Quantized models on smaller models tend to be completely broken. There's lots of developments in the field of quantization, which I'm keeping an eye on.
+*Stretch goal. 7B is the size of the model, which might be too big for Android for a good user experience. Quantized smaller models tend to be completely broken. There's lots of developments in the field of quantization, which I'm keeping an eye on.
 
 ## Tech Stack
 
 - [Flutter](https://flutter.dev/) - Frontend (in Dart)
 - [Serverpod](https://serverpod.dev/) - Backend (in Dart)
-- [rwkv.cpp](https://github.com/saharNooby/rwkv.cpp) - Allows me to run one of BlinkDL's models on the CPU, fast intference.
+- [rwkv.cpp](https://github.com/saharNooby/rwkv.cpp) - Allows me to run one of BlinkDL's models on the CPU, fast inference.
 - [Design System](https://m3.material.io/) - Design system made by Google for their own apps. I will use their Figma template and their theme builder generator (official Flutter support)
 - And many more...
 
