@@ -57,7 +57,7 @@ dev_dependencies:
 ffigen:
   name: RWKV
   description: Bindings to rwkv.cpp
-  output: 'lib/rwkv_bindings.dart'
+  output: 'lib/generated/rwkv/rwkv_bindings.g.dart'
   headers:
     entry-points:
       - 'headers/rwkv.h'

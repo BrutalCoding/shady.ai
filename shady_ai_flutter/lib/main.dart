@@ -7,7 +7,7 @@ import 'package:ffi/ffi.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:path/path.dart' as p;
-import 'package:shady_ai/rwkv_bindings.dart';
+import 'package:shady_ai/generated/rwkv/rwkv_bindings.g.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 Future<String> loadModelFile() async {
@@ -91,7 +91,7 @@ class MyHomePageState extends State<MyHomePage> {
     try {
       rwkv = RWKV(await loadLibrwkv());
       final modelFilePath = await loadModelFile();
-      final modelFilePathCStr = modelFilePath.toNativeUtf8();
+      final modelFilePathCStr = modelFilePath.toNativeUtf8().cast<Char>();
       ctx = rwkv.rwkv_init_from_file(modelFilePathCStr, 1);
 
       final state_buffer = rwkv.rwkv_get_state_buffer_element_count(ctx);
