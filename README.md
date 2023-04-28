@@ -76,8 +76,6 @@ July 2023 - Real Shady
 - [ ] Prototyping with voice synthesis and music generation.
 - [ ] Trying out WASM for Flutter web (experimental)
 
-*Stretch goal. 7B is the size of the model, which might be too big for Android for a good user experience. Quantized smaller models tend to be completely broken. There's lots of developments in the field of quantization, which I'm keeping an eye on.
-
 ## Tech Stack
 
 - [Flutter](https://flutter.dev/) - Frontend (in Dart)
