@@ -5,6 +5,12 @@
   <sub>My take to get privacy friendly, offline AI models accessible to as many people as possible. The cutting edge offline AI models such as [Segment Anything](https://ai.facebook.com/research/publications/segment-anything/), [LLaMA](https://github.com/facebookresearch/llama) and [Whisper](https://github.com/openai/whisper) have been optimised by many other developers in various forms and sizes. The small to medium sizes are the ones I'm interested in.</sub>
 </div>
 
+<center>
+
+[Skip to App Preview](#app-preview)
+
+</center>
+
 ## Getting Started
 
 Unlike the majority of frontends for AI models, this project aims to be easier than even those with 1-click installers to launch a web app.
@@ -38,7 +44,7 @@ Stats: mid-70s. Great memory. Always forgets my date of birth, yet somehow remem
 
 That's him 👇
 
-<img alt="Shady's Daddy" src="shady_ai_flutter/assets/dad_the_benchmark.png" height=256>
+<img alt="Shady's Daddy" src="shady_ai_flutter/assets/images/dad_cutout.png" height=256>
 
 ## Goal
 
@@ -90,6 +96,14 @@ Q: Why the name Shady.ai?
 
 A: Because it's shady. It's shady because it's not using the internet. Wait, that doesn't make any sense. I'll think of something better.
 
+## Verified Systems
+
+My daily driver:
+
+- macOS: Ventura - 13.3.1 (22E261)
+- Chip: M1
+- Memory: 16 GB
+
 ## Disclaimer
 
 This project is not affiliated with Facebook, OpenAI or any other company. This is a personal project made by a hobbyist.
@@ -104,4 +118,6 @@ Feel free to open an issue or a pull request. I'm open to any suggestions.
 
 ## App Preview
 
-![shadyai_eval_ok](https://user-images.githubusercontent.com/5500332/234497371-eeb5be33-f884-4a90-b977-0d5f162641da.gif)
+### macOS
+
+<image alt="Screenshot of ShadyAI for MacOS - Launchpad" height=256 src="assets/macos_preview_0.png"/>
