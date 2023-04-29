@@ -15,7 +15,8 @@ class HomeGridWidget extends StatelessWidget {
       color: onPressed != null
           ? Theme.of(context).colorScheme.surfaceVariant
           : Theme.of(context).disabledColor,
-      borderRadius: BorderRadius.circular(4),
+      type: MaterialType.card,
+      textStyle: Theme.of(context).textTheme.titleLarge,
       child: InkWell(
         onTap: onPressed != null
             ? () {
@@ -35,7 +36,7 @@ class HomeGridWidget extends StatelessWidget {
                 text,
                 maxLines: 1,
                 textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.displayMedium,
+                style: Theme.of(context).textTheme.titleLarge,
               ),
             ),
           ),

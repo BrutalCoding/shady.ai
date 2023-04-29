@@ -41,6 +41,7 @@ dependencies:
   flutter_adaptive_scaffold: ^0.1.3
   riverpod_annotation: ^2.1.1
   flutter_hooks: ^0.18.6
+  window_manager: ^0.3.2
   #
   # Experimental. I was able to compile "flutter build web --wasm" but only without serverpod_flutter.
   # serverpod_flutter relies on a connectivity package, which uses dart:html.
@@ -62,6 +63,7 @@ dev_dependencies:
   flutter_lints: ^2.0.1
   flutter_test:
     sdk: flutter
+  go_router_builder: ^1.2.2
 
 ffigen:
   name: RWKV
