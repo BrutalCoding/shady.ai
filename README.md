@@ -9,13 +9,17 @@
 
 Unlike the majority of frontends for AI models, this project aims to be easier than even those with 1-click installers to launch a web app.
 
-### Website
+### Web version
 
 Visit [shady.ai](https://shady.ai) (experimental!). This web-app gets freshly built and deployed every night at 00:00 UTC, as seen on the [deployments page](https://github.com/BrutalCoding/shady.ai/deployments?environment=github-pages#activity-log).
 
 ### Other platforms
 
-No builds are available yet.
+No builds are available yet. However, let me show you a snapshot of what I'm trying to push out as the first prototype. It's not pretty (yet!), but function over form because I'd like to get the last 2 letters of __ShadyAI__ to be true first.
+
+__Dev snapshot of macOS - 3 May 2023__
+
+<image alt="Snapshot of ShadyAI for MacOS" height="384" width="auto" src="https://user-images.githubusercontent.com/5500332/235390984-5c69a7bf-ed95-47f7-897d-830a19590d30.png"/>
 
 ### DIY
 
@@ -50,38 +54,53 @@ The web version will be powered by [Serverpod](https://github.com/serverpod/serv
 
 _Planned release dates are estimates and subject to change._
 
-April 2023 - No Talk, Just Code
+__April 2023 - No Talk, Just Code__
 
 - [x] Mac app powered by [rwkv.cpp](https://github.com/saharNooby/rwkv.cpp)
 - [ ] iOS app powered by [rwkv.cpp](https://github.com/saharNooby/rwkv.cpp)
+
 - [ ] Android app powered by [rwkv.cpp](https://github.com/saharNooby/rwkv.cpp)
-- [ ] Windows app powered by [rwkv.cpp](https://github.com/saharNooby/rwkv.cpp)
 - [x] Setup various CI/CD pipelines
-- [x] Update documentation to include instructions on how to build the apps from source or download the prebuilt apps from GitHub releases.
+- [x] Update documentation to include instructions on how to build the apps from source or ~~download the prebuilt apps from GitHub releases~~.
 
-May 2023 - Whisper Quiet
+<sup>End of April update from @BrutalCoding: April's missed goals are now May's goals.</sup>
 
-- [ ] Update apps to support [whisper.cc](https://github.com/ggerganov/whisper.cpp)
-- [ ] Start working on Flutter web app & Dart web server powered by [Serverpod](https://github.com/serverpod/serverpod)
+__May 2023 - Whisper Quiet__
+
+- [ ] iOS app powered by [rwkv.cpp](https://github.com/saharNooby/rwkv.cpp)
+- [ ] Android app powered by [rwkv.cpp](https://github.com/saharNooby/rwkv.cpp)
+- [ ] Add whisper.cc support in at least one of the platforms. This allows you to transcribe audio to text powered by [whisper.cc](https://github.com/ggerganov/whisper.cpp)
+
+__June 2023 - Mask On__
+
+- [ ] Start Fastlane integration for iOS and Android, this is a pre-requisite step so that I can start automating releases to targets like: [ShadyAI's GitHub Releases](https://github.com/BrutalCoding/shady.ai/releases), Google Play Store, Apple App Store, etc.
+- [ ] Windows app powered by [rwkv.cpp](https://github.com/saharNooby/rwkv.cpp)
 - [ ] Start with the tedious tasks such as new assets (e.g. icons, images), splash screen, configure dev/staging/prod environments, bug fixes, auto-updater, support for different sizes etc.
 
-June 2023 - Mask On
+__July 2023 - Real Shady__
 
-- [ ] My 2nd attempt to port [ONNX Runtime](https://github.com/microsoft/onnxruntime) over to [Dart](https://dart.dev/). This should save a lot of time and effort to run [Segment Anything](https://ai.facebook.com/research/publications/segment-anything/) and generally helps to use models independent of the model's original ML platform (e.g. PyTorch, TensorFlow, etc).
-- [ ] Publish [ONNX Runtime](https://github.com/microsoft/onnxruntime) for [Dart](https://dart.dev/) to [pub.dev](https://pub.dev/) so that it can be used by other developers. Using ffigen to generate the bindings.
+- [ ] Start working on Flutter web app & Dart web server powered by [Serverpod](https://github.com/serverpod/serverpod)
+- [ ] Prototyping with state of the art models in the audio sector. I've seen open source code to try it out, however, I'd like to get rid of the developer experience. That's the challenge for me. Would be nice to generate Lo-Fi music, or even better, generate music based on your voice, on your devices, without internet connection.
 
-July 2023 - Real Shady
+### Taken away from roadmap
 
-- [ ] Reearching state of the art models in the audio sector.
-- [ ] Prototyping with voice synthesis and music generation.
-- [ ] Trying out WASM for Flutter web (experimental)
+These are the things I've decided to take away from the roadmap. I'd still like to do them, but they're not a priority. This could be due to missing my own deadlines on certain items of my roadmap, or simply because I've decided to focus on other ShadyAI goals.
+
+- [ ] ~~My 2nd attempt to port [ONNX Runtime](https://github.com/microsoft/onnxruntime) over to [Dart](https://dart.dev/). This should save a lot of time and effort to run [Segment Anything](https://ai.facebook.com/research/publications/segment-anything/) and generally helps to use models independent of the model's original ML platform (e.g. PyTorch, TensorFlow, etc).~~
+- [ ] ~~Trying out WASM for Flutter web (experimental)~~
+- [ ] ~~Publish [ONNX Runtime](https://github.com/microsoft/onnxruntime) for [Dart](https://dart.dev/) to [pub.dev](https://pub.dev/) so that it can be used by other developers. Using ffigen to generate the bindings.~~
 
 ## Tech Stack
 
 - [Flutter](https://flutter.dev/) - Frontend (in Dart)
 - [Serverpod](https://serverpod.dev/) - Backend (in Dart)
 - [rwkv.cpp](https://github.com/saharNooby/rwkv.cpp) - Allows me to run one of BlinkDL's models on the CPU, fast inference.
-- [Design System](https://m3.material.io/) - Design system made by Google for their own apps. I will use their Figma template and their theme builder generator (official Flutter support)
+- [Design System](https://m3.material.io/) - Design system made by Google. Helps me to get a consisting theme throughout the app in less effort than doing it all myself.
+Once finished implementing the roadmap items ([see roadmap](#roadmap)), I'll start moving away to the following available Flutter UI kits:
+-- Android: No changes required, Android's theme is Material.
+-- iOS: [Flutter's Cupertino](https://flutter.dev/docs/development/ui/widgets/cupertino)
+-- Windows: [pub.dev/fluent_ui](https://pub.dev/packages/fluent_ui)
+-- macOS: [pub.dev/macos_ui](https://pub.dev/packages/macos_ui)
 - And many more...
 
 ## FAQ
