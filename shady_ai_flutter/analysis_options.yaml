@@ -1,6 +1,18 @@
+include: package:flutter_lints/flutter.yaml
+
 analyzer:
+  exclude:
+    - "**/*.g.dart"
   plugins:
-    - dart_code_metrics
+    - custom_lint
+
+custom_lint:
+  rules:
+    - missing_provider_scope: true
+    - always_specify_types: true
+    # Enforce new lines before a return statement
+    - newline_before_return: true
+
 
 dart_code_metrics:
   metrics:
@@ -9,6 +21,7 @@ dart_code_metrics:
     maximum-nesting-level: 5
   metrics-exclude:
     - test/**
+    - generated/**
   rules:
     - avoid-dynamic
     - avoid-passing-async-when-sync-expected

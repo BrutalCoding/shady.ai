@@ -9,17 +9,11 @@ pre-push:
     flutter-test:
       root: shady_ai_flutter/
       run: flutter test
-      fail_text: "Could not pass tests"
+      fail_text: "❌ Could not pass tests"
     flutter-analyze:
       root: "shady_ai_flutter/"
       run: |
         flutter analyze
-        flutter pub run dart_code_metrics:metrics analyze lib
-    flutter-check-unused:
-      root: shady_ai_flutter/
-      run: |
-        flutter pub run dart_code_metrics:metrics check-unused-files lib --exclude="{/**.g.dart,/**.freezed.dart}"
-        flutter pub run dart_code_metrics:metrics check-unused-code lib --exclude="{/**.g.dart,/**.freezed.dart}"
 
 # Note: commit-msg hook takes a single parameter,
 # the name of the file that holds the proposed commit log message.
@@ -38,13 +32,4 @@ pre-commit:
   commands:
     dart-fix:
       root: shady_ai_flutter/
-      glob: '*.dart' # Find all .dart files
-      exclude: '*.{g,freezed}.dart' # Exclude generated dart files
-      run: dart fix --apply "{staged_files}"
-      stage_fixed: true # Stage the fixed files
-    dart-format:
-      root: shady_ai_flutter/
-      glob: '*.dart' # Find all .dart files
-      exclude: '*.{g,freezed}.dart' # Exclude generated dart files
-      run: dart format "{staged_files}" # Format staged files
-      stage_fixed: true # Stage the fixed files
+      run: dart fix --apply
