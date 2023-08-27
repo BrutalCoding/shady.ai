@@ -144,3 +144,7 @@ app.*.symbols
 **/*.env
 
 shady_ai_flutter/.fvm/flutter_sdk
+
+*.gguf
+
+*.bin
