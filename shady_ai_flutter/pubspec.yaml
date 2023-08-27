@@ -61,7 +61,7 @@ dev_dependencies:
 #   output: 'lib/generated/llama.cpp/llama.cpp_bindings.g.dart'
 #   headers:
 #     entry-points:
-#       - 'headers/rwkv.h'
+#       # - '/example/absolute/path/to/llama.cpp/llama.h'
 #   preamble: |
 #     // ignore_for_file: deprecated_member_use
 
@@ -73,7 +73,7 @@ dev_dependencies:
 #   output: 'lib/generated/rwkv.cpp/rwkv_bindings.g.dart'
 #   headers:
 #     entry-points:
-#       - 'headers/rwkv.h'
+#       - '# - /example/absolute/path/to/rwkv.cpp/rwkv.h'
 #   preamble: |
 #     // ignore_for_file: deprecated_member_use
 
