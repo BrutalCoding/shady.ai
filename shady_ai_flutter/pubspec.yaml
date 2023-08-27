@@ -54,15 +54,29 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-ffigen:
-  name: RWKV
-  description: Bindings to rwkv.cpp
-  output: 'lib/generated/rwkv/rwkv_bindings.g.dart'
-  headers:
-    entry-points:
-      - 'headers/rwkv.h'
-  preamble: |
-    // ignore_for_file: deprecated_member_use
+
+# # Generates bindings for llama.cpp
+# ffigen:
+#   name: LLaMa
+#   description: Bindings to llama.cpp
+#   output: 'lib/generated/llama.cpp/llama.cpp_bindings.g.dart'
+#   headers:
+#     entry-points:
+#       - 'headers/rwkv.h'
+#   preamble: |
+#     // ignore_for_file: deprecated_member_use
+
+
+# # Generates bindings for rwkv.cpp
+# ffigen:
+#   name: RWKV
+#   description: Bindings to rwkv.cpp
+#   output: 'lib/generated/rwkv.cpp/rwkv_bindings.g.dart'
+#   headers:
+#     entry-points:
+#       - 'headers/rwkv.h'
+#   preamble: |
+#     // ignore_for_file: deprecated_member_use
 
 
 # Launcher icons generator plugin

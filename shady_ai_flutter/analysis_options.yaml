@@ -14,7 +14,6 @@ analyzer:
 
 linter:
   rules:
-    sort_pub_dependencies: true
     require_trailing_commas: true
     directives_ordering: true
     prefer_relative_imports: true
