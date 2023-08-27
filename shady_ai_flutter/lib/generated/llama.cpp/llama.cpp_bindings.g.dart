@@ -7278,7 +7278,7 @@ class LLaMa {
       .asFunction<void Function(llama_log_callback, ffi.Pointer<ffi.Void>)>();
 }
 
-class __mbstate_t extends ffi.Union {
+final class __mbstate_t extends ffi.Union {
   @ffi.Array.multi([128])
   external ffi.Array<ffi.Char> __mbstate8;
 
@@ -7286,7 +7286,7 @@ class __mbstate_t extends ffi.Union {
   external int _mbstateL;
 }
 
-class __darwin_pthread_handler_rec extends ffi.Struct {
+final class __darwin_pthread_handler_rec extends ffi.Struct {
   external ffi
       .Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>
       __routine;
@@ -7296,7 +7296,7 @@ class __darwin_pthread_handler_rec extends ffi.Struct {
   external ffi.Pointer<__darwin_pthread_handler_rec> __next;
 }
 
-class _opaque_pthread_attr_t extends ffi.Struct {
+final class _opaque_pthread_attr_t extends ffi.Struct {
   @ffi.Long()
   external int __sig;
 
@@ -7304,7 +7304,7 @@ class _opaque_pthread_attr_t extends ffi.Struct {
   external ffi.Array<ffi.Char> __opaque;
 }
 
-class _opaque_pthread_cond_t extends ffi.Struct {
+final class _opaque_pthread_cond_t extends ffi.Struct {
   @ffi.Long()
   external int __sig;
 
@@ -7312,7 +7312,7 @@ class _opaque_pthread_cond_t extends ffi.Struct {
   external ffi.Array<ffi.Char> __opaque;
 }
 
-class _opaque_pthread_condattr_t extends ffi.Struct {
+final class _opaque_pthread_condattr_t extends ffi.Struct {
   @ffi.Long()
   external int __sig;
 
@@ -7320,7 +7320,7 @@ class _opaque_pthread_condattr_t extends ffi.Struct {
   external ffi.Array<ffi.Char> __opaque;
 }
 
-class _opaque_pthread_mutex_t extends ffi.Struct {
+final class _opaque_pthread_mutex_t extends ffi.Struct {
   @ffi.Long()
   external int __sig;
 
@@ -7328,7 +7328,7 @@ class _opaque_pthread_mutex_t extends ffi.Struct {
   external ffi.Array<ffi.Char> __opaque;
 }
 
-class _opaque_pthread_mutexattr_t extends ffi.Struct {
+final class _opaque_pthread_mutexattr_t extends ffi.Struct {
   @ffi.Long()
   external int __sig;
 
@@ -7336,7 +7336,7 @@ class _opaque_pthread_mutexattr_t extends ffi.Struct {
   external ffi.Array<ffi.Char> __opaque;
 }
 
-class _opaque_pthread_once_t extends ffi.Struct {
+final class _opaque_pthread_once_t extends ffi.Struct {
   @ffi.Long()
   external int __sig;
 
@@ -7344,7 +7344,7 @@ class _opaque_pthread_once_t extends ffi.Struct {
   external ffi.Array<ffi.Char> __opaque;
 }
 
-class _opaque_pthread_rwlock_t extends ffi.Struct {
+final class _opaque_pthread_rwlock_t extends ffi.Struct {
   @ffi.Long()
   external int __sig;
 
@@ -7352,7 +7352,7 @@ class _opaque_pthread_rwlock_t extends ffi.Struct {
   external ffi.Array<ffi.Char> __opaque;
 }
 
-class _opaque_pthread_rwlockattr_t extends ffi.Struct {
+final class _opaque_pthread_rwlockattr_t extends ffi.Struct {
   @ffi.Long()
   external int __sig;
 
@@ -7360,7 +7360,7 @@ class _opaque_pthread_rwlockattr_t extends ffi.Struct {
   external ffi.Array<ffi.Char> __opaque;
 }
 
-class _opaque_pthread_t extends ffi.Struct {
+final class _opaque_pthread_t extends ffi.Struct {
   @ffi.Long()
   external int __sig;
 
@@ -7370,7 +7370,7 @@ class _opaque_pthread_t extends ffi.Struct {
   external ffi.Array<ffi.Char> __opaque;
 }
 
-class ggml_object extends ffi.Struct {
+final class ggml_object extends ffi.Struct {
   @ffi.Size()
   external int offs;
 
@@ -7392,7 +7392,7 @@ abstract class ggml_object_type {
   static const int GGML_OBJECT_WORK_BUFFER = 2;
 }
 
-class ggml_context extends ffi.Opaque {}
+final class ggml_context extends ffi.Opaque {}
 
 abstract class ggml_type {
   static const int GGML_TYPE_F32 = 0;
@@ -7523,7 +7523,7 @@ abstract class ggml_unary_op {
   static const int GGML_UNARY_OP_SILU = 9;
 }
 
-class ggml_tensor extends ffi.Struct {
+final class ggml_tensor extends ffi.Struct {
   @ffi.Int32()
   external int type;
 
@@ -7573,7 +7573,7 @@ class ggml_tensor extends ffi.Struct {
   external ffi.Array<ffi.Char> padding;
 }
 
-class ggml_cplan extends ffi.Struct {
+final class ggml_cplan extends ffi.Struct {
   @ffi.Size()
   external int work_size;
 
@@ -7592,7 +7592,7 @@ class ggml_cplan extends ffi.Struct {
   external ffi.Pointer<ffi.Void> abort_callback_data;
 }
 
-class ggml_cgraph extends ffi.Struct {
+final class ggml_cgraph extends ffi.Struct {
   @ffi.Int()
   external int n_nodes;
 
@@ -7621,7 +7621,7 @@ class ggml_cgraph extends ffi.Struct {
   external int perf_time_us;
 }
 
-class ggml_scratch extends ffi.Struct {
+final class ggml_scratch extends ffi.Struct {
   @ffi.Size()
   external int offs;
 
@@ -7631,7 +7631,7 @@ class ggml_scratch extends ffi.Struct {
   external ffi.Pointer<ffi.Void> data;
 }
 
-class ggml_init_params extends ffi.Struct {
+final class ggml_init_params extends ffi.Struct {
   @ffi.Size()
   external int mem_size;
 
@@ -7647,7 +7647,7 @@ abstract class ggml_task_type {
   static const int GGML_TASK_FINALIZE = 2;
 }
 
-class ggml_compute_params extends ffi.Struct {
+final class ggml_compute_params extends ffi.Struct {
   @ffi.Int32()
   external int type;
 
@@ -7741,7 +7741,7 @@ abstract class ggml_opt_result {
   static const int GGML_LINESEARCH_INVALID_PARAMETERS = -124;
 }
 
-class ggml_opt_params extends ffi.Struct {
+final class ggml_opt_params extends ffi.Struct {
   @ffi.Int32()
   external int type;
 
@@ -7768,7 +7768,7 @@ class ggml_opt_params extends ffi.Struct {
   external UnnamedStruct2 lbfgs;
 }
 
-class UnnamedStruct1 extends ffi.Struct {
+final class UnnamedStruct1 extends ffi.Struct {
   @ffi.Int()
   external int n_iter;
 
@@ -7797,7 +7797,7 @@ class UnnamedStruct1 extends ffi.Struct {
   external double eps_g;
 }
 
-class UnnamedStruct2 extends ffi.Struct {
+final class UnnamedStruct2 extends ffi.Struct {
   @ffi.Int()
   external int m;
 
@@ -7826,7 +7826,7 @@ class UnnamedStruct2 extends ffi.Struct {
   external int linesearch;
 }
 
-class ggml_opt_context extends ffi.Struct {
+final class ggml_opt_context extends ffi.Struct {
   external ffi.Pointer<ggml_context> ctx;
 
   external ggml_opt_params params;
@@ -7845,7 +7845,7 @@ class ggml_opt_context extends ffi.Struct {
   external UnnamedStruct4 lbfgs;
 }
 
-class UnnamedStruct3 extends ffi.Struct {
+final class UnnamedStruct3 extends ffi.Struct {
   external ffi.Pointer<ggml_tensor> x;
 
   external ffi.Pointer<ggml_tensor> g1;
@@ -7872,7 +7872,7 @@ class UnnamedStruct3 extends ffi.Struct {
   external int n_no_improvement;
 }
 
-class UnnamedStruct4 extends ffi.Struct {
+final class UnnamedStruct4 extends ffi.Struct {
   external ffi.Pointer<ggml_tensor> x;
 
   external ffi.Pointer<ggml_tensor> xp;
@@ -7929,16 +7929,16 @@ abstract class gguf_type {
   static const int GGUF_TYPE_COUNT = 13;
 }
 
-class gguf_context extends ffi.Opaque {}
+final class gguf_context extends ffi.Opaque {}
 
-class gguf_init_params extends ffi.Struct {
+final class gguf_init_params extends ffi.Struct {
   @ffi.Bool()
   external bool no_alloc;
 
   external ffi.Pointer<ffi.Pointer<ggml_context>> ctx;
 }
 
-class ggml_type_traits_t extends ffi.Struct {
+final class ggml_type_traits_t extends ffi.Struct {
   external ffi.Pointer<ffi.Char> type_name;
 
   @ffi.Int()
@@ -7975,9 +7975,9 @@ typedef ggml_vec_dot_t = ffi.Pointer<
         ffi.Void Function(ffi.Int n, ffi.Pointer<ffi.Float> s,
             ffi.Pointer<ffi.Void> x, ffi.Pointer<ffi.Void> y)>>;
 
-class llama_model extends ffi.Opaque {}
+final class llama_model extends ffi.Opaque {}
 
-class llama_context extends ffi.Opaque {}
+final class llama_context extends ffi.Opaque {}
 
 abstract class llama_log_level {
   static const int LLAMA_LOG_LEVEL_ERROR = 2;
@@ -8021,7 +8021,7 @@ abstract class llama_ftype {
   static const int LLAMA_FTYPE_GUESSED = 1024;
 }
 
-class llama_token_data extends ffi.Struct {
+final class llama_token_data extends ffi.Struct {
   @llama_token()
   external int id;
 
@@ -8034,7 +8034,7 @@ class llama_token_data extends ffi.Struct {
 
 typedef llama_token = ffi.Int;
 
-class llama_token_data_array extends ffi.Struct {
+final class llama_token_data_array extends ffi.Struct {
   external ffi.Pointer<llama_token_data> data;
 
   @ffi.Size()
@@ -8044,7 +8044,7 @@ class llama_token_data_array extends ffi.Struct {
   external bool sorted;
 }
 
-class llama_context_params extends ffi.Struct {
+final class llama_context_params extends ffi.Struct {
   @ffi.Uint32()
   external int seed;
 
@@ -8101,7 +8101,7 @@ typedef llama_progress_callback = ffi.Pointer<
     ffi.NativeFunction<
         ffi.Void Function(ffi.Float progress, ffi.Pointer<ffi.Void> ctx)>>;
 
-class llama_model_quantize_params extends ffi.Struct {
+final class llama_model_quantize_params extends ffi.Struct {
   @ffi.Int()
   external int nthread;
 
@@ -8115,7 +8115,7 @@ class llama_model_quantize_params extends ffi.Struct {
   external bool quantize_output_tensor;
 }
 
-class llama_grammar extends ffi.Opaque {}
+final class llama_grammar extends ffi.Opaque {}
 
 abstract class llama_gretype {
   static const int LLAMA_GRETYPE_END = 0;
@@ -8127,7 +8127,7 @@ abstract class llama_gretype {
   static const int LLAMA_GRETYPE_CHAR_ALT = 6;
 }
 
-class llama_grammar_element extends ffi.Struct {
+final class llama_grammar_element extends ffi.Struct {
   @ffi.Int32()
   external int type;
 
@@ -8135,7 +8135,7 @@ class llama_grammar_element extends ffi.Struct {
   external int value;
 }
 
-class llama_timings extends ffi.Struct {
+final class llama_timings extends ffi.Struct {
   @ffi.Double()
   external double t_start_ms;
 
@@ -8164,7 +8164,7 @@ class llama_timings extends ffi.Struct {
   external int n_eval;
 }
 
-class llama_beam_view extends ffi.Struct {
+final class llama_beam_view extends ffi.Struct {
   external ffi.Pointer<llama_token> tokens;
 
   @ffi.Size()
@@ -8177,7 +8177,7 @@ class llama_beam_view extends ffi.Struct {
   external bool eob;
 }
 
-class llama_beams_state extends ffi.Struct {
+final class llama_beams_state extends ffi.Struct {
   external ffi.Pointer<llama_beam_view> beam_views;
 
   @ffi.Size()
