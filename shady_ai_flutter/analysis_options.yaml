@@ -1,28 +1,24 @@
 analyzer:
-  plugins:
-    - dart_code_metrics
+  language:
+    strict-casts: true
+    strict-inference: true
+    strict-raw-types: true
+  errors:
+    # For example, this should throw an error: if (CarBrands.Tesla == 'Tesla') ...
+    # Types must be explicitly enforced. This is just a personal preference of mine to avoid hardcoded strings.
+    unrelated_type_equality_checks: error
+  exclude:
+    - lib/generated/**
+    - '**.g.dart'
+    - '**.freezed.dart'
 
-dart_code_metrics:
-  metrics:
-    cyclomatic-complexity: 20
-    number-of-parameters: 4
-    maximum-nesting-level: 5
-  metrics-exclude:
-    - test/**
+linter:
   rules:
-    - avoid-dynamic
-    - avoid-passing-async-when-sync-expected
-    - avoid-redundant-async
-    - avoid-unnecessary-type-assertions
-    - avoid-unnecessary-type-casts
-    - avoid-unrelated-type-assertions
-    - avoid-unused-parameters
-    - avoid-nested-conditional-expressions
-    - newline-before-return
-    - no-boolean-literal-compare
-    - no-empty-block
-    - prefer-trailing-comma
-    - prefer-conditional-expressions
-    - no-equal-then-else
-    - prefer-moving-to-variable
-    - prefer-match-file-name
+    sort_pub_dependencies: true
+    require_trailing_commas: true
+    directives_ordering: true
+    prefer_relative_imports: true
+    always_use_package_imports: false
+
+    # This rule is considered as experimental (2+ years already!)
+    use_build_context_synchronously: false
