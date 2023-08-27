@@ -14,10 +14,6 @@ frontend_task:
     cd $WORKING_DIR
     flutter analyze
     flutter test
-  analyze_with_dart_code_metrics_script: |
-    cd $WORKING_DIR
-    flutter pub run dart_code_metrics:metrics check-unused-files lib test --exclude="{/**.g.dart,/**.freezed.dart}"
-    flutter pub run dart_code_metrics:metrics check-unused-code lib test --exclude="{/**.g.dart,/**.freezed.dart}"
   format_with_dart_script: |
     cd $WORKING_DIR
     dart format -o none --set-exit-if-changed .

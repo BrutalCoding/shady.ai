@@ -47,7 +47,6 @@ dependencies:
   #     path: flutter_wasm
 
 dev_dependencies:
-  dart_code_metrics: ^5.7.2
   ffigen: ^7.2.10
   flutter_launcher_icons: ^0.13.0
   flutter_lints: ^2.0.1

@@ -14,12 +14,6 @@ pre-push:
       root: "shady_ai_flutter/"
       run: |
         flutter analyze
-        flutter pub run dart_code_metrics:metrics analyze lib
-    flutter-check-unused:
-      root: shady_ai_flutter/
-      run: |
-        flutter pub run dart_code_metrics:metrics check-unused-files lib --exclude="{/**.g.dart,/**.freezed.dart}"
-        flutter pub run dart_code_metrics:metrics check-unused-code lib --exclude="{/**.g.dart,/**.freezed.dart}"
 
 # Note: commit-msg hook takes a single parameter,
 # the name of the file that holds the proposed commit log message.
