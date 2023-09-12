@@ -34,7 +34,7 @@ dependencies:
   riverpod_lint: ^2.0.1
   go_router: ^10.1.0
   url_launcher: ^6.1.10
-  flutter_deck: ^0.3.0
+  flutter_deck: ^0.4.0
   path_provider: ^2.1.1
   desktop_drop: ^0.4.3
   #
