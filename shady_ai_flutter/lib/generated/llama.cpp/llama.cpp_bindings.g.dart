@@ -42,6 +42,7 @@ class LLaMa {
 
   set GGML_GRAPH_SIZE(int value) => _GGML_GRAPH_SIZE.value = value;
 
+  /// misc
   void ggml_time_init() {
     return _ggml_time_init();
   }
@@ -312,6 +313,7 @@ class LLaMa {
   late final _ggml_is_quantized =
       _ggml_is_quantizedPtr.asFunction<bool Function(int)>();
 
+  /// TODO: temporary until model loading of ggml examples is refactored
   int ggml_ftype_to_ggml_type(
     int ftype,
   ) {
@@ -385,6 +387,7 @@ class LLaMa {
   late final _ggml_are_same_shape = _ggml_are_same_shapePtr.asFunction<
       bool Function(ffi.Pointer<ggml_tensor>, ffi.Pointer<ggml_tensor>)>();
 
+  /// use this to compute the memory overhead of a tensor
   int ggml_tensor_overhead() {
     return _ggml_tensor_overhead();
   }
@@ -394,6 +397,7 @@ class LLaMa {
   late final _ggml_tensor_overhead =
       _ggml_tensor_overheadPtr.asFunction<int Function()>();
 
+  /// main
   ffi.Pointer<ggml_context> ggml_init(
     ggml_init_params params,
   ) {
@@ -953,6 +957,7 @@ class LLaMa {
       ffi.Pointer<ggml_tensor> Function(
           ffi.Pointer<ggml_tensor>, ffi.Pointer<ffi.Char>)>();
 
+  /// operations on tensors with backpropagation
   ffi.Pointer<ggml_tensor> ggml_dup(
     ffi.Pointer<ggml_context> ctx,
     ffi.Pointer<ggml_tensor> a,
@@ -971,6 +976,7 @@ class LLaMa {
       ffi.Pointer<ggml_tensor> Function(
           ffi.Pointer<ggml_context>, ffi.Pointer<ggml_tensor>)>();
 
+  /// in-place, returns view(a)
   ffi.Pointer<ggml_tensor> ggml_dup_inplace(
     ffi.Pointer<ggml_context> ctx,
     ffi.Pointer<ggml_tensor> a,
@@ -1389,6 +1395,7 @@ class LLaMa {
       ffi.Pointer<ggml_tensor> Function(
           ffi.Pointer<ggml_context>, ffi.Pointer<ggml_tensor>)>();
 
+  /// return scalar
   ffi.Pointer<ggml_tensor> ggml_sum(
     ffi.Pointer<ggml_context> ctx,
     ffi.Pointer<ggml_tensor> a,
@@ -1407,6 +1414,7 @@ class LLaMa {
       ffi.Pointer<ggml_tensor> Function(
           ffi.Pointer<ggml_context>, ffi.Pointer<ggml_tensor>)>();
 
+  /// sums along rows, with input shape [a,b,c,d] return shape [1,b,c,d]
   ffi.Pointer<ggml_tensor> ggml_sum_rows(
     ffi.Pointer<ggml_context> ctx,
     ffi.Pointer<ggml_tensor> a,
@@ -1425,6 +1433,7 @@ class LLaMa {
       ffi.Pointer<ggml_tensor> Function(
           ffi.Pointer<ggml_context>, ffi.Pointer<ggml_tensor>)>();
 
+  /// mean along rows
   ffi.Pointer<ggml_tensor> ggml_mean(
     ffi.Pointer<ggml_context> ctx,
     ffi.Pointer<ggml_tensor> a,
@@ -1443,6 +1452,7 @@ class LLaMa {
       ffi.Pointer<ggml_tensor> Function(
           ffi.Pointer<ggml_context>, ffi.Pointer<ggml_tensor>)>();
 
+  /// argmax along rows
   ffi.Pointer<ggml_tensor> ggml_argmax(
     ffi.Pointer<ggml_context> ctx,
     ffi.Pointer<ggml_tensor> a,
@@ -1461,6 +1471,8 @@ class LLaMa {
       ffi.Pointer<ggml_tensor> Function(
           ffi.Pointer<ggml_context>, ffi.Pointer<ggml_tensor>)>();
 
+  /// if a is the same shape as b, and a is not parameter, return a
+  /// otherwise, return a new tensor: repeat(a) to fit in b
   ffi.Pointer<ggml_tensor> ggml_repeat(
     ffi.Pointer<ggml_context> ctx,
     ffi.Pointer<ggml_tensor> a,
@@ -1505,6 +1517,8 @@ class LLaMa {
       ffi.Pointer<ggml_tensor> Function(ffi.Pointer<ggml_context>,
           ffi.Pointer<ggml_tensor>, ffi.Pointer<ggml_tensor>)>();
 
+  /// concat a and b on dim 2
+  /// used in stable-diffusion
   ffi.Pointer<ggml_tensor> ggml_concat(
     ffi.Pointer<ggml_context> ctx,
     ffi.Pointer<ggml_tensor> a,
@@ -1779,6 +1793,7 @@ class LLaMa {
       ffi.Pointer<ggml_tensor> Function(
           ffi.Pointer<ggml_context>, ffi.Pointer<ggml_tensor>)>();
 
+  /// TODO: double-check this computation is correct
   ffi.Pointer<ggml_tensor> ggml_gelu(
     ffi.Pointer<ggml_context> ctx,
     ffi.Pointer<ggml_tensor> a,
@@ -1887,6 +1902,8 @@ class LLaMa {
       ffi.Pointer<ggml_tensor> Function(
           ffi.Pointer<ggml_context>, ffi.Pointer<ggml_tensor>)>();
 
+  /// a - x
+  /// b - dy
   ffi.Pointer<ggml_tensor> ggml_silu_back(
     ffi.Pointer<ggml_context> ctx,
     ffi.Pointer<ggml_tensor> a,
@@ -1909,6 +1926,7 @@ class LLaMa {
       ffi.Pointer<ggml_tensor> Function(ffi.Pointer<ggml_context>,
           ffi.Pointer<ggml_tensor>, ffi.Pointer<ggml_tensor>)>();
 
+  /// normalize along rows
   ffi.Pointer<ggml_tensor> ggml_norm(
     ffi.Pointer<ggml_context> ctx,
     ffi.Pointer<ggml_tensor> a,
@@ -1989,6 +2007,9 @@ class LLaMa {
       ffi.Pointer<ggml_tensor> Function(
           ffi.Pointer<ggml_context>, ffi.Pointer<ggml_tensor>, double)>();
 
+  /// group normalize along ne0*ne1*n_groups
+  /// used in stable-diffusion
+  /// TODO: eps is hardcoded to 1e-6 for now
   ffi.Pointer<ggml_tensor> ggml_group_norm(
     ffi.Pointer<ggml_context> ctx,
     ffi.Pointer<ggml_tensor> a,
@@ -2029,6 +2050,8 @@ class LLaMa {
       ffi.Pointer<ggml_tensor> Function(
           ffi.Pointer<ggml_context>, ffi.Pointer<ggml_tensor>, int)>();
 
+  /// a - x
+  /// b - dy
   ffi.Pointer<ggml_tensor> ggml_rms_norm_back(
     ffi.Pointer<ggml_context> ctx,
     ffi.Pointer<ggml_tensor> a,
@@ -2054,6 +2077,9 @@ class LLaMa {
       ffi.Pointer<ggml_tensor> Function(ffi.Pointer<ggml_context>,
           ffi.Pointer<ggml_tensor>, ffi.Pointer<ggml_tensor>, double)>();
 
+  /// A: n columns, m rows
+  /// B: n columns, p rows  (i.e. we transpose it internally)
+  /// result is m columns, p rows
   ffi.Pointer<ggml_tensor> ggml_mul_mat(
     ffi.Pointer<ggml_context> ctx,
     ffi.Pointer<ggml_tensor> a,
@@ -2076,6 +2102,9 @@ class LLaMa {
       ffi.Pointer<ggml_tensor> Function(ffi.Pointer<ggml_context>,
           ffi.Pointer<ggml_tensor>, ffi.Pointer<ggml_tensor>)>();
 
+  /// A: m columns, n rows,
+  /// B: p columns, n rows,
+  /// result is m columns, p rows
   ffi.Pointer<ggml_tensor> ggml_out_prod(
     ffi.Pointer<ggml_context> ctx,
     ffi.Pointer<ggml_tensor> a,
@@ -2098,6 +2127,7 @@ class LLaMa {
       ffi.Pointer<ggml_tensor> Function(ffi.Pointer<ggml_context>,
           ffi.Pointer<ggml_tensor>, ffi.Pointer<ggml_tensor>)>();
 
+  /// operations on tensors without backpropagation
   ffi.Pointer<ggml_tensor> ggml_scale(
     ffi.Pointer<ggml_context> ctx,
     ffi.Pointer<ggml_tensor> a,
@@ -2120,6 +2150,7 @@ class LLaMa {
       ffi.Pointer<ggml_tensor> Function(ffi.Pointer<ggml_context>,
           ffi.Pointer<ggml_tensor>, ffi.Pointer<ggml_tensor>)>();
 
+  /// in-place, returns view(a)
   ffi.Pointer<ggml_tensor> ggml_scale_inplace(
     ffi.Pointer<ggml_context> ctx,
     ffi.Pointer<ggml_tensor> a,
@@ -2142,6 +2173,7 @@ class LLaMa {
       ffi.Pointer<ggml_tensor> Function(ffi.Pointer<ggml_context>,
           ffi.Pointer<ggml_tensor>, ffi.Pointer<ggml_tensor>)>();
 
+  /// b -> view(a,offset,nb1,nb2,3), return modified a
   ffi.Pointer<ggml_tensor> ggml_set(
     ffi.Pointer<ggml_context> ctx,
     ffi.Pointer<ggml_tensor> a,
@@ -2182,6 +2214,7 @@ class LLaMa {
           int,
           int)>();
 
+  /// b -> view(a,offset,nb1,nb2,3), return view(a)
   ffi.Pointer<ggml_tensor> ggml_set_inplace(
     ffi.Pointer<ggml_context> ctx,
     ffi.Pointer<ggml_tensor> a,
@@ -2272,6 +2305,7 @@ class LLaMa {
       ffi.Pointer<ggml_tensor> Function(ffi.Pointer<ggml_context>,
           ffi.Pointer<ggml_tensor>, ffi.Pointer<ggml_tensor>, int)>();
 
+  /// b -> view(a,offset,nb1,nb2,3), return modified a
   ffi.Pointer<ggml_tensor> ggml_set_2d(
     ffi.Pointer<ggml_context> ctx,
     ffi.Pointer<ggml_tensor> a,
@@ -2300,6 +2334,7 @@ class LLaMa {
       ffi.Pointer<ggml_tensor> Function(ffi.Pointer<ggml_context>,
           ffi.Pointer<ggml_tensor>, ffi.Pointer<ggml_tensor>, int, int)>();
 
+  /// b -> view(a,offset,nb1,nb2,3), return view(a)
   ffi.Pointer<ggml_tensor> ggml_set_2d_inplace(
     ffi.Pointer<ggml_context> ctx,
     ffi.Pointer<ggml_tensor> a,
@@ -2328,6 +2363,7 @@ class LLaMa {
       ffi.Pointer<ggml_tensor> Function(ffi.Pointer<ggml_context>,
           ffi.Pointer<ggml_tensor>, ffi.Pointer<ggml_tensor>, int, int)>();
 
+  /// a -> b, return view(b)
   ffi.Pointer<ggml_tensor> ggml_cpy(
     ffi.Pointer<ggml_context> ctx,
     ffi.Pointer<ggml_tensor> a,
@@ -2348,6 +2384,7 @@ class LLaMa {
       ffi.Pointer<ggml_tensor> Function(ffi.Pointer<ggml_context>,
           ffi.Pointer<ggml_tensor>, ffi.Pointer<ggml_tensor>)>();
 
+  /// a -> b, in-place, return view(b)
   ffi.Pointer<ggml_tensor> ggml_cpy_inplace(
     ffi.Pointer<ggml_context> ctx,
     ffi.Pointer<ggml_tensor> a,
@@ -2370,6 +2407,7 @@ class LLaMa {
       ffi.Pointer<ggml_tensor> Function(ffi.Pointer<ggml_context>,
           ffi.Pointer<ggml_tensor>, ffi.Pointer<ggml_tensor>)>();
 
+  /// make contiguous
   ffi.Pointer<ggml_tensor> ggml_cont(
     ffi.Pointer<ggml_context> ctx,
     ffi.Pointer<ggml_tensor> a,
@@ -2388,6 +2426,7 @@ class LLaMa {
       ffi.Pointer<ggml_tensor> Function(
           ffi.Pointer<ggml_context>, ffi.Pointer<ggml_tensor>)>();
 
+  /// make contiguous, in-place
   ffi.Pointer<ggml_tensor> ggml_cont_inplace(
     ffi.Pointer<ggml_context> ctx,
     ffi.Pointer<ggml_tensor> a,
@@ -2406,6 +2445,8 @@ class LLaMa {
       ffi.Pointer<ggml_tensor> Function(
           ffi.Pointer<ggml_context>, ffi.Pointer<ggml_tensor>)>();
 
+  /// return view(a), b specifies the new shape
+  /// TODO: when we start computing gradient, make a copy instead of view
   ffi.Pointer<ggml_tensor> ggml_reshape(
     ffi.Pointer<ggml_context> ctx,
     ffi.Pointer<ggml_tensor> a,
@@ -2428,6 +2469,8 @@ class LLaMa {
       ffi.Pointer<ggml_tensor> Function(ffi.Pointer<ggml_context>,
           ffi.Pointer<ggml_tensor>, ffi.Pointer<ggml_tensor>)>();
 
+  /// return view(a)
+  /// TODO: when we start computing gradient, make a copy instead of view
   ffi.Pointer<ggml_tensor> ggml_reshape_1d(
     ffi.Pointer<ggml_context> ctx,
     ffi.Pointer<ggml_tensor> a,
@@ -2473,6 +2516,8 @@ class LLaMa {
       ffi.Pointer<ggml_tensor> Function(
           ffi.Pointer<ggml_context>, ffi.Pointer<ggml_tensor>, int, int)>();
 
+  /// return view(a)
+  /// TODO: when we start computing gradient, make a copy instead of view
   ffi.Pointer<ggml_tensor> ggml_reshape_3d(
     ffi.Pointer<ggml_context> ctx,
     ffi.Pointer<ggml_tensor> a,
@@ -2532,6 +2577,7 @@ class LLaMa {
       ffi.Pointer<ggml_tensor> Function(ffi.Pointer<ggml_context>,
           ffi.Pointer<ggml_tensor>, int, int, int, int)>();
 
+  /// offset in bytes
   ffi.Pointer<ggml_tensor> ggml_view_1d(
     ffi.Pointer<ggml_context> ctx,
     ffi.Pointer<ggml_tensor> a,
@@ -2696,6 +2742,7 @@ class LLaMa {
       ffi.Pointer<ggml_tensor> Function(ffi.Pointer<ggml_context>,
           ffi.Pointer<ggml_tensor>, int, int, int, int)>();
 
+  /// alias for ggml_permute(ctx, a, 1, 0, 2, 3)
   ffi.Pointer<ggml_tensor> ggml_transpose(
     ffi.Pointer<ggml_context> ctx,
     ffi.Pointer<ggml_tensor> a,
@@ -2782,6 +2829,7 @@ class LLaMa {
       ffi.Pointer<ggml_tensor> Function(
           ffi.Pointer<ggml_context>, ffi.Pointer<ggml_tensor>)>();
 
+  /// set elements above the diagonal to -INF
   ffi.Pointer<ggml_tensor> ggml_diag_mask_inf(
     ffi.Pointer<ggml_context> ctx,
     ffi.Pointer<ggml_tensor> a,
@@ -2802,6 +2850,7 @@ class LLaMa {
       ffi.Pointer<ggml_tensor> Function(
           ffi.Pointer<ggml_context>, ffi.Pointer<ggml_tensor>, int)>();
 
+  /// in-place, returns view(a)
   ffi.Pointer<ggml_tensor> ggml_diag_mask_inf_inplace(
     ffi.Pointer<ggml_context> ctx,
     ffi.Pointer<ggml_tensor> a,
@@ -2825,6 +2874,7 @@ class LLaMa {
           ffi.Pointer<ggml_tensor> Function(
               ffi.Pointer<ggml_context>, ffi.Pointer<ggml_tensor>, int)>();
 
+  /// set elements above the diagonal to 0
   ffi.Pointer<ggml_tensor> ggml_diag_mask_zero(
     ffi.Pointer<ggml_context> ctx,
     ffi.Pointer<ggml_tensor> a,
@@ -2845,6 +2895,7 @@ class LLaMa {
       ffi.Pointer<ggml_tensor> Function(
           ffi.Pointer<ggml_context>, ffi.Pointer<ggml_tensor>, int)>();
 
+  /// in-place, returns view(a)
   ffi.Pointer<ggml_tensor> ggml_diag_mask_zero_inplace(
     ffi.Pointer<ggml_context> ctx,
     ffi.Pointer<ggml_tensor> a,
@@ -2886,6 +2937,7 @@ class LLaMa {
       ffi.Pointer<ggml_tensor> Function(
           ffi.Pointer<ggml_context>, ffi.Pointer<ggml_tensor>)>();
 
+  /// in-place, returns view(a)
   ffi.Pointer<ggml_tensor> ggml_soft_max_inplace(
     ffi.Pointer<ggml_context> ctx,
     ffi.Pointer<ggml_tensor> a,
@@ -2926,6 +2978,7 @@ class LLaMa {
       ffi.Pointer<ggml_tensor> Function(ffi.Pointer<ggml_context>,
           ffi.Pointer<ggml_tensor>, ffi.Pointer<ggml_tensor>)>();
 
+  /// in-place, returns view(a)
   ffi.Pointer<ggml_tensor> ggml_soft_max_back_inplace(
     ffi.Pointer<ggml_context> ctx,
     ffi.Pointer<ggml_tensor> a,
@@ -2949,6 +3002,11 @@ class LLaMa {
           ffi.Pointer<ggml_tensor> Function(ffi.Pointer<ggml_context>,
               ffi.Pointer<ggml_tensor>, ffi.Pointer<ggml_tensor>)>();
 
+  /// rotary position embedding
+  /// if mode & 1 == 1, skip n_past elements
+  /// if mode & 2 == 1, GPT-NeoX style
+  /// if mode & 4 == 1, ChatGLM style
+  /// TODO: avoid creating a new tensor every time
   ffi.Pointer<ggml_tensor> ggml_rope(
     ffi.Pointer<ggml_context> ctx,
     ffi.Pointer<ggml_tensor> a,
@@ -2980,6 +3038,7 @@ class LLaMa {
       ffi.Pointer<ggml_tensor> Function(ffi.Pointer<ggml_context>,
           ffi.Pointer<ggml_tensor>, int, int, int, int)>();
 
+  /// in-place, returns view(a)
   ffi.Pointer<ggml_tensor> ggml_rope_inplace(
     ffi.Pointer<ggml_context> ctx,
     ffi.Pointer<ggml_tensor> a,
@@ -3011,6 +3070,7 @@ class LLaMa {
       ffi.Pointer<ggml_tensor> Function(ffi.Pointer<ggml_context>,
           ffi.Pointer<ggml_tensor>, int, int, int, int)>();
 
+  /// custom RoPE
   ffi.Pointer<ggml_tensor> ggml_rope_custom(
     ffi.Pointer<ggml_context> ctx,
     ffi.Pointer<ggml_tensor> a,
@@ -3048,6 +3108,7 @@ class LLaMa {
       ffi.Pointer<ggml_tensor> Function(ffi.Pointer<ggml_context>,
           ffi.Pointer<ggml_tensor>, int, int, int, int, double, double)>();
 
+  /// in-place, returns view(a)
   ffi.Pointer<ggml_tensor> ggml_rope_custom_inplace(
     ffi.Pointer<ggml_context> ctx,
     ffi.Pointer<ggml_tensor> a,
@@ -3086,6 +3147,7 @@ class LLaMa {
           ffi.Pointer<ggml_tensor> Function(ffi.Pointer<ggml_context>,
               ffi.Pointer<ggml_tensor>, int, int, int, int, double, double)>();
 
+  /// xPos RoPE, in-place, returns view(a)
   ffi.Pointer<ggml_tensor> ggml_rope_xpos_inplace(
     ffi.Pointer<ggml_context> ctx,
     ffi.Pointer<ggml_tensor> a,
@@ -3117,6 +3179,8 @@ class LLaMa {
       ffi.Pointer<ggml_tensor> Function(ffi.Pointer<ggml_context>,
           ffi.Pointer<ggml_tensor>, int, int, double, bool)>();
 
+  /// rotary position embedding backward, i.e compute dx from dy
+  /// a - dy
   ffi.Pointer<ggml_tensor> ggml_rope_back(
     ffi.Pointer<ggml_context> ctx,
     ffi.Pointer<ggml_tensor> a,
@@ -3169,6 +3233,8 @@ class LLaMa {
           double,
           bool)>();
 
+  /// alibi position embedding
+  /// in-place, returns view(a)
   ffi.Pointer<ggml_tensor> ggml_alibi(
     ffi.Pointer<ggml_context> ctx,
     ffi.Pointer<ggml_tensor> a,
@@ -3197,6 +3263,8 @@ class LLaMa {
       ffi.Pointer<ggml_tensor> Function(ffi.Pointer<ggml_context>,
           ffi.Pointer<ggml_tensor>, int, int, double)>();
 
+  /// clamp
+  /// in-place, returns view(a)
   ffi.Pointer<ggml_tensor> ggml_clamp(
     ffi.Pointer<ggml_context> ctx,
     ffi.Pointer<ggml_tensor> a,
@@ -3250,6 +3318,8 @@ class LLaMa {
       ffi.Pointer<ggml_tensor> Function(ffi.Pointer<ggml_context>,
           ffi.Pointer<ggml_tensor>, ffi.Pointer<ggml_tensor>, int, int, int)>();
 
+  /// conv_1d with padding = half
+  /// alias for ggml_conv_1d(a, b, s, a->ne[0]/2, d)
   ffi.Pointer<ggml_tensor> ggml_conv_1d_ph(
     ffi.Pointer<ggml_context> ctx,
     ffi.Pointer<ggml_tensor> a,
@@ -3326,6 +3396,14 @@ class LLaMa {
           int,
           int)>();
 
+  /// kernel size is a->ne[0] x a->ne[1]
+  /// stride is equal to kernel size
+  /// padding is zero
+  /// example:
+  /// a:     16   16    3  768
+  /// b:   1024 1024    3    1
+  /// res:   64   64  768    1
+  /// used in sam
   ffi.Pointer<ggml_tensor> ggml_conv_2d_sk_p0(
     ffi.Pointer<ggml_context> ctx,
     ffi.Pointer<ggml_tensor> a,
@@ -3348,6 +3426,14 @@ class LLaMa {
       ffi.Pointer<ggml_tensor> Function(ffi.Pointer<ggml_context>,
           ffi.Pointer<ggml_tensor>, ffi.Pointer<ggml_tensor>)>();
 
+  /// kernel size is a->ne[0] x a->ne[1]
+  /// stride is 1
+  /// padding is half
+  /// example:
+  /// a:      3    3    256  256
+  /// b:     64   64    256    1
+  /// res:   64   64    256    1
+  /// used in sam
   ffi.Pointer<ggml_tensor> ggml_conv_2d_s1_ph(
     ffi.Pointer<ggml_context> ctx,
     ffi.Pointer<ggml_tensor> a,
@@ -3467,6 +3553,8 @@ class LLaMa {
       ffi.Pointer<ggml_tensor> Function(ffi.Pointer<ggml_context>,
           ffi.Pointer<ggml_tensor>, int, int, int, int, int, int, int)>();
 
+  /// nearest interpolate
+  /// used in stable-diffusion
   ffi.Pointer<ggml_tensor> ggml_upscale(
     ffi.Pointer<ggml_context> ctx,
     ffi.Pointer<ggml_tensor> a,
@@ -3591,6 +3679,12 @@ class LLaMa {
           ffi.Pointer<ggml_tensor>,
           ffi.Pointer<ggml_tensor>)>();
 
+  /// partition into non-overlapping windows with padding if needed
+  /// example:
+  /// a:   768   64   64    1
+  /// w:    14
+  /// res: 768   14   14    25
+  /// used in sam
   ffi.Pointer<ggml_tensor> ggml_win_part(
     ffi.Pointer<ggml_context> ctx,
     ffi.Pointer<ggml_tensor> a,
@@ -3611,6 +3705,8 @@ class LLaMa {
       ffi.Pointer<ggml_tensor> Function(
           ffi.Pointer<ggml_context>, ffi.Pointer<ggml_tensor>, int)>();
 
+  /// reverse of ggml_win_part
+  /// used in sam
   ffi.Pointer<ggml_tensor> ggml_win_unpart(
     ffi.Pointer<ggml_context> ctx,
     ffi.Pointer<ggml_tensor> a,
@@ -3679,6 +3775,7 @@ class LLaMa {
       ffi.Pointer<ggml_tensor> Function(
           ffi.Pointer<ggml_context>, ffi.Pointer<ggml_tensor>, int)>();
 
+  /// used in sam
   ffi.Pointer<ggml_tensor> ggml_get_rel_pos(
     ffi.Pointer<ggml_context> ctx,
     ffi.Pointer<ggml_tensor> a,
@@ -3701,6 +3798,7 @@ class LLaMa {
       ffi.Pointer<ggml_tensor> Function(
           ffi.Pointer<ggml_context>, ffi.Pointer<ggml_tensor>, int, int)>();
 
+  /// used in sam
   ffi.Pointer<ggml_tensor> ggml_add_rel_pos(
     ffi.Pointer<ggml_context> ctx,
     ffi.Pointer<ggml_tensor> a,
@@ -4246,6 +4344,7 @@ class LLaMa {
               int,
               ffi.Pointer<ffi.Void>)>();
 
+  /// loss function
   ffi.Pointer<ggml_tensor> ggml_cross_entropy_loss(
     ffi.Pointer<ggml_context> ctx,
     ffi.Pointer<ggml_tensor> a,
@@ -4297,6 +4396,7 @@ class LLaMa {
               ffi.Pointer<ggml_tensor>,
               ffi.Pointer<ggml_tensor>)>();
 
+  /// automatic differentiation
   void ggml_set_param(
     ffi.Pointer<ggml_context> ctx,
     ffi.Pointer<ggml_tensor> tensor,
@@ -4392,6 +4492,7 @@ class LLaMa {
       ggml_cgraph Function(
           ffi.Pointer<ggml_context>, ffi.Pointer<ggml_cgraph>, bool)>();
 
+  /// graph allocation in a context
   ffi.Pointer<ggml_cgraph> ggml_new_graph(
     ffi.Pointer<ggml_context> ctx,
   ) {
@@ -4434,6 +4535,8 @@ class LLaMa {
   late final _ggml_graph_overhead =
       _ggml_graph_overheadPtr.asFunction<int Function()>();
 
+  /// ggml_graph_plan() has to be called before ggml_graph_compute()
+  /// when plan.work_size > 0, caller must allocate memory for plan.work_data
   ggml_cplan ggml_graph_plan(
     ffi.Pointer<ggml_cgraph> cgraph,
     int n_threads,
@@ -4482,6 +4585,8 @@ class LLaMa {
   late final _ggml_graph_reset = _ggml_graph_resetPtr
       .asFunction<void Function(ffi.Pointer<ggml_cgraph>)>();
 
+  /// same as ggml_graph_compute() but the work data is allocated as a part of the context
+  /// note: the drawback of this API is that you must have ensured that the context has enough memory for the work data
   void ggml_graph_compute_with_ctx(
     ffi.Pointer<ggml_context> ctx,
     ffi.Pointer<ggml_cgraph> cgraph,
@@ -4562,6 +4667,7 @@ class LLaMa {
           ffi.Pointer<ffi.Pointer<ggml_context>>,
           ffi.Pointer<ffi.Pointer<ggml_context>>)>();
 
+  /// print info and performance information for the graph
   void ggml_graph_print(
     ffi.Pointer<ggml_cgraph> cgraph,
   ) {
@@ -4576,6 +4682,7 @@ class LLaMa {
   late final _ggml_graph_print = _ggml_graph_printPtr
       .asFunction<void Function(ffi.Pointer<ggml_cgraph>)>();
 
+  /// dump the graph into a file using the dot format
   void ggml_graph_dump_dot(
     ffi.Pointer<ggml_cgraph> gb,
     ffi.Pointer<ggml_cgraph> gf,
@@ -4610,6 +4717,7 @@ class LLaMa {
   late final _ggml_opt_default_params =
       _ggml_opt_default_paramsPtr.asFunction<ggml_opt_params Function(int)>();
 
+  /// optimize the function defined by the tensor f
   int ggml_opt(
     ffi.Pointer<ggml_context> ctx,
     ggml_opt_params params,
@@ -4630,6 +4738,7 @@ class LLaMa {
       int Function(ffi.Pointer<ggml_context>, ggml_opt_params,
           ffi.Pointer<ggml_tensor>)>();
 
+  /// initialize optimizer context
   void ggml_opt_init(
     ffi.Pointer<ggml_context> ctx,
     ffi.Pointer<ggml_opt_context> opt,
@@ -4655,6 +4764,7 @@ class LLaMa {
       void Function(ffi.Pointer<ggml_context>, ffi.Pointer<ggml_opt_context>,
           ggml_opt_params, int)>();
 
+  /// continue optimizing the function defined by the tensor f
   int ggml_opt_resume(
     ffi.Pointer<ggml_context> ctx,
     ffi.Pointer<ggml_opt_context> opt,
@@ -4677,6 +4787,7 @@ class LLaMa {
       int Function(ffi.Pointer<ggml_context>, ffi.Pointer<ggml_opt_context>,
           ffi.Pointer<ggml_tensor>)>();
 
+  /// continue optimizing the function defined by the tensor f
   int ggml_opt_resume_g(
     ffi.Pointer<ggml_context> ctx,
     ffi.Pointer<ggml_opt_context> opt,
@@ -4717,6 +4828,7 @@ class LLaMa {
           ggml_opt_callback,
           ffi.Pointer<ffi.Void>)>();
 
+  /// quantization
   int ggml_quantize_q4_0(
     ffi.Pointer<ffi.Float> src,
     ffi.Pointer<ffi.Void> dst,
@@ -4896,6 +5008,7 @@ class LLaMa {
       ffi.Pointer<gguf_context> Function(
           ffi.Pointer<ffi.Char>, gguf_init_params)>();
 
+  /// GGML_API struct gguf_context * gguf_init_from_buffer(..);
   void gguf_free(
     ffi.Pointer<gguf_context> ctx,
   ) {
@@ -5063,6 +5176,7 @@ class LLaMa {
   late final _gguf_get_arr_type = _gguf_get_arr_typePtr
       .asFunction<int Function(ffi.Pointer<gguf_context>, int)>();
 
+  /// results are undefined if the wrong type is used for the key
   int gguf_get_val_u8(
     ffi.Pointer<gguf_context> ctx,
     int i,
@@ -5385,6 +5499,7 @@ class LLaMa {
   late final _gguf_get_tensor_name = _gguf_get_tensor_namePtr.asFunction<
       ffi.Pointer<ffi.Char> Function(ffi.Pointer<gguf_context>, int)>();
 
+  /// overrides existing values or adds a new one
   void gguf_set_val_u8(
     ffi.Pointer<gguf_context> ctx,
     ffi.Pointer<ffi.Char> key,
@@ -5665,6 +5780,7 @@ class LLaMa {
       void Function(ffi.Pointer<gguf_context>, ffi.Pointer<ffi.Char>,
           ffi.Pointer<ffi.Pointer<ffi.Char>>, int)>();
 
+  /// set or add KV pairs from another context
   void gguf_set_kv(
     ffi.Pointer<gguf_context> ctx,
     ffi.Pointer<gguf_context> src,
@@ -5682,6 +5798,7 @@ class LLaMa {
   late final _gguf_set_kv = _gguf_set_kvPtr.asFunction<
       void Function(ffi.Pointer<gguf_context>, ffi.Pointer<gguf_context>)>();
 
+  /// manage tensor info
   void gguf_add_tensor(
     ffi.Pointer<gguf_context> ctx,
     ffi.Pointer<ggml_tensor> tensor,
@@ -5740,6 +5857,7 @@ class LLaMa {
       void Function(ffi.Pointer<gguf_context>, ffi.Pointer<ffi.Char>,
           ffi.Pointer<ffi.Void>, int)>();
 
+  /// write the entire context to a binary file
   void gguf_write_to_file(
     ffi.Pointer<gguf_context> ctx,
     ffi.Pointer<ffi.Char> fname,
@@ -5759,6 +5877,7 @@ class LLaMa {
   late final _gguf_write_to_file = _gguf_write_to_filePtr.asFunction<
       void Function(ffi.Pointer<gguf_context>, ffi.Pointer<ffi.Char>, bool)>();
 
+  /// get the size in bytes of the meta data (header, kv pairs, tensor info) including padding
   int gguf_get_meta_size(
     ffi.Pointer<gguf_context> ctx,
   ) {
@@ -5790,6 +5909,7 @@ class LLaMa {
   late final _gguf_get_meta_data = _gguf_get_meta_dataPtr.asFunction<
       void Function(ffi.Pointer<gguf_context>, ffi.Pointer<ffi.Void>)>();
 
+  /// system info
   int ggml_cpu_has_avx() {
     return _ggml_cpu_has_avx();
   }
@@ -6053,6 +6173,7 @@ class LLaMa {
 
   set __stderrp(ffi.Pointer<FILE> value) => ___stderrp.value = value;
 
+  /// ANSI-C
   void clearerr(
     ffi.Pointer<FILE> arg0,
   ) {
@@ -6760,6 +6881,7 @@ class LLaMa {
       ffi.Pointer<FILE> Function(
           ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>)>();
 
+  /// Functions internal to the implementation.
   int __srget(
     ffi.Pointer<FILE> arg0,
   ) {
@@ -7191,6 +7313,7 @@ class LLaMa {
       ffi.Pointer<FILE> Function(
           ffi.Pointer<ffi.Pointer<ffi.Char>>, ffi.Pointer<ffi.Size>)>();
 
+  /// perror(3) external variables
   late final ffi.Pointer<ffi.Int> _sys_nerr = _lookup<ffi.Int>('sys_nerr');
 
   int get sys_nerr => _sys_nerr.value;
@@ -7339,6 +7462,7 @@ class LLaMa {
       int Function(ffi.Pointer<ffi.Pointer<ffi.Char>>, ffi.Pointer<ffi.Char>,
           va_list)>();
 
+  /// Stdio function-access interface.
   ffi.Pointer<FILE> funopen(
     ffi.Pointer<ffi.Void> arg0,
     ffi.Pointer<
@@ -7518,6 +7642,9 @@ class LLaMa {
       _llama_model_quantize_default_paramsPtr
           .asFunction<llama_model_quantize_params Function()>();
 
+  /// Initialize the llama + ggml backend
+  /// If numa is true, use NUMA optimizations
+  /// Call once at the start of the program
   void llama_backend_init(
     bool numa,
   ) {
@@ -7532,6 +7659,7 @@ class LLaMa {
   late final _llama_backend_init =
       _llama_backend_initPtr.asFunction<void Function(bool)>();
 
+  /// Call once at the end of the program - currently only used for MPI
   void llama_backend_free() {
     return _llama_backend_free();
   }
@@ -7593,6 +7721,7 @@ class LLaMa {
           ffi.Pointer<llama_context> Function(
               ffi.Pointer<llama_model>, llama_context_params)>();
 
+  /// Frees all allocated memory
   void llama_free(
     ffi.Pointer<llama_context> ctx,
   ) {
@@ -7768,6 +7897,7 @@ class LLaMa {
   late final _llama_model_n_embd = _llama_model_n_embdPtr
       .asFunction<int Function(ffi.Pointer<llama_model>)>();
 
+  /// Get a string describing the model type
   int llama_model_desc(
     ffi.Pointer<llama_model> model,
     ffi.Pointer<ffi.Char> buf,
@@ -7787,6 +7917,7 @@ class LLaMa {
   late final _llama_model_desc = _llama_model_descPtr.asFunction<
       int Function(ffi.Pointer<llama_model>, ffi.Pointer<ffi.Char>, int)>();
 
+  /// Returns the total size of all the tensors in the model in bytes
   int llama_model_size(
     ffi.Pointer<llama_model> model,
   ) {
@@ -7801,6 +7932,7 @@ class LLaMa {
   late final _llama_model_size =
       _llama_model_sizePtr.asFunction<int Function(ffi.Pointer<llama_model>)>();
 
+  /// Returns the total number of parameters in the model
   int llama_model_n_params(
     ffi.Pointer<llama_model> model,
   ) {
@@ -7815,6 +7947,7 @@ class LLaMa {
   late final _llama_model_n_params = _llama_model_n_paramsPtr
       .asFunction<int Function(ffi.Pointer<llama_model>)>();
 
+  /// Returns 0 on success
   int llama_model_quantize(
     ffi.Pointer<ffi.Char> fname_inp,
     ffi.Pointer<ffi.Char> fname_out,
@@ -7885,6 +8018,7 @@ class LLaMa {
           int Function(ffi.Pointer<llama_model>, ffi.Pointer<ffi.Char>,
               ffi.Pointer<ffi.Char>, int)>();
 
+  /// Returns the number of tokens in the KV cache
   int llama_get_kv_cache_token_count(
     ffi.Pointer<llama_context> ctx,
   ) {
@@ -7900,6 +8034,7 @@ class LLaMa {
       _llama_get_kv_cache_token_countPtr
           .asFunction<int Function(ffi.Pointer<llama_context>)>();
 
+  /// Sets the current rng seed.
   void llama_set_rng_seed(
     ffi.Pointer<llama_context> ctx,
     int seed,
@@ -7917,6 +8052,8 @@ class LLaMa {
   late final _llama_set_rng_seed = _llama_set_rng_seedPtr
       .asFunction<void Function(ffi.Pointer<llama_context>, int)>();
 
+  /// Returns the maximum size in bytes of the state (rng, logits, embedding
+  /// and kv_cache) - will often be smaller after compacting tokens
   int llama_get_state_size(
     ffi.Pointer<llama_context> ctx,
   ) {
@@ -7931,6 +8068,9 @@ class LLaMa {
   late final _llama_get_state_size = _llama_get_state_sizePtr
       .asFunction<int Function(ffi.Pointer<llama_context>)>();
 
+  /// Copies the state to the specified destination address.
+  /// Destination needs to have allocated enough memory.
+  /// Returns the number of bytes copied
   int llama_copy_state_data(
     ffi.Pointer<llama_context> ctx,
     ffi.Pointer<ffi.Uint8> dst,
@@ -7948,6 +8088,8 @@ class LLaMa {
   late final _llama_copy_state_data = _llama_copy_state_dataPtr.asFunction<
       int Function(ffi.Pointer<llama_context>, ffi.Pointer<ffi.Uint8>)>();
 
+  /// Set the state reading from the specified address
+  /// Returns the number of bytes read
   int llama_set_state_data(
     ffi.Pointer<llama_context> ctx,
     ffi.Pointer<ffi.Uint8> src,
@@ -7965,6 +8107,7 @@ class LLaMa {
   late final _llama_set_state_data = _llama_set_state_dataPtr.asFunction<
       int Function(ffi.Pointer<llama_context>, ffi.Pointer<ffi.Uint8>)>();
 
+  /// Save/load session file
   bool llama_load_session_file(
     ffi.Pointer<llama_context> ctx,
     ffi.Pointer<ffi.Char> path_session,
@@ -8015,6 +8158,10 @@ class LLaMa {
       bool Function(ffi.Pointer<llama_context>, ffi.Pointer<ffi.Char>,
           ffi.Pointer<llama_token>, int)>();
 
+  /// Run the llama inference to obtain the logits and probabilities for the next token.
+  /// tokens + n_tokens is the provided batch of new tokens to process
+  /// n_past is the number of tokens to use from previous eval calls
+  /// Returns 0 on success
   int llama_eval(
     ffi.Pointer<llama_context> ctx,
     ffi.Pointer<llama_token> tokens,
@@ -8039,6 +8186,7 @@ class LLaMa {
       int Function(ffi.Pointer<llama_context>, ffi.Pointer<llama_token>, int,
           int, int)>();
 
+  /// Same as llama_eval, but use float matrix input directly.
   int llama_eval_embd(
     ffi.Pointer<llama_context> ctx,
     ffi.Pointer<ffi.Float> embd,
@@ -8063,6 +8211,10 @@ class LLaMa {
       int Function(
           ffi.Pointer<llama_context>, ffi.Pointer<ffi.Float>, int, int, int)>();
 
+  /// Export a static computation graph for context of 511 and batch size of 1
+  /// NOTE: since this functionality is mostly for debugging and demonstration purposes, we hardcode these
+  /// parameters here to keep things simple
+  /// IMPORTANT: do not use for anything else other than debugging and testing!
   int llama_eval_export(
     ffi.Pointer<llama_context> ctx,
     ffi.Pointer<ffi.Char> fname,
@@ -8080,6 +8232,11 @@ class LLaMa {
   late final _llama_eval_export = _llama_eval_exportPtr.asFunction<
       int Function(ffi.Pointer<llama_context>, ffi.Pointer<ffi.Char>)>();
 
+  /// Token logits obtained from the last call to llama_eval()
+  /// The logits for the last token are stored in the last row
+  /// Can be mutated in order to change the probabilities of the next token
+  /// Rows: n_tokens
+  /// Cols: n_vocab
   ffi.Pointer<ffi.Float> llama_get_logits(
     ffi.Pointer<llama_context> ctx,
   ) {
@@ -8095,6 +8252,8 @@ class LLaMa {
   late final _llama_get_logits = _llama_get_logitsPtr.asFunction<
       ffi.Pointer<ffi.Float> Function(ffi.Pointer<llama_context>)>();
 
+  /// Get the embeddings for the input
+  /// shape: [n_embd] (1-dimensional)
   ffi.Pointer<ffi.Float> llama_get_embeddings(
     ffi.Pointer<llama_context> ctx,
   ) {
@@ -8110,6 +8269,7 @@ class LLaMa {
   late final _llama_get_embeddings = _llama_get_embeddingsPtr.asFunction<
       ffi.Pointer<ffi.Float> Function(ffi.Pointer<llama_context>)>();
 
+  /// Vocab
   ffi.Pointer<ffi.Char> llama_token_get_text(
     ffi.Pointer<llama_context> ctx,
     int token,
@@ -8161,6 +8321,7 @@ class LLaMa {
   late final _llama_token_get_type = _llama_token_get_typePtr
       .asFunction<int Function(ffi.Pointer<llama_context>, int)>();
 
+  /// Special tokens
   int llama_token_bos(
     ffi.Pointer<llama_context> ctx,
   ) {
@@ -8203,6 +8364,10 @@ class LLaMa {
   late final _llama_token_nl =
       _llama_token_nlPtr.asFunction<int Function(ffi.Pointer<llama_context>)>();
 
+  /// Convert the provided text into tokens.
+  /// The tokens pointer must be large enough to hold the resulting tokens.
+  /// Returns the number of tokens on success, no more than n_max_tokens
+  /// Returns a negative number on failure - the number of tokens that would have been returned
   int llama_tokenize(
     ffi.Pointer<llama_context> ctx,
     ffi.Pointer<ffi.Char> text,
@@ -8256,6 +8421,10 @@ class LLaMa {
           int Function(ffi.Pointer<llama_model>, ffi.Pointer<ffi.Char>,
               ffi.Pointer<llama_token>, int, bool)>();
 
+  /// Token Id -> Piece.
+  /// Uses the vocabulary in the provided context.
+  /// Does not write null terminator to the buffer.
+  /// User code is responsible to remove the leading whitespace of the first non-BOS token when decoding multiple tokens.
   int llama_token_to_piece(
     ffi.Pointer<llama_context> ctx,
     int token,
@@ -8304,6 +8473,7 @@ class LLaMa {
           int Function(
               ffi.Pointer<llama_model>, int, ffi.Pointer<ffi.Char>, int)>();
 
+  /// Grammar
   ffi.Pointer<llama_grammar> llama_grammar_init(
     ffi.Pointer<ffi.Pointer<llama_grammar_element>> rules,
     int n_rules,
@@ -8816,6 +8986,7 @@ class LLaMa {
       void Function(ffi.Pointer<llama_context>, llama_beam_search_callback_fn_t,
           ffi.Pointer<ffi.Void>, int, int, int, int)>();
 
+  /// Performance information
   llama_timings llama_get_timings(
     ffi.Pointer<llama_context> ctx,
   ) {
@@ -8859,6 +9030,7 @@ class LLaMa {
   late final _llama_reset_timings = _llama_reset_timingsPtr
       .asFunction<void Function(ffi.Pointer<llama_context>)>();
 
+  /// Print system information
   ffi.Pointer<ffi.Char> llama_print_system_info() {
     return _llama_print_system_info();
   }
@@ -8869,6 +9041,8 @@ class LLaMa {
   late final _llama_print_system_info = _llama_print_system_infoPtr
       .asFunction<ffi.Pointer<ffi.Char> Function()>();
 
+  /// Set callback for all future logging events.
+  /// If this is not called, or NULL is supplied, everything is output on stderr.
   void llama_log_set(
     llama_log_callback log_callback,
     ffi.Pointer<ffi.Void> user_data,
@@ -8905,19 +9079,24 @@ class LLaMa {
           void Function(ffi.Pointer<FILE>, ffi.Pointer<llama_context>)>();
 }
 
+/// mbstate_t is an opaque object to keep conversion state, during multibyte
+/// stream conversions.  The content must not be referenced by user programs.
 final class __mbstate_t extends ffi.Union {
   @ffi.Array.multi([128])
   external ffi.Array<ffi.Char> __mbstate8;
 
+  /// for alignment
   @ffi.LongLong()
   external int _mbstateL;
 }
 
 final class __darwin_pthread_handler_rec extends ffi.Struct {
+  /// Routine to call
   external ffi
       .Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>
       __routine;
 
+  /// Argument to pass
   external ffi.Pointer<ffi.Void> __arg;
 
   external ffi.Pointer<__darwin_pthread_handler_rec> __next;
@@ -8997,6 +9176,7 @@ final class _opaque_pthread_t extends ffi.Struct {
   external ffi.Array<ffi.Char> __opaque;
 }
 
+/// ggml object
 final class ggml_object extends ffi.Struct {
   @ffi.Size()
   external int offs;
@@ -9026,10 +9206,15 @@ abstract class ggml_type {
   static const int GGML_TYPE_F16 = 1;
   static const int GGML_TYPE_Q4_0 = 2;
   static const int GGML_TYPE_Q4_1 = 3;
+
+  /// GGML_TYPE_Q4_2 = 4, support has been removed
+  /// GGML_TYPE_Q4_3 (5) support has been removed
   static const int GGML_TYPE_Q5_0 = 6;
   static const int GGML_TYPE_Q5_1 = 7;
   static const int GGML_TYPE_Q8_0 = 8;
   static const int GGML_TYPE_Q8_1 = 9;
+
+  /// k-quantizations
   static const int GGML_TYPE_Q2_K = 10;
   static const int GGML_TYPE_Q3_K = 11;
   static const int GGML_TYPE_Q4_K = 12;
@@ -9048,23 +9233,49 @@ abstract class ggml_backend {
   static const int GGML_BACKEND_GPU_SPLIT = 20;
 }
 
+/// model file types
 abstract class ggml_ftype {
   static const int GGML_FTYPE_UNKNOWN = -1;
   static const int GGML_FTYPE_ALL_F32 = 0;
+
+  /// except 1d tensors
   static const int GGML_FTYPE_MOSTLY_F16 = 1;
+
+  /// except 1d tensors
   static const int GGML_FTYPE_MOSTLY_Q4_0 = 2;
+
+  /// except 1d tensors
   static const int GGML_FTYPE_MOSTLY_Q4_1 = 3;
+
+  /// tok_embeddings.weight and output.weight are F16
   static const int GGML_FTYPE_MOSTLY_Q4_1_SOME_F16 = 4;
+
+  /// except 1d tensors
   static const int GGML_FTYPE_MOSTLY_Q8_0 = 7;
+
+  /// except 1d tensors
   static const int GGML_FTYPE_MOSTLY_Q5_0 = 8;
+
+  /// except 1d tensors
   static const int GGML_FTYPE_MOSTLY_Q5_1 = 9;
+
+  /// except 1d tensors
   static const int GGML_FTYPE_MOSTLY_Q2_K = 10;
+
+  /// except 1d tensors
   static const int GGML_FTYPE_MOSTLY_Q3_K = 11;
+
+  /// except 1d tensors
   static const int GGML_FTYPE_MOSTLY_Q4_K = 12;
+
+  /// except 1d tensors
   static const int GGML_FTYPE_MOSTLY_Q5_K = 13;
+
+  /// except 1d tensors
   static const int GGML_FTYPE_MOSTLY_Q6_K = 14;
 }
 
+/// available tensor operations:
 abstract class ggml_op {
   static const int GGML_OP_NONE = 0;
   static const int GGML_OP_DUP = 1;
@@ -9085,6 +9296,8 @@ abstract class ggml_op {
   static const int GGML_OP_REPEAT_BACK = 16;
   static const int GGML_OP_CONCAT = 17;
   static const int GGML_OP_SILU_BACK = 18;
+
+  /// normalize
   static const int GGML_OP_NORM = 19;
   static const int GGML_OP_RMS_NORM = 20;
   static const int GGML_OP_RMS_NORM_BACK = 21;
@@ -9115,6 +9328,8 @@ abstract class ggml_op {
   static const int GGML_OP_CONV_TRANSPOSE_2D = 46;
   static const int GGML_OP_POOL_1D = 47;
   static const int GGML_OP_POOL_2D = 48;
+
+  /// nearest interpolate
   static const int GGML_OP_UPSCALE = 49;
   static const int GGML_OP_FLASH_ATTN = 50;
   static const int GGML_OP_FLASH_FF = 51;
@@ -9150,6 +9365,7 @@ abstract class ggml_unary_op {
   static const int GGML_UNARY_OP_SILU = 9;
 }
 
+/// n-dimensional tensor
 final class ggml_tensor extends ffi.Struct {
   @ffi.Int32()
   external int type;
@@ -9160,15 +9376,22 @@ final class ggml_tensor extends ffi.Struct {
   @ffi.Int()
   external int n_dims;
 
+  /// number of elements
   @ffi.Array.multi([4])
   external ffi.Array<ffi.Int64> ne;
 
+  /// stride in bytes:
+  /// nb[0] = sizeof(type)
+  /// nb[1] = nb[0]   * ne[0] + padding
+  /// nb[i] = nb[i-1] * ne[i-1]
   @ffi.Array.multi([4])
   external ffi.Array<ffi.Size> nb;
 
+  /// compute data
   @ffi.Int32()
   external int op;
 
+  /// op params - allocated as int32_t for alignment
   @ffi.Array.multi([8])
   external ffi.Array<ffi.Int32> op_params;
 
@@ -9180,6 +9403,7 @@ final class ggml_tensor extends ffi.Struct {
   @ffi.Array.multi([6])
   external ffi.Array<ffi.Pointer<ggml_tensor>> src;
 
+  /// performance
   @ffi.Int()
   external int perf_runs;
 
@@ -9199,24 +9423,31 @@ final class ggml_tensor extends ffi.Struct {
   @ffi.Array.multi([64])
   external ffi.Array<ffi.Char> name;
 
+  /// extra things e.g. for ggml-cuda.cu
   external ffi.Pointer<ffi.Void> extra;
 
   @ffi.Array.multi([4])
   external ffi.Array<ffi.Char> padding;
 }
 
+/// the compute plan that needs to be prepared for ggml_graph_compute()
+/// since https://github.com/ggerganov/ggml/issues/287
 final class ggml_cplan extends ffi.Struct {
+  /// size of work buffer, calculated by `ggml_graph_plan()`
   @ffi.Size()
   external int work_size;
 
+  /// work buffer, to be allocated by caller before calling to `ggml_graph_compute()`
   external ffi.Pointer<ffi.Uint8> work_data;
 
   @ffi.Int()
   external int n_threads;
 
+  /// the `n_tasks` of nodes, 1:1 mapping to cgraph nodes
   @ffi.Array.multi([4096])
   external ffi.Array<ffi.Int> n_tasks;
 
+  /// abort ggml_graph_compute when true
   external ffi.Pointer<
           ffi.NativeFunction<ffi.Bool Function(ffi.Pointer<ffi.Void> data)>>
       abort_callback;
@@ -9224,6 +9455,7 @@ final class ggml_cplan extends ffi.Struct {
   external ffi.Pointer<ffi.Void> abort_callback_data;
 }
 
+/// computation graph
 final class ggml_cgraph extends ffi.Struct {
   @ffi.Int()
   external int n_nodes;
@@ -9243,6 +9475,7 @@ final class ggml_cgraph extends ffi.Struct {
   @ffi.Array.multi([8273])
   external ffi.Array<ffi.Pointer<ffi.Void>> visited_hash_table;
 
+  /// performance
   @ffi.Int()
   external int perf_runs;
 
@@ -9253,6 +9486,7 @@ final class ggml_cgraph extends ffi.Struct {
   external int perf_time_us;
 }
 
+/// scratch buffer
 final class ggml_scratch extends ffi.Struct {
   @ffi.Size()
   external int offs;
@@ -9264,15 +9498,20 @@ final class ggml_scratch extends ffi.Struct {
 }
 
 final class ggml_init_params extends ffi.Struct {
+  /// bytes
   @ffi.Size()
   external int mem_size;
 
+  /// if NULL, memory will be allocated internally
   external ffi.Pointer<ffi.Void> mem_buffer;
 
+  /// don't allocate memory for the tensor data
   @ffi.Bool()
   external bool no_alloc;
 }
 
+/// NOTE: the INIT or FINALIZE pass is not scheduled unless explicitly enabled.
+/// This behavior was changed since https://github.com/ggerganov/llama.cpp/pull/1995.
 abstract class ggml_task_type {
   static const int GGML_TASK_INIT = 0;
   static const int GGML_TASK_COMPUTE = 1;
@@ -9283,12 +9522,14 @@ final class ggml_compute_params extends ffi.Struct {
   @ffi.Int32()
   external int type;
 
+  /// ith = thread index, nth = number of threads
   @ffi.Int()
   external int ith;
 
   @ffi.Int()
   external int nth;
 
+  /// work buffer for all threads
   @ffi.Size()
   external int wsize;
 
@@ -9301,6 +9542,7 @@ abstract class ggml_op_pool {
   static const int GGML_OP_POOL_COUNT = 2;
 }
 
+/// custom operators
 typedef ggml_unary_op_f32_t = ffi.Pointer<
     ffi.NativeFunction<
         ffi.Void Function(
@@ -9320,6 +9562,8 @@ typedef ggml_custom3_op_f32_t = ffi.Pointer<
     ffi.NativeFunction<
         ffi.Void Function(ffi.Pointer<ggml_tensor>, ffi.Pointer<ggml_tensor>,
             ffi.Pointer<ggml_tensor>, ffi.Pointer<ggml_tensor>)>>;
+
+/// custom operators v2
 typedef ggml_custom1_op_t = ffi.Pointer<
     ffi.NativeFunction<
         ffi.Void Function(
@@ -9348,11 +9592,13 @@ typedef ggml_custom3_op_t = ffi.Pointer<
             ffi.Int nth,
             ffi.Pointer<ffi.Void> userdata)>>;
 
+/// optimization methods
 abstract class ggml_opt_type {
   static const int GGML_OPT_ADAM = 0;
   static const int GGML_OPT_LBFGS = 1;
 }
 
+/// linesearch methods
 abstract class ggml_linesearch {
   static const int GGML_LINESEARCH_DEFAULT = 1;
   static const int GGML_LINESEARCH_BACKTRACKING_ARMIJO = 0;
@@ -9360,6 +9606,7 @@ abstract class ggml_linesearch {
   static const int GGML_LINESEARCH_BACKTRACKING_STRONG_WOLFE = 2;
 }
 
+/// optimization return values
 abstract class ggml_opt_result {
   static const int GGML_OPT_OK = 0;
   static const int GGML_OPT_DID_NOT_CONVERGE = 1;
@@ -9373,6 +9620,9 @@ abstract class ggml_opt_result {
   static const int GGML_LINESEARCH_INVALID_PARAMETERS = -124;
 }
 
+/// optimization parameters
+///
+/// see ggml.c (ggml_opt_default_params) for default values
 final class ggml_opt_params extends ffi.Struct {
   @ffi.Int32()
   external int type;
@@ -9380,12 +9630,22 @@ final class ggml_opt_params extends ffi.Struct {
   @ffi.Int()
   external int n_threads;
 
+  /// delta-based convergence test
+  ///
+  /// if past == 0 - disabled
+  /// if past > 0:
+  /// stop if |f(x) - f(x_past)| < delta * max(1, |f(x)|)
   @ffi.Int()
   external int past;
 
   @ffi.Float()
   external double delta;
 
+  /// maximum number of iterations without improvement
+  ///
+  /// if 0 - disabled
+  /// if > 0:
+  /// assume convergence if no cost improvement in this number of iterations
   @ffi.Int()
   external int max_no_improvement;
 
@@ -9400,19 +9660,24 @@ final class ggml_opt_params extends ffi.Struct {
   external UnnamedStruct2 lbfgs;
 }
 
+/// ADAM parameters
 final class UnnamedStruct1 extends ffi.Struct {
   @ffi.Int()
   external int n_iter;
 
+  /// schedule multiplier (fixed, decay or warmup)
   @ffi.Float()
   external double sched;
 
+  /// weight decay for AdamW, use 0.0f to disable
   @ffi.Float()
   external double decay;
 
+  /// minimum number of tensor dimension to apply weight decay
   @ffi.Int()
   external int decay_min_ndim;
 
+  /// learning rate
   @ffi.Float()
   external double alpha;
 
@@ -9422,20 +9687,26 @@ final class UnnamedStruct1 extends ffi.Struct {
   @ffi.Float()
   external double beta2;
 
+  /// epsilon for numerical stability
   @ffi.Float()
   external double eps;
 
+  /// epsilon for convergence test
   @ffi.Float()
   external double eps_f;
 
+  /// epsilon for convergence test
   @ffi.Float()
   external double eps_g;
 
+  /// gradient clipping
   @ffi.Float()
   external double gclip;
 }
 
+/// LBFGS parameters
 final class UnnamedStruct2 extends ffi.Struct {
+  /// number of corrections to approximate the inv. Hessian
   @ffi.Int()
   external int m;
 
@@ -9445,9 +9716,11 @@ final class UnnamedStruct2 extends ffi.Struct {
   @ffi.Int()
   external int max_linesearch;
 
+  /// convergence tolerance
   @ffi.Float()
   external double eps;
 
+  /// line search tolerance
   @ffi.Float()
   external double ftol;
 
@@ -9472,6 +9745,7 @@ final class ggml_opt_context extends ffi.Struct {
   @ffi.Int()
   external int iter;
 
+  /// number of parameter elements
   @ffi.Int64()
   external int nx;
 
@@ -9490,10 +9764,13 @@ final class ggml_opt_context extends ffi.Struct {
 }
 
 final class UnnamedStruct3 extends ffi.Struct {
+  /// first moment
   external ffi.Pointer<ggml_tensor> m;
 
+  /// second moment
   external ffi.Pointer<ggml_tensor> v;
 
+  /// past function values
   external ffi.Pointer<ggml_tensor> pf;
 
   @ffi.Float()
@@ -9507,24 +9784,34 @@ final class UnnamedStruct3 extends ffi.Struct {
 }
 
 final class UnnamedStruct4 extends ffi.Struct {
+  /// current parameters
   external ffi.Pointer<ggml_tensor> x;
 
+  /// previous parameters
   external ffi.Pointer<ggml_tensor> xp;
 
+  /// current gradient
   external ffi.Pointer<ggml_tensor> g;
 
+  /// previous gradient
   external ffi.Pointer<ggml_tensor> gp;
 
+  /// search direction
   external ffi.Pointer<ggml_tensor> d;
 
+  /// past function values
   external ffi.Pointer<ggml_tensor> pf;
 
+  /// the L-BFGS memory alpha
   external ffi.Pointer<ggml_tensor> lmal;
 
+  /// the L-BFGS memory ys
   external ffi.Pointer<ggml_tensor> lmys;
 
+  /// the L-BFGS memory s
   external ffi.Pointer<ggml_tensor> lms;
 
+  /// the L-BFGS memory y
   external ffi.Pointer<ggml_tensor> lmy;
 
   @ffi.Float()
@@ -9551,6 +9838,7 @@ typedef ggml_opt_callback = ffi.Pointer<
         ffi.Void Function(
             ffi.Pointer<ffi.Void> data, ffi.Pointer<ffi.Float> sched)>>;
 
+/// gguf
 abstract class gguf_type {
   static const int GGUF_TYPE_UINT8 = 0;
   static const int GGUF_TYPE_INT8 = 1;
@@ -9565,6 +9853,8 @@ abstract class gguf_type {
   static const int GGUF_TYPE_UINT64 = 10;
   static const int GGUF_TYPE_INT64 = 11;
   static const int GGUF_TYPE_FLOAT64 = 12;
+
+  /// marks the end of the enum
   static const int GGUF_TYPE_COUNT = 13;
 }
 
@@ -9574,6 +9864,7 @@ final class gguf_init_params extends ffi.Struct {
   @ffi.Bool()
   external bool no_alloc;
 
+  /// if not NULL, create a ggml_context and allocate the tensor data in it
   external ffi.Pointer<ffi.Pointer<ggml_context>> ctx;
 }
 
@@ -9614,6 +9905,7 @@ typedef ggml_vec_dot_t = ffi.Pointer<
         ffi.Void Function(ffi.Int n, ffi.Pointer<ffi.Float> s,
             ffi.Pointer<ffi.Void> x, ffi.Pointer<ffi.Void> y)>>;
 
+/// stdio buffers
 final class __sbuf extends ffi.Struct {
   external ffi.Pointer<ffi.UnsignedChar> _base;
 
@@ -9621,28 +9913,61 @@ final class __sbuf extends ffi.Struct {
   external int _size;
 }
 
+/// hold a buncha junk that would grow the ABI
 final class __sFILEX extends ffi.Opaque {}
 
+/// stdio state variables.
+///
+/// The following always hold:
+///
+/// if (_flags&(__SLBF|__SWR)) == (__SLBF|__SWR),
+/// _lbfsize is -_bf._size, else _lbfsize is 0
+/// if _flags&__SRD, _w is 0
+/// if _flags&__SWR, _r is 0
+///
+/// This ensures that the getc and putc macros (or inline functions) never
+/// try to write or read from a file that is in `read' or `write' mode.
+/// (Moreover, they can, and do, automatically switch from read mode to
+/// write mode, and back, on "r+" and "w+" files.)
+///
+/// _lbfsize is used only to make the inline line-buffered output stream
+/// code as compact as possible.
+///
+/// _ub, _up, and _ur are used when ungetc() pushes back more characters
+/// than fit in the current _bf, or when ungetc() pushes back a character
+/// that does not match the previous one in _bf.  When this happens,
+/// _ub._base becomes non-nil (i.e., a stream has ungetc() data iff
+/// _ub._base!=NULL) and _up and _ur save the current values of _p and _r.
+///
+/// NB: see WARNING above before changing the layout of this structure!
 final class __sFILE extends ffi.Struct {
+  /// current position in (some) buffer
   external ffi.Pointer<ffi.UnsignedChar> _p;
 
+  /// read space left for getc()
   @ffi.Int()
   external int _r;
 
+  /// write space left for putc()
   @ffi.Int()
   external int _w;
 
+  /// flags, below; this FILE is free if 0
   @ffi.Short()
   external int _flags;
 
+  /// fileno, if Unix descriptor, else -1
   @ffi.Short()
   external int _file;
 
+  /// the buffer (at least 1 byte, if !NULL)
   external __sbuf _bf;
 
+  /// 0 or -_bf._size, for inline putc
   @ffi.Int()
   external int _lbfsize;
 
+  /// cookie passed to io functions
   external ffi.Pointer<ffi.Void> _cookie;
 
   external ffi
@@ -9663,24 +9988,32 @@ final class __sFILE extends ffi.Struct {
           ffi.Int Function(
               ffi.Pointer<ffi.Void>, ffi.Pointer<ffi.Char>, ffi.Int)>> _write;
 
+  /// ungetc buffer
   external __sbuf _ub;
 
+  /// additions to FILE to not break ABI
   external ffi.Pointer<__sFILEX> _extra;
 
+  /// saved _r when _r is counting ungetc data
   @ffi.Int()
   external int _ur;
 
+  /// guarantee an ungetc() buffer
   @ffi.Array.multi([3])
   external ffi.Array<ffi.UnsignedChar> _ubuf;
 
+  /// guarantee a getc() buffer
   @ffi.Array.multi([1])
   external ffi.Array<ffi.UnsignedChar> _nbuf;
 
+  /// buffer for fgetln()
   external __sbuf _lb;
 
+  /// stat.st_blksize (may be != _bf._size)
   @ffi.Int()
   external int _blksize;
 
+  /// current lseek offset (see WARNING)
   @fpos_t()
   external int _offset;
 }
@@ -9688,6 +10021,31 @@ final class __sFILE extends ffi.Struct {
 typedef fpos_t = __darwin_off_t;
 typedef __darwin_off_t = __int64_t;
 typedef __int64_t = ffi.LongLong;
+
+/// stdio state variables.
+///
+/// The following always hold:
+///
+/// if (_flags&(__SLBF|__SWR)) == (__SLBF|__SWR),
+/// _lbfsize is -_bf._size, else _lbfsize is 0
+/// if _flags&__SRD, _w is 0
+/// if _flags&__SWR, _r is 0
+///
+/// This ensures that the getc and putc macros (or inline functions) never
+/// try to write or read from a file that is in `read' or `write' mode.
+/// (Moreover, they can, and do, automatically switch from read mode to
+/// write mode, and back, on "r+" and "w+" files.)
+///
+/// _lbfsize is used only to make the inline line-buffered output stream
+/// code as compact as possible.
+///
+/// _ub, _up, and _ur are used when ungetc() pushes back more characters
+/// than fit in the current _bf, or when ungetc() pushes back a character
+/// that does not match the previous one in _bf.  When this happens,
+/// _ub._base becomes non-nil (i.e., a stream has ungetc() data iff
+/// _ub._base!=NULL) and _up and _ur save the current values of _p and _r.
+///
+/// NB: see WARNING above before changing the layout of this structure!
 typedef FILE = __sFILE;
 typedef va_list = __darwin_va_list;
 typedef __darwin_va_list = __builtin_va_list;
@@ -9696,6 +10054,9 @@ typedef off_t = __darwin_off_t;
 typedef ssize_t = __darwin_ssize_t;
 typedef __darwin_ssize_t = ffi.Long;
 
+/// C interface
+///
+/// TODO: show sample usage
 final class llama_model extends ffi.Opaque {}
 
 final class llama_context extends ffi.Opaque {}
@@ -9707,7 +10068,10 @@ abstract class llama_log_level {
 }
 
 abstract class llama_vocab_type {
+  /// SentencePiece
   static const int LLAMA_VOCAB_TYPE_SPM = 0;
+
+  /// Byte Pair Encoding
   static const int LLAMA_VOCAB_TYPE_BPE = 1;
 }
 
@@ -9721,34 +10085,72 @@ abstract class llama_token_type {
   static const int LLAMA_TOKEN_TYPE_BYTE = 6;
 }
 
+/// model file types
 abstract class llama_ftype {
   static const int LLAMA_FTYPE_ALL_F32 = 0;
+
+  /// except 1d tensors
   static const int LLAMA_FTYPE_MOSTLY_F16 = 1;
+
+  /// except 1d tensors
   static const int LLAMA_FTYPE_MOSTLY_Q4_0 = 2;
+
+  /// except 1d tensors
   static const int LLAMA_FTYPE_MOSTLY_Q4_1 = 3;
+
+  /// tok_embeddings.weight and output.weight are F16
   static const int LLAMA_FTYPE_MOSTLY_Q4_1_SOME_F16 = 4;
+
+  /// except 1d tensors
   static const int LLAMA_FTYPE_MOSTLY_Q8_0 = 7;
+
+  /// except 1d tensors
   static const int LLAMA_FTYPE_MOSTLY_Q5_0 = 8;
+
+  /// except 1d tensors
   static const int LLAMA_FTYPE_MOSTLY_Q5_1 = 9;
+
+  /// except 1d tensors
   static const int LLAMA_FTYPE_MOSTLY_Q2_K = 10;
+
+  /// except 1d tensors
   static const int LLAMA_FTYPE_MOSTLY_Q3_K_S = 11;
+
+  /// except 1d tensors
   static const int LLAMA_FTYPE_MOSTLY_Q3_K_M = 12;
+
+  /// except 1d tensors
   static const int LLAMA_FTYPE_MOSTLY_Q3_K_L = 13;
+
+  /// except 1d tensors
   static const int LLAMA_FTYPE_MOSTLY_Q4_K_S = 14;
+
+  /// except 1d tensors
   static const int LLAMA_FTYPE_MOSTLY_Q4_K_M = 15;
+
+  /// except 1d tensors
   static const int LLAMA_FTYPE_MOSTLY_Q5_K_S = 16;
+
+  /// except 1d tensors
   static const int LLAMA_FTYPE_MOSTLY_Q5_K_M = 17;
+
+  /// except 1d tensors
   static const int LLAMA_FTYPE_MOSTLY_Q6_K = 18;
+
+  /// not specified in the model file
   static const int LLAMA_FTYPE_GUESSED = 1024;
 }
 
 final class llama_token_data extends ffi.Struct {
+  /// token id
   @llama_token()
   external int id;
 
+  /// log-odds of the token
   @ffi.Float()
   external double logit;
 
+  /// probability of the token
   @ffi.Float()
   external double p;
 }
@@ -9766,54 +10168,72 @@ final class llama_token_data_array extends ffi.Struct {
 }
 
 final class llama_context_params extends ffi.Struct {
+  /// RNG seed, -1 for random
   @ffi.Uint32()
   external int seed;
 
+  /// text context
   @ffi.Int32()
   external int n_ctx;
 
+  /// prompt processing batch size
   @ffi.Int32()
   external int n_batch;
 
+  /// number of layers to store in VRAM
   @ffi.Int32()
   external int n_gpu_layers;
 
+  /// the GPU that is used for scratch and small tensors
   @ffi.Int32()
   external int main_gpu;
 
+  /// how to split layers across multiple GPUs (size: LLAMA_MAX_DEVICES)
   external ffi.Pointer<ffi.Float> tensor_split;
 
+  /// RoPE base frequency
   @ffi.Float()
   external double rope_freq_base;
 
+  /// RoPE frequency scaling factor
   @ffi.Float()
   external double rope_freq_scale;
 
+  /// called with a progress value between 0 and 1, pass NULL to disable
   external llama_progress_callback progress_callback;
 
+  /// context pointer passed to the progress callback
   external ffi.Pointer<ffi.Void> progress_callback_user_data;
 
+  /// if true, reduce VRAM usage at the cost of performance
   @ffi.Bool()
   external bool low_vram;
 
+  /// if true, use experimental mul_mat_q kernels
   @ffi.Bool()
   external bool mul_mat_q;
 
+  /// use fp16 for KV cache
   @ffi.Bool()
   external bool f16_kv;
 
+  /// the llama_eval() call computes all logits, not just the last one
   @ffi.Bool()
   external bool logits_all;
 
+  /// only load the vocabulary, no weights
   @ffi.Bool()
   external bool vocab_only;
 
+  /// use mmap if possible
   @ffi.Bool()
   external bool use_mmap;
 
+  /// force system to keep model in RAM
   @ffi.Bool()
   external bool use_mlock;
 
+  /// embedding mode only
   @ffi.Bool()
   external bool embedding;
 }
@@ -9822,32 +10242,55 @@ typedef llama_progress_callback = ffi.Pointer<
     ffi.NativeFunction<
         ffi.Void Function(ffi.Float progress, ffi.Pointer<ffi.Void> ctx)>>;
 
+/// model quantization parameters
 final class llama_model_quantize_params extends ffi.Struct {
+  /// number of threads to use for quantizing, if <=0 will use std::thread::hardware_concurrency()
   @ffi.Int()
   external int nthread;
 
+  /// quantize to this llama_ftype
   @ffi.Int32()
   external int ftype;
 
+  /// allow quantizing non-f32/f16 tensors
   @ffi.Bool()
   external bool allow_requantize;
 
+  /// quantize output.weight
   @ffi.Bool()
   external bool quantize_output_tensor;
 
+  /// only copy tensors - ftype, allow_requantize and quantize_output_tensor are ignored
   @ffi.Bool()
   external bool only_copy;
 }
 
+/// grammar types
 final class llama_grammar extends ffi.Opaque {}
 
+/// grammar element type
 abstract class llama_gretype {
+  /// end of rule definition
   static const int LLAMA_GRETYPE_END = 0;
+
+  /// start of alternate definition for rule
   static const int LLAMA_GRETYPE_ALT = 1;
+
+  /// non-terminal element: reference to rule
   static const int LLAMA_GRETYPE_RULE_REF = 2;
+
+  /// terminal element: character (code point)
   static const int LLAMA_GRETYPE_CHAR = 3;
+
+  /// inverse char(s) ([^a], [^a-b] [^abc])
   static const int LLAMA_GRETYPE_CHAR_NOT = 4;
+
+  /// modifies a preceding LLAMA_GRETYPE_CHAR or LLAMA_GRETYPE_CHAR_ALT to
+  /// be an inclusive range ([a-z])
   static const int LLAMA_GRETYPE_CHAR_RNG_UPPER = 5;
+
+  /// modifies a preceding LLAMA_GRETYPE_CHAR or
+  /// LLAMA_GRETYPE_CHAR_RNG_UPPER to add an alternate char to match ([ab], [a-zA])
   static const int LLAMA_GRETYPE_CHAR_ALT = 6;
 }
 
@@ -9855,10 +10298,12 @@ final class llama_grammar_element extends ffi.Struct {
   @ffi.Int32()
   external int type;
 
+  /// Unicode code point or rule ID
   @ffi.Uint32()
   external int value;
 }
 
+/// performance timing information
 final class llama_timings extends ffi.Struct {
   @ffi.Double()
   external double t_start_ms;
@@ -9888,35 +10333,54 @@ final class llama_timings extends ffi.Struct {
   external int n_eval;
 }
 
+/// Beam search
 final class llama_beam_view extends ffi.Struct {
   external ffi.Pointer<llama_token> tokens;
 
   @ffi.Size()
   external int n_tokens;
 
+  /// Cumulative beam probability (renormalized relative to all beams)
   @ffi.Float()
   external double p;
 
+  /// Callback should set this to true when a beam is at end-of-beam.
   @ffi.Bool()
   external bool eob;
 }
 
+/// Passed to beam_search_callback function.
+/// Whenever 0 < common_prefix_length, this number of tokens should be copied from any of the beams
+/// (e.g. beams[0]) as they will be removed (shifted) from all beams in all subsequent callbacks.
+/// These pointers are valid only during the synchronous callback, so should not be saved.
 final class llama_beams_state extends ffi.Struct {
   external ffi.Pointer<llama_beam_view> beam_views;
 
+  /// Number of elements in beam_views[].
   @ffi.Size()
   external int n_beams;
 
+  /// Current max length of prefix tokens shared by all beams.
   @ffi.Size()
   external int common_prefix_length;
 
+  /// True iff this is the last callback invocation.
   @ffi.Bool()
   external bool last_call;
 }
 
+/// Type of pointer to the beam_search_callback function.
+/// void* callback_data is any custom data passed to llama_beam_search, that is subsequently
+/// passed back to beam_search_callback. This avoids having to use global variables in the callback.
 typedef llama_beam_search_callback_fn_t = ffi.Pointer<
     ffi.NativeFunction<
         ffi.Void Function(ffi.Pointer<ffi.Void>, llama_beams_state)>>;
+
+/// Signature for logging events
+/// Note that text includes the new line character at the end for most events.
+/// If your logging mechanism cannot handle that, check if the last character is '\n' and strip it
+/// if it exists.
+/// It might not exist for progress report where '.' is output repeatedly.
 typedef llama_log_callback = ffi.Pointer<
     ffi.NativeFunction<
         ffi.Void Function(ffi.Int32 level, ffi.Pointer<ffi.Char> text,

@@ -63,6 +63,9 @@ ffigen:
   name: LLaMa
   description: llama.cpp bindings
   output: 'lib/generated/llama.cpp/llama.cpp_bindings.g.dart'
+  comments:
+    style: any
+    length: full
   headers:
     entry-points:
       # - '/example/absolute/path/to/llama.cpp/llama.h'
