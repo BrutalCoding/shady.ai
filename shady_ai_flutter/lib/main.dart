@@ -355,16 +355,44 @@ class MyHomePage extends HookConsumerWidget {
                                                           ),
                                                         ),
                                                         const SizedBox(
-                                                          height: 16,
+                                                          height: 32,
                                                         ),
                                                         const Text(
                                                           'This might take a while. Please wait.',
                                                         ),
                                                         const SizedBox(
-                                                          height: 16,
+                                                          height: 64,
                                                         ),
                                                         CircularProgressIndicator
                                                             .adaptive(),
+                                                        const SizedBox(
+                                                          height: 64,
+                                                        ),
+                                                        Text(
+                                                          'Prompt template:',
+                                                          style: Theme.of(
+                                                            context,
+                                                          )
+                                                              .textTheme
+                                                              .titleLarge,
+                                                        ),
+                                                        const SizedBox(
+                                                          height: 8,
+                                                        ),
+                                                        Text(
+                                                          promptTemplate.value
+                                                              .getCompletePrompt,
+                                                          style: Theme.of(
+                                                            context,
+                                                          )
+                                                              .textTheme
+                                                              .bodyMedium
+                                                              ?.copyWith(
+                                                                fontStyle:
+                                                                    FontStyle
+                                                                        .italic,
+                                                              ),
+                                                        ),
                                                       ],
                                                     ),
                                                   ),
@@ -389,8 +417,8 @@ class MyHomePage extends HookConsumerWidget {
                                             pathToFile: filePath.value,
                                             modelContextSize: promptTemplate
                                                 .value.contextSize,
-                                            originalPrompt: promptTemplate
-                                                .value.getCompletePrompt,
+                                            originalPrompt:
+                                                promptTemplate.value,
                                           );
 
                                           // Show response in a dialog
@@ -402,7 +430,7 @@ class MyHomePage extends HookConsumerWidget {
                                                   'Response',
                                                 ),
                                                 content: Text(
-                                                  response.response,
+                                                  response,
                                                 ),
                                               );
                                             },
@@ -508,6 +536,11 @@ class MyHomePage extends HookConsumerWidget {
                                               promptTemplate.value = template;
                                             },
                                             dropdownMenuEntries: [
+                                              DropdownMenuEntry(
+                                                value: PromptConfig.alpaca,
+                                                label:
+                                                    PromptConfig.alpaca.label,
+                                              ),
                                               DropdownMenuEntry(
                                                 value: PromptConfig.synthia,
                                                 label:

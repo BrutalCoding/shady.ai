@@ -22,6 +22,11 @@ class PromptConfig with _$PromptConfig {
     assistant: '',
   );
 
+  static const alpaca = PromptConfig(
+    label: 'Chat',
+    defaultPromptFormat: "A chat.\nUSER: {prompt}\nASSISTANT:",
+  );
+
   static const none = PromptConfig(
     label: 'Empty',
     defaultPromptFormat: '',
