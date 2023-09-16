@@ -44,7 +44,7 @@ class Instruction extends _$Instruction {
     /// Below is an instruction that describes a task. Write a response that
     /// appropriately completes the request.\n\n### Instruction:\nWhat is the
     /// meaning of life?\n\n### Response:
-    required String prompt,
+    required String originalPrompt,
 
     /// The maximum number of tokens to generate.
     /// If not specified, the default value is used from the model file.
@@ -97,17 +97,18 @@ class Instruction extends _$Instruction {
     // Template specific to what the AI model expects
 
     print(
-      "You: $prompt",
+      "You: $originalPrompt",
     );
 
     // Convert the prompt template to a pointer to be used by llama.cpp
-    final Pointer<Char> textPrompt = prompt.toNativeUtf8() as Pointer<Char>;
+    final Pointer<Char> textPrompt =
+        originalPrompt.toNativeUtf8() as Pointer<Char>;
 
     // Missing conditional check for llama.cpp's "add_bos" parameter.
     // add_bos is a boolean value that is used to determine whether or not to add a beginning of sentence token to the prompt.
     // Get the length of the text prompt.
     // Example: 'abc' => 3
-    final lengthOfTextPrompt = prompt.length + 0;
+    final lengthOfTextPrompt = originalPrompt.length + 0;
 
     // A pointer in the memory (RAM) where the tokens will be stored
     // Example: [0, 1, 2, 3]
@@ -132,7 +133,11 @@ class Instruction extends _$Instruction {
 
     print('n_tokens: $n_tokens');
 
-    final llama_tmp = List<int>.generate(n_tokens, (i) => i + 0);
+    final llama_tmp = List<int>.generate(n_tokens, (i) {
+      // Convert 'int' to nativetype Int
+      final token = tokens.elementAt(i).value;
+      return token;
+    });
 
     print(llama_tmp);
 
@@ -146,22 +151,44 @@ class Instruction extends _$Instruction {
     llama.llama_eval(
       llama_ctx,
       llama_tmp_ptr,
-      llama_tmp.length,
+      llama_tmp.length + 1,
       0,
       number_of_cores,
     );
-    calloc.free(llama_tmp_ptr);
+    const maxLength = 256;
 
-    List<String> tokensDecodedIntoPieces = [];
+    final decoded = <String>[];
 
-    malloc.free(tokens);
-    llama.llama_free(llama_ctx);
-    final String response = tokensDecodedIntoPieces.join(' ');
-    print('AI: $response');
+    for (int i = 0; i < n_tokens; i++) {
+      final tokenId = llama_tmp[i];
 
+      final byteCount = sizeOf<IntPtr>();
+      final tokenPtr = malloc.allocate<IntPtr>(byteCount);
+
+      llama.llama_token_get_text(llama_ctx, tokenId);
+
+      final buffer = malloc.allocate<Char>(maxLength);
+
+      llama.llama_token_to_piece(llama_ctx, tokenId, buffer, maxLength);
+
+      final String bufferToString = String.fromCharCodes(
+        List.generate(
+          maxLength,
+          (index) => buffer[index],
+        ),
+      );
+
+      decoded.add(bufferToString);
+
+      print("Buffer decoded: $bufferToString");
+
+      malloc.free(tokenPtr);
+    }
+
+    print('Finished decoding tokens');
     return LLaMaInstruction(
-      prompt: prompt,
-      response: response,
+      prompt: originalPrompt,
+      response: decoded.join(' '),
     );
   }
 }

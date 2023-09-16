@@ -16,6 +16,7 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$PromptConfig {
+  String get label => throw _privateConstructorUsedError;
   String get defaultPromptFormat => throw _privateConstructorUsedError;
   String? get system => throw _privateConstructorUsedError;
   String? get user => throw _privateConstructorUsedError;
@@ -34,7 +35,8 @@ abstract class $PromptConfigCopyWith<$Res> {
       _$PromptConfigCopyWithImpl<$Res, PromptConfig>;
   @useResult
   $Res call(
-      {String defaultPromptFormat,
+      {String label,
+      String defaultPromptFormat,
       String? system,
       String? user,
       String? assistant,
@@ -54,6 +56,7 @@ class _$PromptConfigCopyWithImpl<$Res, $Val extends PromptConfig>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? label = null,
     Object? defaultPromptFormat = null,
     Object? system = freezed,
     Object? user = freezed,
@@ -61,6 +64,10 @@ class _$PromptConfigCopyWithImpl<$Res, $Val extends PromptConfig>
     Object? contextSize = freezed,
   }) {
     return _then(_value.copyWith(
+      label: null == label
+          ? _value.label
+          : label // ignore: cast_nullable_to_non_nullable
+              as String,
       defaultPromptFormat: null == defaultPromptFormat
           ? _value.defaultPromptFormat
           : defaultPromptFormat // ignore: cast_nullable_to_non_nullable
@@ -94,7 +101,8 @@ abstract class _$$_PromptConfigCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String defaultPromptFormat,
+      {String label,
+      String defaultPromptFormat,
       String? system,
       String? user,
       String? assistant,
@@ -112,6 +120,7 @@ class __$$_PromptConfigCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? label = null,
     Object? defaultPromptFormat = null,
     Object? system = freezed,
     Object? user = freezed,
@@ -119,6 +128,10 @@ class __$$_PromptConfigCopyWithImpl<$Res>
     Object? contextSize = freezed,
   }) {
     return _then(_$_PromptConfig(
+      label: null == label
+          ? _value.label
+          : label // ignore: cast_nullable_to_non_nullable
+              as String,
       defaultPromptFormat: null == defaultPromptFormat
           ? _value.defaultPromptFormat
           : defaultPromptFormat // ignore: cast_nullable_to_non_nullable
@@ -147,12 +160,15 @@ class __$$_PromptConfigCopyWithImpl<$Res>
 
 class _$_PromptConfig implements _PromptConfig {
   const _$_PromptConfig(
-      {required this.defaultPromptFormat,
+      {required this.label,
+      required this.defaultPromptFormat,
       this.system,
       this.user,
       this.assistant,
       this.contextSize});
 
+  @override
+  final String label;
   @override
   final String defaultPromptFormat;
   @override
@@ -166,7 +182,7 @@ class _$_PromptConfig implements _PromptConfig {
 
   @override
   String toString() {
-    return 'PromptConfig(defaultPromptFormat: $defaultPromptFormat, system: $system, user: $user, assistant: $assistant, contextSize: $contextSize)';
+    return 'PromptConfig(label: $label, defaultPromptFormat: $defaultPromptFormat, system: $system, user: $user, assistant: $assistant, contextSize: $contextSize)';
   }
 
   @override
@@ -174,6 +190,7 @@ class _$_PromptConfig implements _PromptConfig {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_PromptConfig &&
+            (identical(other.label, label) || other.label == label) &&
             (identical(other.defaultPromptFormat, defaultPromptFormat) ||
                 other.defaultPromptFormat == defaultPromptFormat) &&
             (identical(other.system, system) || other.system == system) &&
@@ -185,8 +202,8 @@ class _$_PromptConfig implements _PromptConfig {
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType, defaultPromptFormat, system, user, assistant, contextSize);
+  int get hashCode => Object.hash(runtimeType, label, defaultPromptFormat,
+      system, user, assistant, contextSize);
 
   @JsonKey(ignore: true)
   @override
@@ -197,12 +214,15 @@ class _$_PromptConfig implements _PromptConfig {
 
 abstract class _PromptConfig implements PromptConfig {
   const factory _PromptConfig(
-      {required final String defaultPromptFormat,
+      {required final String label,
+      required final String defaultPromptFormat,
       final String? system,
       final String? user,
       final String? assistant,
       final int? contextSize}) = _$_PromptConfig;
 
+  @override
+  String get label;
   @override
   String get defaultPromptFormat;
   @override

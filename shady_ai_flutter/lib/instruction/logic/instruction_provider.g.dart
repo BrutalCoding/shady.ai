@@ -6,7 +6,7 @@ part of 'instruction_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$instructionHash() => r'2509b0c6768819d9eed673f864fba5b3f8021c0f';
+String _$instructionHash() => r'dd38b4ddd2f016fbdfb1443f2caecb2673843c38';
 
 /// This class is responsible for generating a response from an instruction.
 ///

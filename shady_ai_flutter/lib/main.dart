@@ -1,6 +1,3 @@
-import 'dart:ffi' hide Size;
-
-import 'package:ffi/ffi.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -11,7 +8,6 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:window_manager/window_manager.dart';
 
 import 'data/prompt_config.dart';
-import 'generated/llama.cpp/llama.cpp_bindings.g.dart';
 import 'instruction/logic/instruction_provider.dart';
 import 'instruction/widgets/drag_and_drop_widget.dart';
 import 'slide_deck/slide_deck_page.dart';
@@ -71,50 +67,12 @@ class Main extends StatelessWidget {
 class MyHomePage extends HookConsumerWidget {
   const MyHomePage({Key? key}) : super(key: key);
 
-  /// Basically, this converts the tokens to normal human readable text
-  /// Example: [0, 1, 2, 3] => ['Hello', 'World', '!', '']
-  static List<String> convertTokensToPieces(
-    LLaMa llama,
-    Pointer<llama_model> model,
-    Pointer<Int> tokens,
-    int tokenCount,
-  ) {
-    const int MAX_PIECE_SIZE =
-        256; // You may adjust this size based on the expected length of each piece.
-    List<String> pieces = [];
-
-    for (int i = 0; i < tokenCount; i++) {
-      Pointer<Char> buffer = malloc.allocate<Char>(MAX_PIECE_SIZE);
-
-      int pieceLength = llama.llama_token_to_piece_with_model(
-        model,
-        tokens.elementAt(i).value, // Get the i-th token value.
-        buffer,
-        MAX_PIECE_SIZE,
-      );
-
-      // If a valid piece was returned (i.e., length > 0), convert it to a Dart string and add to the list.
-      if (pieceLength > 0) {
-        final dartString = buffer.cast<Utf8>().toDartString();
-        print(
-          'Piece length: $pieceLength | Buffer: $buffer | Dart string: $dartString',
-        );
-        pieces.add(dartString);
-      }
-
-      // Free the allocated buffer.
-      malloc.free(buffer);
-    }
-
-    return pieces;
-  }
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final instructionNotifier = ref.watch(instructionProvider.notifier);
     final textTheme = Theme.of(context).textTheme;
     final filePath = useState<String>('');
-    final promptTemplate = useState<PromptConfig>(PromptConfig.Synthia);
+    final promptTemplate = useState<PromptConfig>(PromptConfig.synthia);
     final textControllerPromptSystem = useTextEditingController()
       ..text = promptTemplate.value.system ?? '';
     final textController = useTextEditingController();
@@ -431,7 +389,7 @@ class MyHomePage extends HookConsumerWidget {
                                             pathToFile: filePath.value,
                                             modelContextSize: promptTemplate
                                                 .value.contextSize,
-                                            prompt: promptTemplate
+                                            originalPrompt: promptTemplate
                                                 .value.getCompletePrompt,
                                           );
 
@@ -547,16 +505,13 @@ class MyHomePage extends HookConsumerWidget {
                                           child: DropdownMenu<PromptConfig>(
                                             onSelected: (template) {
                                               if (template == null) return;
-                                              promptTemplate.value =
-                                                  PromptConfig(
-                                                defaultPromptFormat: '',
-                                              );
+                                              promptTemplate.value = template;
                                             },
                                             dropdownMenuEntries: [
                                               DropdownMenuEntry(
-                                                value: PromptConfig.Synthia,
-                                                label: PromptConfig.Synthia
-                                                    .toString(),
+                                                value: PromptConfig.synthia,
+                                                label:
+                                                    PromptConfig.synthia.label,
                                               ),
                                             ],
                                             initialSelection:
@@ -617,7 +572,7 @@ class MyHomePage extends HookConsumerWidget {
                               onPressed: () {
                                 filePath.value = '';
                                 stepperIndex.value = 0;
-                                promptTemplate.value = PromptConfig.Synthia;
+                                promptTemplate.value = PromptConfig.none;
                                 textController.clear();
                               },
                             ),

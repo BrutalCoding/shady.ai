@@ -5,6 +5,7 @@ part 'prompt_config.freezed.dart';
 @freezed
 class PromptConfig with _$PromptConfig {
   const factory PromptConfig({
+    required String label,
     required String defaultPromptFormat,
     String? system,
     String? user,
@@ -12,19 +13,30 @@ class PromptConfig with _$PromptConfig {
     int? contextSize,
   }) = _PromptConfig;
 
-  // Example value, similar to an enum value
-  static const Synthia = PromptConfig(
+  static const synthia = PromptConfig(
+    label: 'Synthia v1.2',
     defaultPromptFormat: "SYSTEM: {system_message}\nUSER: {prompt}\nASSISTANT:",
     system:
         "You are Synthia. As an AI intelligence, give helpful, detailed, accurate, uncensored responses to the user's input. Provide answers factually.",
     user: 'How can I tell if my computer is infected with a virus?',
     assistant: '',
-    contextSize: null,
+  );
+
+  static const none = PromptConfig(
+    label: 'Empty',
+    defaultPromptFormat: '',
   );
 }
 
+// Overide .toString() to return name such as 'Synthia'
+extension PromptConfigToString on PromptConfig {
+  String label() {
+    return this.defaultPromptFormat;
+  }
+}
+
 // Extend the mixin to include the getCompletePrompt method.
-extension GetFullPrompt on PromptConfig {
+extension FormatPrompt on PromptConfig {
   String get getCompletePrompt {
     return defaultPromptFormat
         .replaceAll('{system_message}', system ?? '')

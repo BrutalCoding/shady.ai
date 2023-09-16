@@ -8,9 +8,8 @@ analyzer:
     # Types must be explicitly enforced. This is just a personal preference of mine to avoid hardcoded strings.
     unrelated_type_equality_checks: error
   exclude:
-    - lib/generated/**
-    - '**.g.dart'
-    - '**.freezed.dart'
+    - "**.g.dart"
+    - "**.freezed.dart"
 
 linter:
   rules:
