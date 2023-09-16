@@ -5984,6 +5984,15 @@ class LLaMa {
   late final _ggml_cpu_has_arm_fma =
       _ggml_cpu_has_arm_fmaPtr.asFunction<int Function()>();
 
+  int ggml_cpu_has_metal() {
+    return _ggml_cpu_has_metal();
+  }
+
+  late final _ggml_cpu_has_metalPtr =
+      _lookup<ffi.NativeFunction<ffi.Int Function()>>('ggml_cpu_has_metal');
+  late final _ggml_cpu_has_metal =
+      _ggml_cpu_has_metalPtr.asFunction<int Function()>();
+
   int ggml_cpu_has_f16c() {
     return _ggml_cpu_has_f16c();
   }
@@ -8371,6 +8380,7 @@ class LLaMa {
   int llama_tokenize(
     ffi.Pointer<llama_context> ctx,
     ffi.Pointer<ffi.Char> text,
+    int text_len,
     ffi.Pointer<llama_token> tokens,
     int n_max_tokens,
     bool add_bos,
@@ -8378,6 +8388,7 @@ class LLaMa {
     return _llama_tokenize(
       ctx,
       text,
+      text_len,
       tokens,
       n_max_tokens,
       add_bos,
@@ -8386,15 +8397,21 @@ class LLaMa {
 
   late final _llama_tokenizePtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int Function(ffi.Pointer<llama_context>, ffi.Pointer<ffi.Char>,
-              ffi.Pointer<llama_token>, ffi.Int, ffi.Bool)>>('llama_tokenize');
+          ffi.Int Function(
+              ffi.Pointer<llama_context>,
+              ffi.Pointer<ffi.Char>,
+              ffi.Int,
+              ffi.Pointer<llama_token>,
+              ffi.Int,
+              ffi.Bool)>>('llama_tokenize');
   late final _llama_tokenize = _llama_tokenizePtr.asFunction<
-      int Function(ffi.Pointer<llama_context>, ffi.Pointer<ffi.Char>,
+      int Function(ffi.Pointer<llama_context>, ffi.Pointer<ffi.Char>, int,
           ffi.Pointer<llama_token>, int, bool)>();
 
   int llama_tokenize_with_model(
     ffi.Pointer<llama_model> model,
     ffi.Pointer<ffi.Char> text,
+    int text_len,
     ffi.Pointer<llama_token> tokens,
     int n_max_tokens,
     bool add_bos,
@@ -8402,6 +8419,7 @@ class LLaMa {
     return _llama_tokenize_with_model(
       model,
       text,
+      text_len,
       tokens,
       n_max_tokens,
       add_bos,
@@ -8413,12 +8431,13 @@ class LLaMa {
           ffi.Int Function(
               ffi.Pointer<llama_model>,
               ffi.Pointer<ffi.Char>,
+              ffi.Int,
               ffi.Pointer<llama_token>,
               ffi.Int,
               ffi.Bool)>>('llama_tokenize_with_model');
   late final _llama_tokenize_with_model =
       _llama_tokenize_with_modelPtr.asFunction<
-          int Function(ffi.Pointer<llama_model>, ffi.Pointer<ffi.Char>,
+          int Function(ffi.Pointer<llama_model>, ffi.Pointer<ffi.Char>, int,
               ffi.Pointer<llama_token>, int, bool)>();
 
   /// Token Id -> Piece.
