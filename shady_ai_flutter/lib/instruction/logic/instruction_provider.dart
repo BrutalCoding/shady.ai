@@ -75,8 +75,6 @@ class Instruction extends _$Instruction {
     final llama_params = llama.llama_context_default_params()
       ..n_gpu_layers = n_threads;
 
-    final n_max_tokens = modelContextSize ?? llama_params.n_ctx;
-
     // Load the model
     final llama_model = llama.llama_load_model_from_file(
       model,
