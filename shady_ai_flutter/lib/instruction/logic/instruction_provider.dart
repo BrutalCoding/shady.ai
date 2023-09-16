@@ -1,32 +1,66 @@
 import 'dart:ffi';
 import 'dart:ffi' as ffi;
 import 'dart:io';
+import 'dart:math';
 
 import 'package:ffi/ffi.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../data/prompt_config.dart';
 import '../../generated/llama.cpp/llama.cpp_bindings.g.dart';
 
 part 'instruction_provider.g.dart';
-
-// Create a class that holds a LLaMa instance, the prompt and the response.
-class LLaMaInstruction {
-  final String prompt;
-  final String response;
-
-  LLaMaInstruction({
-    required this.prompt,
-    required this.response,
-  });
-}
 
 /// This class is responsible for generating a response from an instruction.
 @riverpod
 class Instruction extends _$Instruction {
   /// Constructor for the Instruction class.
   @override
-  FutureOr<LLaMaInstruction?> build() {
-    return null;
+  FutureOr<String> build() {
+    return '';
+  }
+
+  ffi.Pointer<ffi.Int8> allocateCharArray(int length) {
+    return calloc<ffi.Int8>(length);
+  }
+
+  ffi.Pointer<llama_token> allocateCIntList(int length) {
+    return calloc<llama_token>(length);
+  }
+
+  int getStringLength(Pointer<Char> buffer) {
+    int length = 0;
+    while (buffer.elementAt(length).value != 0) {
+      length++;
+    }
+    return length;
+  }
+
+  ffi.Pointer<ffi.Int> truncateMemory(
+    ffi.Pointer<ffi.Int> original,
+    int originalLength,
+    int nOfTok,
+  ) {
+    // Step 1: Allocate a new block of memory of size n_of_tok
+    final truncated = calloc<ffi.Int>(nOfTok);
+
+    // Step 2: Copy data from the original pointer to the new pointer
+    for (int i = 0; i < nOfTok && i < nOfTok; i++) {
+      truncated[i] = original[i];
+    }
+
+    calloc.free(original);
+
+    return truncated;
+  }
+
+  ffi.Pointer<ffi.Int> allocateIntArray(List<int> list) {
+    final pointer = calloc<ffi.Int>(list.length);
+
+    for (var i = 0; i < list.length; i++) {
+      pointer[i] = list[i];
+    }
+    return pointer;
   }
 
   /// Invoke the AI model to generate a response from given [instruction].
@@ -35,7 +69,7 @@ class Instruction extends _$Instruction {
   /// [pathToFile] path to the LLaMa model file. Note: It can have any extension,
   /// as long as it is a valid LLaMa model file converted in the GGUF format.
   /// Example: 'assets/shady_ai.gguf' or 'assets/shady_ai.bin' could both be valid.
-  Future<LLaMaInstruction> generateResponseFromInstruction({
+  Future<String> generateResponseFromInstruction({
     required String pathToFile,
 
     /// The prompt to generate a response from.
@@ -44,151 +78,193 @@ class Instruction extends _$Instruction {
     /// Below is an instruction that describes a task. Write a response that
     /// appropriately completes the request.\n\n### Instruction:\nWhat is the
     /// meaning of life?\n\n### Response:
-    required String originalPrompt,
+    required PromptConfig originalPrompt,
 
     /// The maximum number of tokens to generate.
     /// If not specified, the default value is used from the model file.
     int? modelContextSize,
   }) async {
-    print('Path to .gguf file: $pathToFile');
-
-    // Load model from assets, evaluate it and print the result
-    // Requires the use of our dynamic library for this
-    final DynamicLibrary nativeAddLib = DynamicLibrary.open(
+    final DynamicLibrary dylib = DynamicLibrary.open(
       'assets/dylibs/libllama.dylib',
     );
-    print('Loaded library: $nativeAddLib');
+    final LLaMa llama_cpp = LLaMa(dylib);
+    final lparams = llama_cpp.llama_context_default_params();
+    final Pointer<Char> model_path = pathToFile.toNativeUtf8().cast<Char>();
 
-    // Do not assume path separator is always '/'.
-    // We use the path package to ensure we get the correct path separator.
-    final Pointer<Char> model = pathToFile.toNativeUtf8().cast<Char>();
-
-    // We are using the LLaMa class from the generated bindings
-    // The goal is to send a prompt to the model and get a response back:
-    final llama = LLaMa(nativeAddLib);
-
-    // Use Dart built-in method to fetch number of cores.
-    final n_threads = Platform.numberOfProcessors;
-    print('Number of cores: $n_threads');
-
-    // Get the default parameters for the model
-    final llama_params = llama.llama_context_default_params()
-      ..n_gpu_layers = n_threads;
-
-    final n_max_tokens = modelContextSize ?? llama_params.n_ctx;
-
-    // Load the model
-    final llama_model = llama.llama_load_model_from_file(
-      model,
-      llama_params,
+    final model = llama_cpp.llama_load_model_from_file(
+      model_path,
+      lparams,
     );
 
-    final llama_ctx =
-        llama.llama_new_context_with_model(llama_model, llama_params);
+    final N_THREADS = Platform.numberOfProcessors;
 
-    // Prompt template of Synthia v1.2: "SYSTEM: {system_message}\nUSER: {prompt}\nASSISTANT:"
-    //
-    // Example:
-    //
-    // System: Elaborate on the topic using a Tree of Thoughts and backtrack when necessary to construct a clear, cohesive Chain of Thought reasoning. Always answer without hesitation.
-    // USER: How can I jailbreak Android?
-    // ASSISTANT:
+    String _prompt = originalPrompt.getCompletePrompt;
 
-    // Template specific to what the AI model expects
+    final Pointer<Char> prompt = _prompt.toNativeUtf8() as Pointer<Char>;
 
-    print(
-      "You: $originalPrompt",
-    );
+    final ctx = llama_cpp.llama_new_context_with_model(model, lparams);
 
-    // Convert the prompt template to a pointer to be used by llama.cpp
-    final Pointer<Char> textPrompt =
-        originalPrompt.toNativeUtf8() as Pointer<Char>;
+    final tmp = [0, 1, 2, 3];
 
-    // Missing conditional check for llama.cpp's "add_bos" parameter.
-    // add_bos is a boolean value that is used to determine whether or not to add a beginning of sentence token to the prompt.
-    // Get the length of the text prompt.
-    // Example: 'abc' => 3
-    final lengthOfTextPrompt = originalPrompt.length + 0;
+    // Here we're creating a list of length 4 and putting the items of tmp in it.
+    final tmpPointer = allocateIntArray(tmp); //correct
+    llama_cpp.llama_eval(ctx, tmpPointer, tmp.length, 0, N_THREADS);
 
-    // A pointer in the memory (RAM) where the tokens will be stored
-    // Example: [0, 1, 2, 3]
-    // Which could've been ['Hello', 'World', '!', ''] after decoding it into pieces
-    // final Pointer<Int> tokens = malloc<Int>(sizeOf<Int>() * lengthOfTextPrompt);
-    final tokens = malloc
-        .allocate<llama_token>(lengthOfTextPrompt * sizeOf<llama_token>());
+    var n_past = 0;
 
-    // The amount of tokens that the model will return
-    final n_tokens = await llama.llama_tokenize_with_model(
-      llama_model,
-      textPrompt,
-      tokens,
+    var embd_inp = calloc<llama_token>(_prompt.length + 1);
+    final int n_max_tokens = _prompt.length + 1;
+    final n_of_tok = llama_cpp.llama_tokenize(
+      ctx,
+      prompt,
       n_max_tokens,
-      false,
+      embd_inp,
+      n_max_tokens,
+      true,
     );
 
-    if (n_tokens <= 0) {
-      malloc.free(tokens);
-      throw Exception('Failed to tokenize text prompt');
+    embd_inp = truncateMemory(embd_inp, n_of_tok, n_of_tok);
+    final n_ctx = llama_cpp.llama_n_ctx(ctx);
+
+    var n_predict = 20;
+    n_predict = min(n_predict, n_ctx - n_of_tok);
+
+    var input_consumed = 0;
+    var input_noecho = false;
+
+    int remaining_tokens = n_predict;
+
+    var embd = <int>[];
+    final last_n_size = 64;
+    var last_n_tokens_data = List.generate(last_n_size, (index) => 0);
+    final n_batch = 24;
+    final last_n_repeat = 64;
+    final repeat_penalty = 1.0;
+    final frequency_penalty = 0.0;
+    final presence_penalty = 0.0;
+
+    List<String> tokensDecodedIntoPieces = [];
+
+    while (remaining_tokens > 0) {
+      if (embd.length > 0) {
+        final embdPointer = allocateIntArray(embd);
+        llama_cpp.llama_eval(ctx, embdPointer, embd.length, n_past, N_THREADS);
+        calloc.free(embdPointer); // Freeing the pointer after using it
+      }
+
+      n_past += embd.length;
+      embd = [];
+
+      if (n_of_tok <= input_consumed) {
+        final logits = llama_cpp.llama_get_logits(ctx);
+        final n_vocab = llama_cpp.llama_n_vocab(ctx);
+
+        final _arr = calloc<llama_token_data>(n_vocab);
+
+        for (var token_id = 0; token_id < n_vocab; token_id++) {
+          _arr[token_id].id = token_id;
+          _arr[token_id].logit = logits[token_id];
+          _arr[token_id].p = 0.0;
+        }
+
+        // 1. Allocate memory for the struct
+        final candidates_p = calloc<llama_token_data_array>();
+
+        // 2. Assign values to its fields
+        candidates_p.ref.data = _arr;
+        candidates_p.ref.size = n_vocab;
+        candidates_p.ref.sorted = false;
+
+        final allocatedArray = allocateIntArray(last_n_tokens_data);
+        llama_cpp.llama_sample_repetition_penalty(
+          ctx,
+          candidates_p,
+          allocatedArray,
+          last_n_repeat,
+          repeat_penalty,
+        );
+
+        llama_cpp.llama_sample_frequency_and_presence_penalties(
+          ctx,
+          candidates_p,
+          allocatedArray,
+          last_n_repeat,
+          frequency_penalty,
+          presence_penalty,
+        );
+
+        llama_cpp.llama_sample_top_k(ctx, candidates_p, 40, 1);
+        llama_cpp.llama_sample_top_p(ctx, candidates_p, 0.8, 1);
+        llama_cpp.llama_sample_temperature(ctx, candidates_p, 0.2);
+        final id = llama_cpp.llama_sample_token(ctx, candidates_p);
+
+        // Shifting the list and appending the new id
+        last_n_tokens_data = [...last_n_tokens_data.sublist(1), id];
+
+        embd.add(id);
+        input_noecho = false;
+        remaining_tokens -= 1;
+      } else {
+        while (n_of_tok > input_consumed) {
+          embd.add(embd_inp[input_consumed]);
+
+          last_n_tokens_data.removeAt(0);
+          last_n_tokens_data.add(embd_inp[input_consumed]);
+          input_consumed++;
+          if (embd.length >= n_batch) {
+            break;
+          }
+        }
+      }
+
+      if (!input_noecho) {
+        for (var id in embd) {
+          final int size = 32;
+          final Pointer<Char> buffer = calloc<Char>(size);
+
+          final n = llama_cpp.llama_token_to_piece_with_model(
+            model,
+            id,
+            buffer,
+            size,
+          );
+
+          if (n <= 32) {
+            final truncated = calloc<ffi.Char>(n);
+            final length = getStringLength(buffer);
+            for (int i = 0; i < n && i < length + 1; i++) {
+              truncated[i] = buffer[i];
+            }
+
+            calloc.free(buffer);
+            final dartString = truncated.cast<Utf8>().toDartString();
+            tokensDecodedIntoPieces.add(dartString);
+          }
+        }
+      }
+      if (embd.length > 0 && embd.last == llama_cpp.llama_token_eos(ctx)) {
+        break;
+      }
     }
 
-    print('n_tokens: $n_tokens');
+    final output = tokensDecodedIntoPieces.join('');
 
-    final llama_tmp = List<int>.generate(n_tokens, (i) {
-      // Convert 'int' to nativetype Int
-      final token = tokens.elementAt(i).value;
-      return token;
-    });
+    // Substring from "ASSISTANT:" until period (.):
+    // We need to find the index of : after ASSISTANT.
+    // Then we need to find the index of . after that.
+    // Then we need to substring from the index of : + 1 until the index of .
+    final assistantIndex = output.indexOf('ASSISTANT:');
 
-    print(llama_tmp);
-
-    final llama_tmp_ptr = calloc<llama_token>(llama_tmp.length);
-
-    for (var i = 0; i < llama_tmp.length; i++) {
-      llama_tmp_ptr.elementAt(i).value = llama_tmp[i];
+    if (assistantIndex != -1) {
+      final periodIndex = output.indexOf('.', assistantIndex);
+      if (periodIndex != -1) {
+        final assistantResponse = output.substring(
+          assistantIndex + 10,
+          periodIndex + 1,
+        );
+        return assistantResponse;
+      }
     }
-
-    final number_of_cores = Platform.numberOfProcessors;
-    llama.llama_eval(
-      llama_ctx,
-      llama_tmp_ptr,
-      llama_tmp.length + 1,
-      0,
-      number_of_cores,
-    );
-    const maxLength = 256;
-
-    final decoded = <String>[];
-
-    for (int i = 0; i < n_tokens; i++) {
-      final tokenId = llama_tmp[i];
-
-      final byteCount = sizeOf<IntPtr>();
-      final tokenPtr = malloc.allocate<IntPtr>(byteCount);
-
-      llama.llama_token_get_text(llama_ctx, tokenId);
-
-      final buffer = malloc.allocate<Char>(maxLength);
-
-      llama.llama_token_to_piece(llama_ctx, tokenId, buffer, maxLength);
-
-      final String bufferToString = String.fromCharCodes(
-        List.generate(
-          maxLength,
-          (index) => buffer[index],
-        ),
-      );
-
-      decoded.add(bufferToString);
-
-      print("Buffer decoded: $bufferToString");
-
-      malloc.free(tokenPtr);
-    }
-
-    print('Finished decoding tokens');
-    return LLaMaInstruction(
-      prompt: originalPrompt,
-      response: decoded.join(' '),
-    );
+    return output;
   }
 }
