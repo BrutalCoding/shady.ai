@@ -1,5 +1,5 @@
 <div align="center">
-  <image alt="Main logo" height=256 src="assets/shady_app_icon.png"/>
+  <image alt="Main logo" height=256 src="https://raw.githubusercontent.com/BrutalCoding/shady.ai/main/shady_ai_flutter/assets/shady_app_icon.png"/>
   <h1>ShadyAI</h1>
 
   <sub>My take to get privacy friendly, offline AI models accessible to as many people as possible. The cutting edge offline AI models such as [Segment Anything](https://ai.facebook.com/research/publications/segment-anything/), [LLaMA](https://github.com/facebookresearch/llama) and [Whisper](https://github.com/openai/whisper) have been optimised by many other developers in various forms and sizes. The small to medium sizes are the ones I'm interested in.</sub>
@@ -18,12 +18,30 @@ Offline first. Privacy first. Open source. Free. No ads. No tracking. No data co
 - My empty wallet
 - My free time (I'm a full-time dad, full-time employee, and part-time seeker of getting my work-life balance right)
 
+## Progress
+
+Here's a list of things I have done so far and things I'm working on.
+
+- [x] Make a slide deck with Flutter (Bonus: [contribute back custom changes](https://github.com/serverpod/slick_slides/pull/1))
+- [x] Generate Dart bindings for [llama.cpp](https://github.com/ggerganov/llama.cpp)
+- [x] Generate .dylib for macOS (ARM64) (Bonus: with Metal artifact for GPU acceleration)
+- [x] Successfully Load instance of LLaMA with dylib
+- [x] Successfully load LLaMA model in GGUF format with default LLaMA context parameters
+- [x] Successfully run inference on LLaMA model with custom prompt
+  - [ ] Refactor implementation because the model, after eval, is returning garbage tokens / pieces.
+- [x] Make a quick start UI layout
+  - [x] Step 1: Drag-and-drop a model
+  - [x] Step 2: Select a pre-defined prompt template
+  - [x] Step 3: Type in your instruction (user prompt)
+  - [x] Step 4: Press continue in last step to start inference
+  - [x] Step 5: Show inference result (dialog) (Bonus: show progress indicator)
+
 ## Features
 
 Anything that's checked is implemented.
 Otherwise, it's on my list of things-to-tinker-around-with but does not guarantee it will become a feature.
 
-- [x] Ask AI a single question.
+- [ ] Ask AI a single question.
 (Example: "What is the meaning of life?")
 - [ ] Ask AI generate an image based on a short description.
 (Example: "A cat with a hat")
@@ -42,7 +60,6 @@ Here is a list of devices I've tested ShadyAI on. This is not an exhaustive list
   - macOS Ventura - Version 13.5.1
   - Chip: Apple M1 Pro
   - Memory: 16 GB
-  - **Last verified: 9 September 2023**
 
 ### Experimental
 
@@ -75,12 +92,13 @@ In order for the benchmark to pass, this checklist must be completed.
 
 **If it's not completed, it's a fail. If it's completed, it's a pass.**
 
-**About my dad**
+**About my dad.**
+
 He's in his mid 70s. Great memory. Always forgets my date of birth, yet somehow remembers details about his customers from 30 years ago. Has a great sense of humour. Oh wait a minute, his memory is not that great after all. Still, he's a great dad.
 
 Say hi to my dad:
 
-<img alt="Shady's Daddy" src="shady_ai_flutter/assets/dad_the_benchmark.png" height=256>
+<img alt="Shady's Daddy" src="https://raw.githubusercontent.com/BrutalCoding/shady.ai/main/shady_ai_flutter/assets/dad_the_benchmark.png" height=256>
 
 ## Tech Stack
 
@@ -102,7 +120,7 @@ A: Who knows? Maybe it's the AI that's shady. Maybe it's me. Or is it you? Maybe
 
 ## Disclaimer
 
-This project is not affiliated with Facebook, OpenAI or any other company. This is a personal project made by me. ShadyAI, myself, and anyone else involved in this project are not responsible for any damages caused by the use of this app.
+This project is not affiliated with Facebook, OpenAI or any other company. This is a personal project made by me. ShadyAI, myself, and anyone else involved in this project are not responsible for any damages caused by the use of this app. Use at your own risk.
 
 ## License
 
@@ -115,7 +133,3 @@ Feel free to open an issue or a pull request. I'm open to any suggestions.
 ## Friends of ShadyAI
 
 - [Flutter Perth](https://www.meetup.com/Flutter-Perth/) - A meetup group for Flutter developers in Perth, Western Australia. (I'm the organiser)
-
-## Previews
-
-![shadyai_eval_ok](https://user-images.githubusercontent.com/5500332/234497371-eeb5be33-f884-4a90-b977-0d5f162641da.gif)
