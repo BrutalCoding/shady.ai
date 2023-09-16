@@ -108,21 +108,21 @@ class Instruction extends _$Instruction {
     // add_bos is a boolean value that is used to determine whether or not to add a beginning of sentence token to the prompt.
     // Get the length of the text prompt.
     // Example: 'abc' => 3
-    final lengthOfTextPrompt = originalPrompt.length + 0;
+    final lengthOfTextPrompt = originalPrompt.length + sizeOf<llama_token>();
 
     // A pointer in the memory (RAM) where the tokens will be stored
     // Example: [0, 1, 2, 3]
     // Which could've been ['Hello', 'World', '!', ''] after decoding it into pieces
     // final Pointer<Int> tokens = malloc<Int>(sizeOf<Int>() * lengthOfTextPrompt);
-    final tokens = malloc
-        .allocate<llama_token>(lengthOfTextPrompt * sizeOf<llama_token>());
+    final tokens = malloc.allocate<llama_token>(lengthOfTextPrompt);
 
     // The amount of tokens that the model will return
     final n_tokens = await llama.llama_tokenize_with_model(
       llama_model,
       textPrompt,
+      lengthOfTextPrompt,
       tokens,
-      n_max_tokens,
+      lengthOfTextPrompt,
       false,
     );
 

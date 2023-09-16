@@ -417,8 +417,8 @@ class MyHomePage extends HookConsumerWidget {
                                             pathToFile: filePath.value,
                                             modelContextSize: promptTemplate
                                                 .value.contextSize,
-                                            originalPrompt:
-                                                promptTemplate.value,
+                                            originalPrompt: promptTemplate
+                                                .value.getCompletePrompt,
                                           );
 
                                           // Show response in a dialog
@@ -430,7 +430,7 @@ class MyHomePage extends HookConsumerWidget {
                                                   'Response',
                                                 ),
                                                 content: Text(
-                                                  response,
+                                                  response.response,
                                                 ),
                                               );
                                             },
