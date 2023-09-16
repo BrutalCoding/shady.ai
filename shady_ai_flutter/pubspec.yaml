@@ -18,34 +18,33 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 0.0.1+1
 
 environment:
-  sdk: ">=2.19.4 <4.0.0"
-  flutter: ">=3.3.0"
+  sdk: ">=3.0.0 <4.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  serverpod_flutter: ^1.0.1
+  flutter_localizations: # Required to enable localization
+    sdk: flutter         # Required to enable localization
+  serverpod_flutter: ^1.1.1
   shady_ai_client:
     path: ../shady_ai_client
   slick_slides:
-    #FIXME: Should use the git url. Only use local path for testing.
-    path: ../../slick_slides/slick_slides
-    # git:
-    #   url: https://github.com/BrutalCoding/slick_slides.git
-    #   ref: main
-    #   path: slick_slides
-  cupertino_icons: ^1.0.2
-  ffi: ^2.0.1
-  hooks_riverpod: ^2.3.4
-  riverpod_generator: ^2.1.6
-  riverpod_lint: ^2.0.1
-  go_router: ^10.1.0
-  url_launcher: ^6.1.10
+    git:
+      url: https://github.com/BrutalCoding/slick_slides.git
+      ref: main
+      path: slick_slides
+  cupertino_icons: ^1.0.6
+  ffi: ^2.1.0
+  hooks_riverpod: ^2.4.0
+  riverpod_generator: ^2.3.2
+  riverpod_lint: ^2.1.0
+  go_router: ^10.1.2
+  url_launcher: ^6.1.14
   path_provider: ^2.1.1
   desktop_drop: ^0.4.3
   super_hot_key: ^0.6.4
   window_manager: ^0.3.6
-  collection: ^1.17.2
+  collection: ^1.17.0
   freezed_annotation: ^2.4.1
   json_annotation: ^4.8.1
   #
@@ -61,12 +60,12 @@ dependencies:
   #     path: flutter_wasm
 
 dev_dependencies:
+  flutter_test:
+      sdk: flutter
   build_runner: ^2.4.6
   ffigen: ^9.0.1
-  flutter_launcher_icons: ^0.13.0
-  flutter_lints: ^2.0.1
-  flutter_test:
-    sdk: flutter
+  flutter_launcher_icons: ^0.13.1
+  flutter_lints: ^2.0.3 # Contains a set of recommended lints for Flutter code
   freezed: ^2.4.2
   json_serializable: ^6.7.1
 
