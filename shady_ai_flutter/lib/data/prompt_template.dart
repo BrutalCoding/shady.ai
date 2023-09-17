@@ -41,7 +41,8 @@ class PromptTemplate with _$PromptTemplate {
     return PromptTemplate(
       label: 'Story',
       promptTemplate: '{prompt}',
-      prompt: "One day, a boy named Luca went for a walk.",
+      prompt:
+          "One day, there was a boy named Luca who went for a walk. He walked past by a dark cave where he got confronted by a big brown scary bear. Oh oh, 2 big furry ears and 1 big shiny nose. Luca was so scared.",
       postProcess: (output) => output,
     );
   }
@@ -204,7 +205,7 @@ class PromptTemplate with _$PromptTemplate {
     return PromptTemplate(
       label: 'Chat',
       promptTemplate: "USER: {prompt}\nASSISTANT:",
-      prompt: 'Write a story about llamas',
+      prompt: 'Write a story about llamas.',
       postProcess: (output) {
         // Substring from "ASSISTANT:" until period (.):
         // We need to find the index of : after ASSISTANT.

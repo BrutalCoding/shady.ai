@@ -41,8 +41,10 @@ Here's a list of things I have done so far and things I'm working on.
 Anything that's checked is implemented.
 Otherwise, it's on my list of things-to-tinker-around-with but does not guarantee it will become a feature.
 
-- [ ] Ask AI a single question.
+- [x] Ask AI a single question.
 (Example: "What is the meaning of life?")
+- [x] Give AI a single instruction.
+(Example: "Write a Flutter widget with a button that says 'Hello World'")
 - [ ] Ask AI generate an image based on a short description.
 (Example: "A cat with a hat")
 - [ ] On-going chat conversation with AI.

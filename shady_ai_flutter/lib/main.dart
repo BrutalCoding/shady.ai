@@ -410,10 +410,10 @@ class QuickStartPage extends HookConsumerWidget {
                                       Step(
                                         isActive: stepperIndex.value == 0,
                                         title: Text(
-                                          'Select a template',
+                                          'Select a prompt template',
                                         ),
                                         subtitle: Text(
-                                          'Usually, AI models expect a specific format for the prompt. You can select a template here to make sure that the AI understands your prompt.',
+                                          'Usually, AI models expect a specific format for the prompt. This is known as a prompt template. You can select a prompt template from the dropdown below.',
                                         ),
                                         content: Align(
                                           alignment: Alignment.centerLeft,
