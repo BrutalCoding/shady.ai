@@ -68,6 +68,7 @@ dev_dependencies:
   flutter_lints: ^2.0.3 # Contains a set of recommended lints for Flutter code
   freezed: ^2.4.2
   json_serializable: ^6.7.1
+  go_router_builder: ^2.3.2
 
 # Generates bindings for llama.cpp
 ffigen:

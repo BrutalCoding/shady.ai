@@ -1,15 +1,17 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:path/path.dart' as p;
 import 'package:slick_slides/slick_slides.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:window_manager/window_manager.dart';
 
-import 'data/prompt_config.dart';
-import 'instruction/logic/instruction_provider.dart';
+import 'data/prompt_template.dart';
 import 'instruction/widgets/drag_and_drop_widget.dart';
+import 'router/router.dart';
 import 'slide_deck/slide_deck_page.dart';
 
 /// The main entry point for any Dart app.
@@ -17,7 +19,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized(); // Required by some plugins
   SlickSlides().initialize(); // For the slide deck
   await windowManager.ensureInitialized(); // For the window manager
-  const minimumWindowSize = Size(1280, 800); // Current UI is not responsive
+  const minimumWindowSize = Size(1280, 960); // Current UI is not responsive
 
   // Set the window options. Important to keep the window size and minimum size the same.
   WindowOptions windowOptions = WindowOptions(
@@ -42,14 +44,20 @@ void main() async {
   );
 }
 
+/// Global navigator key to access context from anywhere in the app.
+final navigatorKey = GlobalKey<NavigatorState>();
+
+/// [_router] is the global router for the app.
+final _router = GoRouter(routes: $appRoutes);
+
 class Main extends StatelessWidget {
   const Main({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return ProviderScope(
-      child: MaterialApp(
+      child: MaterialApp.router(
         title: 'ShadyAI',
+        routerConfig: _router,
         debugShowCheckedModeBanner: false,
         theme: ThemeData.light(
           useMaterial3: true,
@@ -58,23 +66,24 @@ class Main extends StatelessWidget {
           useMaterial3: true,
         ),
         themeMode: ThemeMode.system,
-        home: const MyHomePage(),
       ),
     );
   }
 }
 
-class MyHomePage extends HookConsumerWidget {
-  const MyHomePage({Key? key}) : super(key: key);
+class QuickStartPage extends HookConsumerWidget {
+  const QuickStartPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final instructionNotifier = ref.watch(instructionProvider.notifier);
+    // final instructionNotifier = ref.watch(instructionProvider.notifier);
     final textTheme = Theme.of(context).textTheme;
     final filePath = useState<String>('');
-    final promptTemplate = useState<PromptConfig>(PromptConfig.synthia);
+    final promptTemplate = useState<PromptTemplate>(
+      PromptTemplate.llama2Chat(),
+    );
     final textControllerPromptSystem = useTextEditingController()
-      ..text = promptTemplate.value.system ?? '';
+      ..text = promptTemplate.value.systemMessage;
     final textController = useTextEditingController();
     final stepperIndex = useState<int>(0);
 
@@ -292,15 +301,21 @@ class MyHomePage extends HookConsumerWidget {
                                   Stepper(
                                     currentStep: stepperIndex.value,
                                     onStepContinue: () async {
-                                      if (stepperIndex.value == 2) {
+                                      if (stepperIndex.value < 3) {
+                                        stepperIndex.value++;
+                                        return;
+                                      }
+                                      if (stepperIndex.value == 3) {
                                         if (textController.value.text.isEmpty) {
                                           await showDialog<void>(
                                             context: context,
                                             builder: (context) {
                                               return AlertDialog.adaptive(
-                                                title: const Text('Try again'),
+                                                title: const Text(
+                                                  'Forgot something?',
+                                                ),
                                                 content: const Text(
-                                                  'You forgot to enter your prompt.',
+                                                  'The prompt text is empty. Did you forget to write something?',
                                                 ),
                                               );
                                             },
@@ -310,207 +325,29 @@ class MyHomePage extends HookConsumerWidget {
 
                                         // Set the system prompt in the template
                                         promptTemplate.value =
-                                            promptTemplate.value =
-                                                promptTemplate.value.copyWith(
-                                          defaultPromptFormat: promptTemplate
-                                              .value.defaultPromptFormat,
-                                          system: textControllerPromptSystem
-                                              .value.text,
+                                            promptTemplate.value.copyWith(
+                                          promptTemplate: promptTemplate
+                                              .value.promptTemplate,
+                                          systemMessage:
+                                              textControllerPromptSystem
+                                                  .value.text,
                                         );
 
                                         // Set the user prompt in the template
                                         promptTemplate.value =
-                                            promptTemplate.value =
-                                                promptTemplate.value.copyWith(
-                                          user: textController.value.text,
+                                            promptTemplate.value.copyWith(
+                                          prompt: textController.value.text,
                                         );
 
-                                        // Show modal progress indicator
-                                        showModalBottomSheet<void>(
-                                          context: context,
-                                          isDismissible: false,
-                                          builder: (context) {
-                                            return BottomSheet(
-                                              onClosing: () {},
-                                              showDragHandle: false,
-                                              builder: (context) {
-                                                return Container(
-                                                  height: 400,
-                                                  child: Center(
-                                                    child: Column(
-                                                      children: [
-                                                        Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .only(
-                                                            top: 16.0,
-                                                          ),
-                                                          child: Text(
-                                                            'Generating response...',
-                                                            style: Theme.of(
-                                                              context,
-                                                            )
-                                                                .textTheme
-                                                                .headlineLarge,
-                                                          ),
-                                                        ),
-                                                        const SizedBox(
-                                                          height: 32,
-                                                        ),
-                                                        const Text(
-                                                          'This might take a while. Please wait.',
-                                                        ),
-                                                        const SizedBox(
-                                                          height: 64,
-                                                        ),
-                                                        CircularProgressIndicator
-                                                            .adaptive(),
-                                                        const SizedBox(
-                                                          height: 64,
-                                                        ),
-                                                        Text(
-                                                          'Prompt template:',
-                                                          style: Theme.of(
-                                                            context,
-                                                          )
-                                                              .textTheme
-                                                              .titleLarge,
-                                                        ),
-                                                        const SizedBox(
-                                                          height: 8,
-                                                        ),
-                                                        Text(
-                                                          promptTemplate.value
-                                                              .getCompletePrompt,
-                                                          style: Theme.of(
-                                                            context,
-                                                          )
-                                                              .textTheme
-                                                              .bodyMedium
-                                                              ?.copyWith(
-                                                                fontStyle:
-                                                                    FontStyle
-                                                                        .italic,
-                                                              ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                );
-                                              },
-                                            );
-                                          },
-                                        );
-
-                                        // Allow the previous modal to be shown before generating the response.
-                                        // Otherwise, the UI will freeze and the modal will not be shown on-time.
-                                        await Future.delayed(
-                                          const Duration(seconds: 3),
-                                          () {},
-                                        );
-
-                                        // Generate the response from the AI
-                                        try {
-                                          final response =
-                                              await instructionNotifier
-                                                  .generateResponseFromInstruction(
-                                            pathToFile: filePath.value,
-                                            modelContextSize: promptTemplate
-                                                .value.contextSize,
-                                            originalPrompt: promptTemplate
-                                                .value.getCompletePrompt,
-                                          );
-
-                                          // Show response in a dialog
-                                          await showDialog<void>(
-                                            context: context,
-                                            builder: (context) {
-                                              return AlertDialog.adaptive(
-                                                title: const Text(
-                                                  'Response',
-                                                ),
-                                                content: Text(
-                                                  response.response,
-                                                ),
-                                              );
-                                            },
-                                          );
-
-                                          // Hide modal progress indicator
-                                          Navigator.of(context).pop();
-                                        } catch (e, s) {
-                                          print(
-                                            s,
-                                          );
-                                          // Hide modal progress indicator
-                                          Navigator.of(context).pop();
-                                          await Future.delayed(
-                                            const Duration(seconds: 2),
-                                            () {},
-                                          );
-
-                                          // Show error dialog
-                                          await showDialog<void>(
-                                            context: context,
-                                            builder: (context) {
-                                              return AlertDialog.adaptive(
-                                                title: const Text(
-                                                  'Error',
-                                                ),
-                                                actions: [
-                                                  // Report issue (goes to GitHub)
-                                                  TextButton(
-                                                    onPressed: () {
-                                                      final safeUriError =
-                                                          Uri.encodeComponent(
-                                                        e.toString(),
-                                                      );
-                                                      final safeUriStacktrace =
-                                                          Uri.encodeComponent(
-                                                        "# Steps to reproduce?\n1. Drag and drop the model\n2. Click on ...\n\n# Stacktrace\n\n```\n" +
-                                                            s.toString(),
-                                                      );
-                                                      launchUrl(
-                                                        Uri.parse(
-                                                          'https://github.com/brutalcoding/shady.ai/issues/new?assignees=&labels=bug&template=bug_report.md&title=$safeUriError&body=$safeUriStacktrace',
-                                                        ),
-                                                      );
-                                                      Navigator.of(context)
-                                                          .pop();
-                                                    },
-                                                    child: const Text(
-                                                      'Report issue',
-                                                    ),
-                                                  ),
-
-                                                  // Close dialog
-                                                  FilledButton(
-                                                    onPressed: () {
-                                                      Clipboard.setData(
-                                                        ClipboardData(
-                                                          text: s.toString(),
-                                                        ),
-                                                      );
-                                                      Navigator.of(context)
-                                                          .pop();
-                                                    },
-                                                    child: const Text(
-                                                      'Close',
-                                                    ),
-                                                  ),
-                                                ],
-                                                content: Text(
-                                                  'Crashed while generating response from instruction.\n\n$e',
-                                                ),
-                                              );
-                                            },
-                                          );
-                                        } finally {}
-
-                                        return;
+                                        // Navigate to the response page
+                                        // with GoRouter (TypedRoute)
+                                        InstructionInferencePageRoute(
+                                          pathToFile: filePath.value,
+                                          promptTemplate: jsonEncode(
+                                            promptTemplate.value.toJson(),
+                                          ),
+                                        ).push<void>(context);
                                       }
-
-                                      stepperIndex.value++;
                                     },
                                     onStepCancel: () {
                                       if (stepperIndex.value == 0) return;
@@ -523,48 +360,59 @@ class MyHomePage extends HookConsumerWidget {
                                       Step(
                                         isActive: stepperIndex.value == 0,
                                         title: Text(
-                                          'Select a template (optional)',
+                                          'Select a template',
                                         ),
                                         subtitle: Text(
                                           'Usually, AI models expect a specific format for the prompt. You can select a template here to make sure that the AI understands your prompt.',
                                         ),
                                         content: Align(
                                           alignment: Alignment.centerLeft,
-                                          child: DropdownMenu<PromptConfig>(
+                                          child: DropdownMenu<PromptTemplate>(
                                             onSelected: (template) {
                                               if (template == null) return;
                                               promptTemplate.value = template;
                                             },
-                                            dropdownMenuEntries: [
-                                              DropdownMenuEntry(
-                                                value: PromptConfig.alpaca,
-                                                label:
-                                                    PromptConfig.alpaca.label,
-                                              ),
-                                              DropdownMenuEntry(
-                                                value: PromptConfig.synthia,
-                                                label:
-                                                    PromptConfig.synthia.label,
-                                              ),
-                                            ],
+                                            dropdownMenuEntries:
+                                                PromptTemplate.all
+                                                    .map(
+                                                      (template) =>
+                                                          DropdownMenuEntry(
+                                                        value: template,
+                                                        label: template.label,
+                                                      ),
+                                                    )
+                                                    .toList(),
                                             initialSelection:
                                                 promptTemplate.value,
+                                            controller:
+                                                TextEditingController.fromValue(
+                                              TextEditingValue(
+                                                text:
+                                                    promptTemplate.value.label,
+                                              ),
+                                            ),
                                           ),
                                         ),
                                       ),
                                       Step(
                                         isActive: stepperIndex.value == 1,
                                         title: Text(
-                                          'Set a system message',
+                                          'Set a system message' +
+                                              (promptTemplate.value
+                                                      .systemMessage.isNotEmpty
+                                                  ? ''
+                                                  : ' (not required)'),
                                         ),
                                         subtitle: Text(
-                                          'A system message allows you to give the AI some context in which it should respond. (recommended)',
+                                          'A system message allows you to give the AI some context in which it should respond.',
                                         ),
                                         content: Padding(
                                           padding: const EdgeInsets.all(8.0),
                                           child: TextField(
                                             controller:
                                                 textControllerPromptSystem,
+                                            enabled: promptTemplate
+                                                .value.systemMessage.isNotEmpty,
                                             maxLines: 1,
                                             decoration: InputDecoration(
                                               border: OutlineInputBorder(),
@@ -577,7 +425,7 @@ class MyHomePage extends HookConsumerWidget {
                                         isActive: stepperIndex.value == 2,
                                         title: Text('Set your prompt'),
                                         subtitle: Text(
-                                          'A user message is what you want to say to the AI. For example: ${promptTemplate.value.user}',
+                                          'A user message is what you want to say to the AI.',
                                         ),
                                         content: Padding(
                                           padding: const EdgeInsets.all(8.0),
@@ -586,6 +434,34 @@ class MyHomePage extends HookConsumerWidget {
                                             decoration: InputDecoration(
                                               border: OutlineInputBorder(),
                                               labelText: 'Your prompt',
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      // Step for context size
+                                      Step(
+                                        isActive: stepperIndex.value == 3,
+                                        title: Text(
+                                          'Set the maximum content length',
+                                        ),
+                                        subtitle: Text(
+                                          'The content length is commonly known as context size. It is the maximum number of words / tokens that the AI will use to generate a response.',
+                                        ),
+                                        content: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: TextField(
+                                            controller:
+                                                TextEditingController.fromValue(
+                                              TextEditingValue(
+                                                text: promptTemplate
+                                                    .value.contextSize
+                                                    .toString(),
+                                              ),
+                                            ),
+                                            maxLines: 1,
+                                            decoration: InputDecoration(
+                                              border: OutlineInputBorder(),
+                                              labelText: 'Context size',
                                             ),
                                           ),
                                         ),
@@ -605,7 +481,8 @@ class MyHomePage extends HookConsumerWidget {
                               onPressed: () {
                                 filePath.value = '';
                                 stepperIndex.value = 0;
-                                promptTemplate.value = PromptConfig.none;
+                                promptTemplate.value =
+                                    PromptTemplate.defaultPromptTemplate();
                                 textController.clear();
                               },
                             ),

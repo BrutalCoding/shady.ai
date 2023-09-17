@@ -6,14 +6,21 @@ import 'dart:math';
 import 'package:ffi/ffi.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../data/prompt_config.dart';
+import '../../data/prompt_template.dart';
 import '../../generated/llama.cpp/llama.cpp_bindings.g.dart';
 
 part 'instruction_provider.g.dart';
 
+/// Used to post process the response of the AI.
+///
+/// Example before: "USER: Hello, how are you?\nASSISTANT: I'm fine, thanks."
+///
+/// Example after:  "I'm fine, thanks."
+typedef String OutputPostProcess(String output);
+
 /// This class is responsible for generating a response from an instruction.
 @riverpod
-class Instruction extends _$Instruction {
+class InstructionInference extends _$InstructionInference {
   /// Constructor for the Instruction class.
   @override
   FutureOr<String> build() {
@@ -78,11 +85,12 @@ class Instruction extends _$Instruction {
     /// Below is an instruction that describes a task. Write a response that
     /// appropriately completes the request.\n\n### Instruction:\nWhat is the
     /// meaning of life?\n\n### Response:
-    required PromptConfig originalPrompt,
+    required PromptTemplate promptTemplate,
 
-    /// The maximum number of tokens to generate.
-    /// If not specified, the default value is used from the model file.
-    int? modelContextSize,
+    /// A method that takes in the output of the model and returns a response.
+    /// Useful to filter out unwanted content.
+    /// E.g. to only keep the part of the AI's response that answers the question.
+    OutputPostProcess? outputPostProcess,
   }) async {
     final DynamicLibrary dylib = DynamicLibrary.open(
       'assets/dylibs/libllama.dylib',
@@ -98,7 +106,7 @@ class Instruction extends _$Instruction {
 
     final N_THREADS = Platform.numberOfProcessors;
 
-    String _prompt = originalPrompt.getCompletePrompt;
+    String _prompt = promptTemplate.prompt;
 
     final Pointer<Char> prompt = _prompt.toNativeUtf8() as Pointer<Char>;
 
@@ -249,22 +257,6 @@ class Instruction extends _$Instruction {
 
     final output = tokensDecodedIntoPieces.join('');
 
-    // Substring from "ASSISTANT:" until period (.):
-    // We need to find the index of : after ASSISTANT.
-    // Then we need to find the index of . after that.
-    // Then we need to substring from the index of : + 1 until the index of .
-    final assistantIndex = output.indexOf('ASSISTANT:');
-
-    if (assistantIndex != -1) {
-      final periodIndex = output.indexOf('.', assistantIndex);
-      if (periodIndex != -1) {
-        final assistantResponse = output.substring(
-          assistantIndex + 10,
-          periodIndex + 1,
-        );
-        return assistantResponse;
-      }
-    }
-    return output;
+    return outputPostProcess?.call(output) ?? output;
   }
 }
