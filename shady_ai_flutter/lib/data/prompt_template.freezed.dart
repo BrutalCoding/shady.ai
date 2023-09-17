@@ -28,6 +28,7 @@ mixin _$PromptTemplate {
   OutputPostProcess get postProcess => throw _privateConstructorUsedError;
   String get output => throw _privateConstructorUsedError;
   int get contextSize => throw _privateConstructorUsedError;
+  List<String> get verifiedSignatures => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -48,7 +49,8 @@ abstract class $PromptTemplateCopyWith<$Res> {
       String prompt,
       @OutputPostProcessConverter() OutputPostProcess postProcess,
       String output,
-      int contextSize});
+      int contextSize,
+      List<String> verifiedSignatures});
 }
 
 /// @nodoc
@@ -71,6 +73,7 @@ class _$PromptTemplateCopyWithImpl<$Res, $Val extends PromptTemplate>
     Object? postProcess = null,
     Object? output = null,
     Object? contextSize = null,
+    Object? verifiedSignatures = null,
   }) {
     return _then(_value.copyWith(
       label: null == label
@@ -101,6 +104,10 @@ class _$PromptTemplateCopyWithImpl<$Res, $Val extends PromptTemplate>
           ? _value.contextSize
           : contextSize // ignore: cast_nullable_to_non_nullable
               as int,
+      verifiedSignatures: null == verifiedSignatures
+          ? _value.verifiedSignatures
+          : verifiedSignatures // ignore: cast_nullable_to_non_nullable
+              as List<String>,
     ) as $Val);
   }
 }
@@ -120,7 +127,8 @@ abstract class _$$_PromptTemplateCopyWith<$Res>
       String prompt,
       @OutputPostProcessConverter() OutputPostProcess postProcess,
       String output,
-      int contextSize});
+      int contextSize,
+      List<String> verifiedSignatures});
 }
 
 /// @nodoc
@@ -141,6 +149,7 @@ class __$$_PromptTemplateCopyWithImpl<$Res>
     Object? postProcess = null,
     Object? output = null,
     Object? contextSize = null,
+    Object? verifiedSignatures = null,
   }) {
     return _then(_$_PromptTemplate(
       label: null == label
@@ -171,6 +180,10 @@ class __$$_PromptTemplateCopyWithImpl<$Res>
           ? _value.contextSize
           : contextSize // ignore: cast_nullable_to_non_nullable
               as int,
+      verifiedSignatures: null == verifiedSignatures
+          ? _value._verifiedSignatures
+          : verifiedSignatures // ignore: cast_nullable_to_non_nullable
+              as List<String>,
     ));
   }
 }
@@ -185,7 +198,9 @@ class _$_PromptTemplate implements _PromptTemplate {
       required this.prompt,
       @OutputPostProcessConverter() required this.postProcess,
       this.output = '',
-      this.contextSize = 2048});
+      this.contextSize = 2048,
+      final List<String> verifiedSignatures = const <String>[]})
+      : _verifiedSignatures = verifiedSignatures;
 
   factory _$_PromptTemplate.fromJson(Map<String, dynamic> json) =>
       _$$_PromptTemplateFromJson(json);
@@ -208,10 +223,19 @@ class _$_PromptTemplate implements _PromptTemplate {
   @override
   @JsonKey()
   final int contextSize;
+  final List<String> _verifiedSignatures;
+  @override
+  @JsonKey()
+  List<String> get verifiedSignatures {
+    if (_verifiedSignatures is EqualUnmodifiableListView)
+      return _verifiedSignatures;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_verifiedSignatures);
+  }
 
   @override
   String toString() {
-    return 'PromptTemplate(label: $label, systemMessage: $systemMessage, promptTemplate: $promptTemplate, prompt: $prompt, postProcess: $postProcess, output: $output, contextSize: $contextSize)';
+    return 'PromptTemplate(label: $label, systemMessage: $systemMessage, promptTemplate: $promptTemplate, prompt: $prompt, postProcess: $postProcess, output: $output, contextSize: $contextSize, verifiedSignatures: $verifiedSignatures)';
   }
 
   @override
@@ -229,13 +253,23 @@ class _$_PromptTemplate implements _PromptTemplate {
                 other.postProcess == postProcess) &&
             (identical(other.output, output) || other.output == output) &&
             (identical(other.contextSize, contextSize) ||
-                other.contextSize == contextSize));
+                other.contextSize == contextSize) &&
+            const DeepCollectionEquality()
+                .equals(other._verifiedSignatures, _verifiedSignatures));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, label, systemMessage,
-      promptTemplate, prompt, postProcess, output, contextSize);
+  int get hashCode => Object.hash(
+      runtimeType,
+      label,
+      systemMessage,
+      promptTemplate,
+      prompt,
+      postProcess,
+      output,
+      contextSize,
+      const DeepCollectionEquality().hash(_verifiedSignatures));
 
   @JsonKey(ignore: true)
   @override
@@ -260,7 +294,8 @@ abstract class _PromptTemplate implements PromptTemplate {
       @OutputPostProcessConverter()
       required final OutputPostProcess postProcess,
       final String output,
-      final int contextSize}) = _$_PromptTemplate;
+      final int contextSize,
+      final List<String> verifiedSignatures}) = _$_PromptTemplate;
 
   factory _PromptTemplate.fromJson(Map<String, dynamic> json) =
       _$_PromptTemplate.fromJson;
@@ -280,6 +315,8 @@ abstract class _PromptTemplate implements PromptTemplate {
   String get output;
   @override
   int get contextSize;
+  @override
+  List<String> get verifiedSignatures;
   @override
   @JsonKey(ignore: true)
   _$$_PromptTemplateCopyWith<_$_PromptTemplate> get copyWith =>

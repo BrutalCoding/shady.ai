@@ -7,7 +7,7 @@ part of 'instruction_provider.dart';
 // **************************************************************************
 
 String _$instructionInferenceHash() =>
-    r'569446620cfbb2032a3e25335073f21e380ce25a';
+    r'845b12244d08e3c6950f345af32acaba76fede19';
 
 /// This class is responsible for generating a response from an instruction.
 ///

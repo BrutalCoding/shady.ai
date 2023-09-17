@@ -16,59 +16,88 @@ class InstructionInferencePage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // Get args from route
+    final provider = InstructionResponseProvider(
+      pathToFile: pathToFile,
+      promptTemplate: promptTemplate,
+    );
     final pod = ref.watch(
-      InstructionResponseProvider(
-        pathToFile: pathToFile,
-        promptTemplate: promptTemplate,
-      ),
+      provider,
     );
     return Scaffold(
       body: Center(
         child: Container(
-          height: 600,
-          width: 600,
+          constraints: const BoxConstraints(
+            minWidth: 600,
+            minHeight: 600,
+            maxHeight: 720,
+            maxWidth: 720,
+          ),
           child: pod.when(
             data: (data) => Center(
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    // Title
-                    Text(
-                      'Output',
-                      style: Theme.of(
-                        context,
-                      ).textTheme.headlineLarge,
+              child: Column(
+                children: [
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          // Title
+                          Text(
+                            'Output',
+                            style: Theme.of(
+                              context,
+                            ).textTheme.headlineLarge,
+                          ),
+                          // Body
+                          Padding(
+                            padding: const EdgeInsets.only(
+                              top: 16.0,
+                            ),
+                            child: Text(
+                              data,
+                              style: Theme.of(
+                                context,
+                              ).textTheme.bodyLarge,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                    // Body
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        top: 16.0,
-                      ),
-                      child: Text(
-                        data,
-                        style: Theme.of(
-                          context,
-                        ).textTheme.bodyLarge,
-                      ),
+                  ),
+                  // Buttons
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      top: 16.0,
                     ),
-                    // Close button
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        top: 16.0,
-                      ),
-                      child: ElevatedButton(
-                        onPressed: () {
-                          HomePageRoute().go(context);
-                        },
-                        child: const Text(
-                          'Back to home',
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        ElevatedButton.icon(
+                          icon: Icon(
+                            Icons.adaptive.arrow_back,
+                          ),
+                          onPressed: () {
+                            HomePageRoute().go(context);
+                          },
+                          label: const Text(
+                            'Back to previous page',
+                          ),
                         ),
-                      ),
+                        ElevatedButton.icon(
+                          icon: Icon(
+                            Icons.refresh,
+                          ),
+                          label: Text(
+                            'Regenerate',
+                          ),
+                          onPressed: () {
+                            ref.invalidate(provider);
+                          },
+                        ),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
             error: (error, stackTrace) => Center(
@@ -105,7 +134,7 @@ class InstructionInferencePage extends HookConsumerWidget {
                         HomePageRoute().go(context);
                       },
                       child: const Text(
-                        'Back to home',
+                        'Back',
                       ),
                     ),
                   ),

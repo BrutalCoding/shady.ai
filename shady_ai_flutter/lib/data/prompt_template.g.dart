@@ -16,6 +16,10 @@ _$_PromptTemplate _$$_PromptTemplateFromJson(Map<String, dynamic> json) =>
           const OutputPostProcessConverter().fromJson(json['postProcess']),
       output: json['output'] as String? ?? '',
       contextSize: json['contextSize'] as int? ?? 2048,
+      verifiedSignatures: (json['verifiedSignatures'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          const <String>[],
     );
 
 Map<String, dynamic> _$$_PromptTemplateToJson(_$_PromptTemplate instance) =>
@@ -28,4 +32,5 @@ Map<String, dynamic> _$$_PromptTemplateToJson(_$_PromptTemplate instance) =>
           const OutputPostProcessConverter().toJson(instance.postProcess),
       'output': instance.output,
       'contextSize': instance.contextSize,
+      'verifiedSignatures': instance.verifiedSignatures,
     };

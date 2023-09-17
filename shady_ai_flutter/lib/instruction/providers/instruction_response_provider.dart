@@ -27,9 +27,10 @@ class InstructionResponse extends _$InstructionResponse {
         ref.watch(instructionInferenceProvider.notifier);
     // Generate the response from the AI
     try {
+      state = AsyncValue.loading();
       await Future<void>.delayed(
         const Duration(
-          milliseconds: 1500,
+          seconds: 3,
         ),
       );
       final String response =
@@ -37,6 +38,7 @@ class InstructionResponse extends _$InstructionResponse {
         pathToFile: pathToFile,
         promptTemplate: _promptTemplate,
       );
+      state = AsyncValue.data(response);
       return response;
     } catch (e, s) {
       print(

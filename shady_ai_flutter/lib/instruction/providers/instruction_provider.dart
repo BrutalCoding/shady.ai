@@ -134,7 +134,7 @@ class InstructionInference extends _$InstructionInference {
     embd_inp = truncateMemory(embd_inp, n_of_tok, n_of_tok);
     final n_ctx = llama_cpp.llama_n_ctx(ctx);
 
-    var n_predict = 20;
+    int n_predict = promptTemplate.contextSize;
     n_predict = min(n_predict, n_ctx - n_of_tok);
 
     var input_consumed = 0;
@@ -169,7 +169,7 @@ class InstructionInference extends _$InstructionInference {
 
         final _arr = calloc<llama_token_data>(n_vocab);
 
-        for (var token_id = 0; token_id < n_vocab; token_id++) {
+        for (int token_id = 0; token_id < n_vocab; token_id++) {
           _arr[token_id].id = token_id;
           _arr[token_id].logit = logits[token_id];
           _arr[token_id].p = 0.0;
@@ -203,7 +203,8 @@ class InstructionInference extends _$InstructionInference {
 
         llama_cpp.llama_sample_top_k(ctx, candidates_p, 40, 1);
         llama_cpp.llama_sample_top_p(ctx, candidates_p, 0.8, 1);
-        llama_cpp.llama_sample_temperature(ctx, candidates_p, 0.2);
+        llama_cpp.llama_sample_temperature(ctx, candidates_p, 0.4);
+
         final id = llama_cpp.llama_sample_token(ctx, candidates_p);
 
         // Shifting the list and appending the new id
@@ -237,7 +238,7 @@ class InstructionInference extends _$InstructionInference {
             size,
           );
 
-          if (n <= 32) {
+          if (n <= size) {
             final truncated = calloc<ffi.Char>(n);
             final length = getStringLength(buffer);
             for (int i = 0; i < n && i < length + 1; i++) {
@@ -267,7 +268,7 @@ class InstructionInference extends _$InstructionInference {
     print('system_info: ${llama_cpp.llama_print_system_info}');
 
     print('=======\nAI responded with (raw): $tokensDecodedIntoPieces=======');
-    final outputPre = tokensDecodedIntoPieces.join('');
+    final outputPre = tokensDecodedIntoPieces.join('').trim();
     print(
       '=======\nAI responded with (pre-post-processing): $outputPre=======',
     );
