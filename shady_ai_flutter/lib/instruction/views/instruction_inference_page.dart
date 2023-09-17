@@ -36,31 +36,29 @@ class InstructionInferencePage extends HookConsumerWidget {
             data: (data) => Center(
               child: Column(
                 children: [
+                  // Title
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 8.0),
+                    child: Text(
+                      'Output',
+                      style: Theme.of(
+                        context,
+                      ).textTheme.headlineLarge,
+                    ),
+                  ),
                   Expanded(
                     child: SingleChildScrollView(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          // Title
-                          Text(
-                            'Output',
-                            style: Theme.of(
-                              context,
-                            ).textTheme.headlineLarge,
-                          ),
-                          // Body
+                      child: // Body
                           Padding(
-                            padding: const EdgeInsets.only(
-                              top: 16.0,
-                            ),
-                            child: Text(
-                              data,
-                              style: Theme.of(
-                                context,
-                              ).textTheme.bodyLarge,
-                            ),
-                          ),
-                        ],
+                        padding: const EdgeInsets.only(
+                          top: 16.0,
+                        ),
+                        child: SelectableText(
+                          data,
+                          style: Theme.of(
+                            context,
+                          ).textTheme.bodyLarge,
+                        ),
                       ),
                     ),
                   ),
