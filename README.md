@@ -28,7 +28,7 @@ Here's a list of things I have done so far and things I'm working on.
 - [x] Successfully Load instance of LLaMA with dylib
 - [x] Successfully load LLaMA model in GGUF format with default LLaMA context parameters
 - [x] Successfully run inference on LLaMA model with custom prompt
-  - [ ] Refactor implementation because the model, after eval, is returning garbage tokens / pieces.
+  - [x] Refactor implementation because the model, after eval, is returning garbage tokens / pieces.
 - [x] Make a quick start UI layout
   - [x] Step 1: Drag-and-drop a model
   - [x] Step 2: Select a pre-defined prompt template
