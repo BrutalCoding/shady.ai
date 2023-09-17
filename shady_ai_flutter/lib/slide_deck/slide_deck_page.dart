@@ -77,10 +77,9 @@ class _SlideDeckState extends ConsumerState<SlideDeckPage> {
           title: const Text('Features'),
           subtitle: Bullets(
             bullets: const [
-              "Nada. Zero.",
-              "The very first feature will be a 'question and answer' interaction.",
-              "For example, you could ask: 'What is the meaning of life?'",
-              "Your AI might reply with: '42', 'To be happy.' or any other answer.",
+              "AI that responds to your prompt.",
+              "Built-in prompt templates to get you started.",
+              "Simple. Powerful. Private. Free.",
             ],
           ),
         );
@@ -94,8 +93,8 @@ class _SlideDeckState extends ConsumerState<SlideDeckPage> {
           subtitle: Bullets(
             bullets: const [
               'To make AI accessible to everyone.',
-              'To learn by doing.',
-              'To have fun.',
+              'To explore the capabilities of tiny but mighty local AI.',
+              'To educate people about AI by providing practical pre-built examples.',
             ],
           ),
         );

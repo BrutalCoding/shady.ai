@@ -314,9 +314,18 @@ class QuickStartPage extends HookConsumerWidget {
                       TextButton(
                         onPressed: () {
                           filePath.value = 'assets/shady.gguf';
+                          ScaffoldMessenger.of(context)
+                            ..hideCurrentSnackBar()
+                            ..showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  'Best to be used with the following prompt template: ${PromptTemplate.story().label}',
+                                ),
+                              ),
+                            );
                         },
                         child: const Text(
-                          'I want to try a built-in model',
+                          'I want to try out the built-in model',
                         ),
                       ),
                     const SizedBox(
@@ -408,30 +417,48 @@ class QuickStartPage extends HookConsumerWidget {
                                         ),
                                         content: Align(
                                           alignment: Alignment.centerLeft,
-                                          child: DropdownMenu<PromptTemplate>(
-                                            onSelected: (template) {
-                                              if (template == null) return;
-                                              promptTemplate.value = template;
-                                            },
-                                            dropdownMenuEntries:
-                                                PromptTemplate.all
-                                                    .map(
-                                                      (template) =>
-                                                          DropdownMenuEntry(
-                                                        value: template,
-                                                        label: template.label,
-                                                      ),
-                                                    )
-                                                    .toList(),
-                                            initialSelection:
-                                                promptTemplate.value,
-                                            controller:
-                                                TextEditingController.fromValue(
-                                              TextEditingValue(
-                                                text:
-                                                    promptTemplate.value.label,
+                                          child: Row(
+                                            children: [
+                                              DropdownMenu<PromptTemplate>(
+                                                onSelected: (template) {
+                                                  if (template == null) return;
+                                                  promptTemplate.value =
+                                                      template;
+                                                },
+                                                dropdownMenuEntries:
+                                                    PromptTemplate.all
+                                                        .map(
+                                                          (template) =>
+                                                              DropdownMenuEntry(
+                                                            value: template,
+                                                            label:
+                                                                template.label,
+                                                          ),
+                                                        )
+                                                        .toList(),
+                                                initialSelection:
+                                                    promptTemplate.value,
+                                                enableSearch: false,
+                                                enableFilter: false,
+                                                leadingIcon: Tooltip(
+                                                  message: promptTemplate
+                                                      .value.promptTemplate,
+                                                  child: Icon(Icons.preview),
+                                                  margin: const EdgeInsets
+                                                      .symmetric(
+                                                    horizontal: 8,
+                                                  ),
+                                                ),
+                                                controller:
+                                                    TextEditingController
+                                                        .fromValue(
+                                                  TextEditingValue(
+                                                    text: promptTemplate
+                                                        .value.label,
+                                                  ),
+                                                ),
                                               ),
-                                            ),
+                                            ],
                                           ),
                                         ),
                                       ),
@@ -479,6 +506,7 @@ class QuickStartPage extends HookConsumerWidget {
                                           ),
                                         ),
                                       ),
+
                                       // Step for context size
                                       Step(
                                         isActive: stepperIndex.value == 3,
