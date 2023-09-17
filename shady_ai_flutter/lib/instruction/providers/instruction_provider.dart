@@ -255,8 +255,24 @@ class InstructionInference extends _$InstructionInference {
       }
     }
 
-    final output = tokensDecodedIntoPieces.join('');
+    // Print parameters set by user and the model
+    print('=======\nParameters received from user=======');
+    print('pathToFile: $pathToFile');
+    print('promptTemplate: ${promptTemplate.toJson()}');
 
-    return outputPostProcess?.call(output) ?? output;
+    print('=======\nParameters received from model (llama.cpp)=======');
+    print('n_ctx: ${lparams.n_ctx}');
+    print('n_gpu_layers: ${lparams.n_gpu_layers}');
+    print('n_batch: ${lparams.n_batch}');
+    print('system_info: ${llama_cpp.llama_print_system_info}');
+
+    print('=======\nAI responded with (raw): $tokensDecodedIntoPieces=======');
+    final outputPre = tokensDecodedIntoPieces.join('');
+    print(
+      '=======\nAI responded with (pre-post-processing): $outputPre=======',
+    );
+    final outputPos = outputPostProcess?.call(outputPre) ?? outputPre;
+    print('=======\nAI responded with (post-processed): $outputPos=======');
+    return outputPos;
   }
 }

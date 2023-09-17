@@ -22,12 +22,33 @@ class PromptTemplate with _$PromptTemplate {
 
   // Returns a List<PromptTemplate> of all the available prompt templates.
   static List<PromptTemplate> get all => [
+        defaultPromptTemplate(),
         PromptTemplate.llama2Chat(),
         PromptTemplate.synthia(),
+        PromptTemplate.chat(),
+        PromptTemplate.nothing(),
       ];
 
   static PromptTemplate defaultPromptTemplate() {
-    return all.first;
+    return PromptTemplate.story();
+  }
+
+  factory PromptTemplate.story() {
+    return PromptTemplate(
+      label: 'Story',
+      promptTemplate: '{prompt}',
+      prompt: "One day, a boy named Luca went for a walk.",
+      postProcess: (output) => output,
+    );
+  }
+
+  factory PromptTemplate.nothing() {
+    return PromptTemplate(
+      label: 'Nothing',
+      promptTemplate: '{prompt}',
+      prompt: '',
+      postProcess: (output) => output,
+    );
   }
 
   factory PromptTemplate.synthia() {
@@ -59,6 +80,34 @@ class PromptTemplate with _$PromptTemplate {
       label: 'Llama-2-Chat',
       promptTemplate:
           "[INST] <<SYS>>\nYou are a helpful, respectful and honest assistant. Always answer as helpfully as possible, while being safe.  Your answers should not include any harmful, unethical, racist, sexist, toxic, dangerous, or illegal content. Please ensure that your responses are socially unbiased and positive in nature. If a question does not make any sense, or is not factually coherent, explain why instead of answering something not correct. If you don't know the answer to a question, please don't share false information.\n<</SYS>>\n{prompt}[/INST]",
+      prompt: 'Write a story about llamas',
+      postProcess: (output) {
+        // We remove everything that is between <<SYS>> and <</SYS>>.
+        // We need to find the index of <<SYS>>.
+        // Then we need to find the index of <</SYS>>.
+        // Then we need to substring from the index of <<SYS>> until the index of <</SYS>> + 7.
+        final sysIndex = output.indexOf('<<SYS>>');
+
+        if (sysIndex != -1) {
+          final endSysIndex = output.indexOf('<</SYS>>', sysIndex);
+          if (endSysIndex != -1) {
+            final assistantResponse = output.substring(
+              sysIndex,
+              endSysIndex + 7,
+            );
+            return assistantResponse;
+          }
+        }
+
+        return output;
+      },
+    );
+  }
+
+  factory PromptTemplate.chat() {
+    return PromptTemplate(
+      label: 'Chat',
+      promptTemplate: "USER: {prompt}\nASSISTANT:",
       prompt: 'Write a story about llamas',
       postProcess: (output) {
         // Substring from "ASSISTANT:" until period (.):

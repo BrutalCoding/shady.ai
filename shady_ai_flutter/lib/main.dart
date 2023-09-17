@@ -80,17 +80,45 @@ class QuickStartPage extends HookConsumerWidget {
     final textTheme = Theme.of(context).textTheme;
     final filePath = useState<String>('');
     final promptTemplate = useState<PromptTemplate>(
-      PromptTemplate.llama2Chat(),
+      PromptTemplate.defaultPromptTemplate(),
     );
     final textControllerPromptSystem = useTextEditingController()
       ..text = promptTemplate.value.systemMessage;
-    final textController = useTextEditingController();
+    final textController = useTextEditingController.fromValue(
+      TextEditingValue(
+        text: promptTemplate.value.prompt,
+      ),
+    );
     final stepperIndex = useState<int>(0);
+
+    // If the template changes, update the text controller with the default prompt
+    useEffect(
+      () {
+        textController.text = promptTemplate.value.prompt;
+        return null;
+      },
+      [promptTemplate.value.promptTemplate],
+    );
 
     return Scaffold(
       appBar: AppBar(
         title: Text("ShadyAI"),
+        centerTitle: true,
         actions: [
+          // Iconbutton to reset filepath etc
+          IconButton(
+            icon: const Icon(Icons.refresh),
+            onPressed: () {
+              filePath.value = '';
+              promptTemplate.value = PromptTemplate.defaultPromptTemplate();
+              textControllerPromptSystem.text =
+                  promptTemplate.value.systemMessage;
+              textController.text = promptTemplate.value.prompt;
+              stepperIndex.value = 0;
+            },
+          ),
+
+          // Iconbutton to show info dialog
           IconButton(
             icon: const Icon(Icons.info_outline),
             onPressed: () {
@@ -278,6 +306,19 @@ class QuickStartPage extends HookConsumerWidget {
                       ),
                       textAlign: TextAlign.center,
                     ),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    // TextButton to start with built-in model
+                    if (filePath.value.isEmpty)
+                      TextButton(
+                        onPressed: () {
+                          filePath.value = 'assets/shady.gguf';
+                        },
+                        child: const Text(
+                          'I want to try a built-in model',
+                        ),
+                      ),
                     const SizedBox(
                       height: 16,
                     ),
@@ -470,21 +511,6 @@ class QuickStartPage extends HookConsumerWidget {
                                   ),
                                 ],
                               ),
-                            ),
-                            const SizedBox(
-                              height: 16,
-                            ),
-                            TextButton(
-                              child: const Text(
-                                'I want to try another model',
-                              ),
-                              onPressed: () {
-                                filePath.value = '';
-                                stepperIndex.value = 0;
-                                promptTemplate.value =
-                                    PromptTemplate.defaultPromptTemplate();
-                                textController.clear();
-                              },
                             ),
                           ],
                         );
