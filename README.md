@@ -2,18 +2,14 @@
   <image alt="Main logo" height=256 src="https://raw.githubusercontent.com/BrutalCoding/shady.ai/main/shady_ai_flutter/assets/shady_app_icon.png"/>
   <h1>ShadyAI</h1>
 
-  <sub>My take to get privacy friendly, offline AI models accessible to as many people as possible. Offline first. Privacy first. Open source. Free. No ads. No tracking. No data collection. No registration. No subscription. No in-app purchases. No premium features. No license key required. Nothing. Just download and use it. That's it. That's the whole point of this app.</sub>
+  <sub>My take to get privacy friendly, offline AI models accessible to as many people as possible. Offline first. Privacy first. Open source. Free. **What happens in ShadyAI, stays in ShadyAI**. No ads. No tracking. No data collection. No registration. No subscription. No in-app purchases. No premium features. Nada. Nothing. That's it. Pure AI, pure intentions—that's the essence of this app.</sub>
 </div>
 
 ## Intro
 
-ShadyAI can be seen as a storefront with curated AI models for those who want to get started right away. For those who do want to bring their own models, ShadyAI supports that too by allowing you to drag-and-drop any model in the GGUF format.
+Ever noticed how AI tends to lurk in the shadows? With a sea of startups sporting cryptic names, ShadyAI playfully acknowledges AI's penchant for mystique. It's all a bit of light-hearted banter. In the contrary, behind this playful façade lies a genuine commitment to transparency and ethical AI practices. ShadyAI is fully open source, and is dedicated to bringing clarity, openness, and strong emphasis on privacy.
 
-The cutting edge offline AI models such as [Segment Anything](https://ai.facebook.com/research/publications/segment-anything/), [LLaMA](https://github.com/facebookresearch/llama) and [Whisper](https://github.com/openai/whisper) have been optimised by many other developers in various forms and sizes. The small to medium sizes are the ones I'm interested in.
-
-Don't take my word for it, it's open source, you can audit the code yourself. The goal is to make AI accessible to as many people as possible while respecting privacy and security.
-
-Why the name ShadyAI? Contrary to what the name suggests, ShadyAI is not shady at all. If you want to know more about the name, subscribe to the newsletter (if I had one, that is).
+There are many cutting edge offline AI models, and I want to catch 'em all. Think of [Segment Anything](https://ai.facebook.com/research/publications/segment-anything/), [LLaMA](https://github.com/facebookresearch/llama) and [Whisper](https://github.com/openai/whisper). What do I mean by that? Well, I want to make it easy for anyone to use cutting edge AI advancements like these without the technical hurdles that come with it.
 
 ## Sponsors
 
@@ -126,7 +122,11 @@ Say hi to my dad:
 
 Q: What is so shady about it?
 
-A: Nothing. It's the complete opposite. Perhaps you can be considered Shady for using it, but who can tell? Exactly, no one.
+A: Ironically, nothing at all. The name ShadyAI is a playful twist, hinting at the often-mysterious nature of AI. If using it makes you "shady," well, that'll be our little secret. Bottom line? What happens in ShadyAI stays in ShadyAI.
+
+Q: What advice do you have for someone who wants to build something like this?
+
+A: It starts with passion. Jumping on the bandwagon because something's "in vogue" won't sustain you in the long run. Trends are fleeting. Dive deep into the subject — in this instance, AI. Understand its capabilities and think critically about the real-world problems you're eager to tackle. For me, it's not just about talking up AI's potential; it's about demonstrating it, making it tangible and accessible to all. I use a simple benchmark: if my parents start using it voluntarily, I know I'm onto something. It's a journey, and while I'm not there yet, I'm committed to the path.
 
 ## Disclaimer
 
