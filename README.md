@@ -18,31 +18,32 @@ There are many cutting edge offline AI models, and I want to catch 'em all. Thin
 
 ## Progress
 
-Here's a list of things I have done so far and things I'm working on.
+Items are subject to change. This list is not exhaustive, I'll update it as I go.
+
+The one thats actively being worked on is marked with a :construction: emoji.
 
 - [x] Make a slide deck with Flutter (Bonus: [contribute back custom changes](https://github.com/serverpod/slick_slides/pull/1))
 - [x] Generate Dart bindings for [llama.cpp](https://github.com/ggerganov/llama.cpp)
 - [x] Generate .dylib for macOS (ARM64) (Bonus: with Metal artifact for GPU acceleration)
 - [x] Successfully Load instance of LLaMA with dylib
 - [x] Successfully load LLaMA model in GGUF format with default LLaMA context parameters
-- [x] Successfully run inference on LLaMA model with custom prompt
-  - [x] Refactor implementation because the model, after eval, is returning garbage tokens / pieces.
-- [x] Make a quick start UI layout
-  - [x] Step 1: Drag-and-drop a model
-  - [x] Step 2: Select a pre-defined prompt template
-  - [x] Step 3: Type in your instruction (user prompt)
-  - [x] Step 4: Press continue in last step to start inference
-  - [x] Step 5: Show inference result (dialog) (Bonus: show progress indicator)
-- [ ] (In progress, nearly there) Create a cross-platform Flutter FFI plugin so you can power your own apps the same way ShadyAI does (but without the countless nights of frustation).
-- [ ] Publish videos, blog posts, add preview images in README, and spread the word.
-- [ ] Explore & tinker with tech hurdles: chat, image, voice, music, video
-
-Tthere are many more steps, but I'm not going to list them all here, I'll update this list as I go.
+- [x] Successfully run inference on LLaMA model with custom prompts
+- [x] Add a Quick Start experience to the app
+- [ ] :construction: Create a cross-platform Flutter FFI plugin to power your own apps the same way (without the countless nights of frustation)
+- [x] Extend supported platforms:
+  - [x] macOS (ARM64)
+  - [ ] macOS (x86_64)
+  - [ ] Windows (x86_64)
+  - [ ] Linux (x86_64)
+  - [ ] Android (ARM64)
+  - [ ] iOS (ARM64)
+  - [ ] Web (ShadyAI for web should have WebGPU support)
+- [ ] **Week 11 Spike (2 days):** text-to-image, segmentation, speech-to-text.
+- [ ] Publish video(s), blog post(s), add visuals (e.g. in README), and gather early feedback.
 
 ## Features
 
-Anything that's checked is implemented.
-Otherwise, it's on my list of things-to-tinker-around-with but does not guarantee it will become a feature.
+Items are subject to change. This list is not exhaustive, I'll update it as I go.
 
 - [x] Ask AI a single question.
 (Example: "What is the meaning of life?")
