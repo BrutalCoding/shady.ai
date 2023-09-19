@@ -2,16 +2,18 @@
   <image alt="Main logo" height=256 src="https://raw.githubusercontent.com/BrutalCoding/shady.ai/main/shady_ai_flutter/assets/shady_app_icon.png"/>
   <h1>ShadyAI</h1>
 
-  <sub>My take to get privacy friendly, offline AI models accessible to as many people as possible. The cutting edge offline AI models such as [Segment Anything](https://ai.facebook.com/research/publications/segment-anything/), [LLaMA](https://github.com/facebookresearch/llama) and [Whisper](https://github.com/openai/whisper) have been optimised by many other developers in various forms and sizes. The small to medium sizes are the ones I'm interested in.</sub>
+  <sub>My take to get privacy friendly, offline AI models accessible to as many people as possible. Offline first. Privacy first. Open source. Free. No ads. No tracking. No data collection. No registration. No subscription. No in-app purchases. No premium features. No license key required. Nothing. Just download and use it. That's it. That's the whole point of this app.</sub>
 </div>
 
 ## Intro
 
-ShadyAI can be seen as a storefront with curated AI models.
+ShadyAI can be seen as a storefront with curated AI models for those who want to get started right away. For those who do want to bring their own models, ShadyAI supports that too by allowing you to drag-and-drop any model in the GGUF format.
 
-No internet connection required. No need to install Python, download models, install dependencies, etc.
+The cutting edge offline AI models such as [Segment Anything](https://ai.facebook.com/research/publications/segment-anything/), [LLaMA](https://github.com/facebookresearch/llama) and [Whisper](https://github.com/openai/whisper) have been optimised by many other developers in various forms and sizes. The small to medium sizes are the ones I'm interested in.
 
-Offline first. Privacy first. Open source. Free. No ads. No tracking. No data collection. No registration. No subscription. No in-app purchases.
+Don't take my word for it, it's open source, you can audit the code yourself. The goal is to make AI accessible to as many people as possible while respecting privacy and security.
+
+Why the name ShadyAI? Contrary to what the name suggests, ShadyAI is not shady at all. If you want to know more about the name, subscribe to the newsletter (if I had one, that is).
 
 ## Sponsors
 
@@ -35,6 +37,11 @@ Here's a list of things I have done so far and things I'm working on.
   - [x] Step 3: Type in your instruction (user prompt)
   - [x] Step 4: Press continue in last step to start inference
   - [x] Step 5: Show inference result (dialog) (Bonus: show progress indicator)
+- [ ] (In progress, nearly there) Create a cross-platform Flutter FFI plugin so you can power your own apps the same way ShadyAI does (but without the countless nights of frustation).
+- [ ] Publish videos, blog posts, add preview images in README, and spread the word.
+- [ ] Explore & tinker with tech hurdles: chat, image, voice, music, video
+
+Tthere are many more steps, but I'm not going to list them all here, I'll update this list as I go.
 
 ## Features
 
@@ -45,12 +52,17 @@ Otherwise, it's on my list of things-to-tinker-around-with but does not guarante
 (Example: "What is the meaning of life?")
 - [x] Give AI a single instruction.
 (Example: "Write a Flutter widget with a button that says 'Hello World'")
+- [x] Choose from pre-defined prompt templates.
+- [x] Get started quickly by using the built-in tiny-but-mighty AI model.
+(Note: It's the TinyStories model of < 100 MB, great at generating short stories. I'm keeping an eye on several ~1B models though)
 - [ ] Ask AI generate an image based on a short description.
 (Example: "A cat with a hat")
 - [ ] On-going chat conversation with AI.
 (Like talking to a friend, with a twist)
 - [ ] Translate text to another language.
 - [ ] Copy anyone's voice and say anything you want.
+- [ ] Make music with AI.
+- [ ] Make short videos with AI.
 
 If you want to see a feature implemented, please open an issue.
 
@@ -105,24 +117,20 @@ Say hi to my dad:
 ## Tech Stack
 
 - [Flutter](https://flutter.dev/) - Frontend (in Dart)
-- [Serverpod](https://serverpod.dev/) - Backend (in Dart)
 - [llama.cpp](https://github.com/saharNooby/rwkv.cpp) - Allows me to run one of BlinkDL's models on the CPU, fast inference.
 - [Design System](https://m3.material.io/) - Design system made by Google. Helps me to get a consisting theme throughout the app in less effort than doing it all myself.
-Once finished implementing the roadmap items ([see roadmap](#roadmap)), I'll start moving away to the following available Flutter UI kits:
--- Android: No changes required, Android's theme is Material.
--- iOS: [Flutter's Cupertino](https://flutter.dev/docs/development/ui/widgets/cupertino)
--- Windows: [pub.dev/fluent_ui](https://pub.dev/packages/fluent_ui)
--- macOS: [pub.dev/macos_ui](https://pub.dev/packages/macos_ui)
 - And many more...
+- [Serverpod](https://serverpod.dev/) - Backend (in Dart). ShadyAI is currently not using any backend. But I'm planning to use Serverpod to make it easier later to run powerful models that you can deploy on your own server. I bet the folks at r/SelfHosted would love that. I know I would. Just imagine a single command line to run a Docker image that runs a powerful AI model (or multiple models) that you can access from anywhere. That's the dream. I'm not there yet, but I'm working on it.
 
 ## FAQ
 
 Q: What is so shady about it?
-A: Who knows? Maybe it's the AI that's shady. Maybe it's me. Or is it you? Maybe there's nothing shady about it. Maybe it's just a name that I like. Subscribing to the newsletter will give you a hint (or not). If I had one, that is.
+
+A: Nothing. It's the complete opposite. Perhaps you can be considered Shady for using it, but who can tell? Exactly, no one.
 
 ## Disclaimer
 
-This project is not affiliated with Facebook, OpenAI or any other company. This is a personal project made by me. ShadyAI, myself, and anyone else involved in this project are not responsible for any damages caused by the use of this app. Use at your own risk.
+This project is not affiliated with Meta, OpenAI or any other company. This is a personal project made by me. ShadyAI, myself, and anyone else involved in this project are not responsible for any damages caused by the use of this app. Use at your own risk.
 
 ## License
 
@@ -134,4 +142,6 @@ Feel free to open an issue or a pull request. I'm open to any suggestions.
 
 ## Friends of ShadyAI
 
-- [Flutter Perth](https://www.meetup.com/Flutter-Perth/) - A meetup group for Flutter developers in Perth, Western Australia. (I'm the organiser)
+- [llama.dart](https://github.com/BrutalCoding/llama.dart) - Dart bindings for [llama.cpp](https://github.com/ggerganov/llama.cpp). Made by me.
+- [llama.cpp](https://github.com/ggerganov/llama.cpp) - C++ library for building and running AI models locally.
+- [Flutter Perth](https://www.meetup.com/Flutter-Perth/) - Perth's Flutter meetup group. I'm the organizer. Join my regular online meetups to learn more about Flutter and AI.
